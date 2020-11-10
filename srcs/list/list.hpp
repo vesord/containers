@@ -51,11 +51,11 @@ public:
 	class iterator : public ft::iterator<bidirectional_iterator_tag, value_type> {
 
 	public:
-		iterator() : _ptr( 0 ) { }
+		iterator() : _ptr( nullptr ) { }
 		~iterator() { }
 
 		iterator( iterator const & it ) { *this = it; }
-		iterator( _t_node const * node ) { this->_ptr = *node; }
+		iterator( _t_node * node ) { this->_ptr = node; }
 
 		iterator & operator=( iterator const & rhs ) {
 			if (this != &rhs)
@@ -63,20 +63,20 @@ public:
 			return *this;
 		}
 
-		iterator & operator++() { this = _ptr._next; return *this; }
+		iterator & operator++() { this->_ptr = this->_ptr->_next; return *this; }
 		iterator operator++(int) { iterator tmp = *this; this->operator++(); return tmp; }
 
-		bool operator==( iterator const & rhs ) { return (this->_ptr._next == rhs._ptr._next && this->_ptr._prev == rhs._ptr._prev && this->_ptr._data == rhs._ptr._data); }
-		bool operator!=( iterator const & rhs ) { return !(*this == rhs); }
+		bool operator==( iterator const & rhs ) { return this->_ptr == rhs._ptr; }
+		bool operator!=( iterator const & rhs ) { return this->_ptr != rhs._ptr; }
 
-		value_type & operator*() { return *this->_ptr._data; }
-		value_type * operator->() { return this->_ptr._data; }
+		value_type & operator*() { return *this->_ptr->_data; }
+		value_type * operator->() { return this->_ptr->_data; }
 
-		iterator & operator--() { this = _ptr._prev; return *this; }
+		iterator & operator--() { this->_ptr = _ptr->_prev; return *this; }
 		iterator operator--(int) { iterator tmp = *this; this->operator--(); return tmp; }
 
 	private:
-		_t_node _ptr;
+		_t_node* _ptr;
 	};
 
 	class const_iterator : public ft::iterator<bidirectional_iterator_tag, value_type>
@@ -87,18 +87,11 @@ public:
 		~const_iterator() { }
 
 		const_iterator( const_iterator const & it ) { *this = it; }
-		const_iterator( _t_node const * node ) {
-			this->_ptr->_prev = node->_prev;
-			this->_ptr->_next = node->_next;
-			this->_ptr->_data = node->_data;
-		}
+		const_iterator( _t_node * node ) { this->_ptr = node; }
 
 		const_iterator & operator=( const_iterator const & rhs ) {
-			if (this != &rhs) {
-				_ptr->_prev = rhs._ptr->_prev;
-				_ptr->_next = rhs._ptr->_next;
-				_ptr->_data = rhs._ptr->_data;
-			}
+			if (this != &rhs)
+				_ptr = rhs._ptr;
 			return *this;
 		}
 
@@ -125,18 +118,11 @@ public:
 		~reverse_iterator() { }
 
 		reverse_iterator( reverse_iterator const & it ) { *this = it; }
-		reverse_iterator( _t_node const * node ) {
-			this->_ptr->_prev = node->_prev;
-			this->_ptr->_next = node->_next;
-			this->_ptr->_data = node->_data;
-		}
+		reverse_iterator( _t_node const * node ) { this->_ptr = node; }
 
 		reverse_iterator & operator=( reverse_iterator const & rhs ) {
-			if (this != &rhs) {
-				_ptr->_prev = rhs._ptr->_prev;
-				_ptr->_next = rhs._ptr->_next;
-				_ptr->_data = rhs._ptr->_data;
-			}
+			if (this != &rhs)
+				_ptr = rhs._ptr;
 			return *this;
 		}
 
@@ -163,18 +149,11 @@ public:
 		~const_reverse_iterator() { }
 
 		const_reverse_iterator( const_reverse_iterator const & it ) { *this = it; }
-		const_reverse_iterator( _t_node const * node ) {
-			this->_ptr->_prev = node->_prev;
-			this->_ptr->_next = node->_next;
-			this->_ptr->_data = node->_data;
-		}
+		const_reverse_iterator( _t_node const * node ) { this->_ptr = node; }
 
 		const_reverse_iterator & operator=( const_reverse_iterator const & rhs ) {
-			if (this != &rhs) {
-				_ptr->_prev = rhs._ptr->_prev;
-				_ptr->_next = rhs._ptr->_next;
-				_ptr->_data = rhs._ptr->_data;
-			}
+			if (this != &rhs)
+				_ptr = rhs._ptr;
 			return *this;
 		}
 
@@ -196,13 +175,6 @@ public:
 
 	typedef ptrdiff_t difference_type;
 	typedef size_t size_type;
-
-//private:
-//
-//	void _abc()
-//	{
-//
-//	}
 
 	/*** CONSTRUCTION ***/
 	explicit list (const allocator_type& alloc = allocator_type()) {
