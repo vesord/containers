@@ -53,9 +53,9 @@ public:
 	pointer address ( reference x ) const { return &x; };
 	const_pointer address ( const_reference x ) const { return &x; };
 
-	pointer allocate (size_type n, allocator<void>::const_pointer hint=0) { // TODO: find out hint?
+	pointer allocate (size_type n, allocator<void>::const_pointer hint=0) const { // TODO: find out hint?
 		static_cast<void>(hint);
-		return ::operator new (sizeof(value_type) * n);						// TODO: should we use n times allocation?
+		return static_cast<pointer>(::operator new (sizeof(value_type) * n));						// TODO: should we use n times allocation?
 	};
 
 	void deallocate (pointer p, size_type n) {

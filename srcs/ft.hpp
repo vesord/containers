@@ -32,7 +32,7 @@ namespace ft {
 	template< class Iter >
 	class reverse_iterator;
 
-	template <class T, class Alloc = allocator<T> > class list;
+	template < class T, class Alloc > class list;
 
 }
 
