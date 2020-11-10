@@ -41,12 +41,13 @@ public:
 		typedef allocator<Type> other;
 	};
 
+	/*** CONSTRUCTION ***/
 	allocator() throw() { };
 	allocator (const allocator& alloc) throw();
-
 	template< class U >
 		allocator (const allocator<U>& alloc) throw() { *this = alloc; };
 
+	/*** DESTRUCTION ***/
 	~allocator () throw() { };
 
 	pointer address ( reference x ) const { return &x; };

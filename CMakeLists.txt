@@ -5,9 +5,10 @@ set(CMAKE_CXX_STANDARD 98)
 add_compile_options( -Wall -Wextra -Werror )
 
 include_directories(srcs
+                    srcs/iterator
                     srcs/allocator
                     srcs/list)
 
-add_executable(ft_containers main.cpp srcs/list/list.hpp srcs/allocator/allocator.hpp srcs/ft.hpp)
+add_executable(ft_containers main.cpp srcs/list/list.hpp srcs/allocator/allocator.hpp srcs/ft.hpp srcs/iterator/iterator.hpp)
 
 add_subdirectory(unit_tests)
