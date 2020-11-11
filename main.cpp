@@ -1,20 +1,16 @@
 #include <iostream>
 #include <vector>
 //#include <list>
-//#include "list.hpp"
-#include "mutantlist.hpp"
+#include "list.hpp"
 
 int main()
 {
-//	ft::list<int> l1;
-//	ft::list<int>::iterator it = l1.end();
-//	ft::list<int>::const_iterator ite = l1.end();
-//	ft::list<int>::const_iterator iteCopy(ite);
-//	ft::list<int>::const_iterator iteAssign = iteCopy;
-//
-//	std::list<int> ls;
-//	ls.push_front(12);
-//	std::list<int>::const_iterator it = ls.begin();
-//	std::cout << *it << std::endl;
+	ft::list<int> ftList;
+	for (int i = 0; i < 10; ++i)
+		ftList.push_front(i);
 
+	typedef ft::list<int>::const_iterator (ft::list<int>::* foo1)() const;
+	foo1 objFoo = &ft::list<int>::begin;
+
+	ft::list<int>::const_iterator fIt = (ftList.*objFoo)();
 }
