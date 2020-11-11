@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.17)
 project(ft_containers)
 
 set(CMAKE_CXX_STANDARD 98)
-add_compile_options( -Wall -Wextra -Werror )
+add_compile_options( -Wall -Wextra -Werror -Wconversion -Wno-unused)
 
 
 set(INCLUDE_DIRS srcs/
@@ -13,7 +13,7 @@ set(INCLUDE_DIRS srcs/
 include_directories(${INCLUDE_DIRS})
 
 set(SRCS srcs/list/list.hpp srcs/allocator/allocator.hpp srcs/ft.hpp srcs/iterator/iterator.hpp)
-add_executable(ft_containers main.cpp ${SRCS})
+add_executable(ft_containers main.cpp ${SRCS} srcs/mutantlist.hpp)
 
 add_library(testlib ${SRCS} main.cpp)
 add_subdirectory(unit_tests)

@@ -24,15 +24,9 @@ protected:
 };
 
 template <typename ftIter, typename stdIter>
-void	listIteratorTest(ft::list<int> & ftList, std::list<int> & stdList)
+void	listIteratorTest(ftIter & fIt, ftIter & fIte, ftIter & ftmpIt,
+						 stdIter & sIt, stdIter & sIte, stdIter & stmpIt)
 {
-	ftIter fIt = ftList.begin();
-	ftIter fIte(ftList.end());
-	ftIter ftmpIt;
-	stdIter sIt = stdList.begin();
-	stdIter sIte = stdList.end();
-	stdIter stmpIt;
-
 	EXPECT_EQ(*fIt, *sIt);
 	++fIt;
 	++sIt;
@@ -54,12 +48,42 @@ void	listIteratorTest(ft::list<int> & ftList, std::list<int> & stdList)
 	}
 }
 
-TEST_F(ListTest, forwardIterator)
-{
-	listIteratorTest<ft::list<int>::iterator, std::list<int>::iterator>(ftList, stdList);
+TEST_F(ListTest, forwardIterator) {
+	ft::list<int>::iterator fIt = ftList.begin();
+	ft::list<int>::iterator fIte(ftList.end());
+	ft::list<int>::iterator ftmpIt;
+	std::list<int>::iterator sIt = stdList.begin();
+	std::list<int>::iterator sIte = stdList.end();
+	std::list<int>::iterator stmpIt;
+	listIteratorTest(fIt, fIte, ftmpIt, sIt, sIte, stmpIt);
 }
 
-TEST_F(ListTest, forwardIteratorConst)
-{
-	listIteratorTest<ft::list<int>::const_iterator, std::list<int>::const_iterator>(ftList, stdList);
+TEST_F(ListTest, forwardIteratorConst) {
+	ft::list<int>::const_iterator fIt = ftList.begin();
+	ft::list<int>::const_iterator fIte(ftList.end());
+	ft::list<int>::const_iterator ftmpIt;
+	std::list<int>::const_iterator sIt = stdList.begin();
+	std::list<int>::const_iterator sIte = stdList.end();
+	std::list<int>::const_iterator stmpIt;
+	listIteratorTest(fIt, fIte, ftmpIt, sIt, sIte, stmpIt);
+}
+
+TEST_F(ListTest, reverseIterator) {
+	ft::list<int>::reverse_iterator fIt = ftList.rbegin();
+	ft::list<int>::reverse_iterator fIte(ftList.rend());
+	ft::list<int>::reverse_iterator ftmpIt;
+	std::list<int>::reverse_iterator sIt = stdList.rbegin();
+	std::list<int>::reverse_iterator sIte = stdList.rend();
+	std::list<int>::reverse_iterator stmpIt;
+	listIteratorTest(fIt, fIte, ftmpIt, sIt, sIte, stmpIt);
+}
+
+TEST_F(ListTest, reverseIteratorConst) {
+	ft::list<int>::const_reverse_iterator fIt = ftList.rbegin();
+	ft::list<int>::const_reverse_iterator fIte(ftList.rend());
+	ft::list<int>::const_reverse_iterator ftmpIt;
+	std::list<int>::const_reverse_iterator sIt = stdList.rbegin();
+	std::list<int>::const_reverse_iterator sIte = stdList.rend();
+	std::list<int>::const_reverse_iterator stmpIt;
+	listIteratorTest(fIt, fIte, ftmpIt, sIt, sIte, stmpIt);
 }

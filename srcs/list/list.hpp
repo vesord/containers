@@ -50,6 +50,10 @@ public:
 
 	class iterator : public ft::iterator<bidirectional_iterator_tag, value_type> {
 
+	template<class U, class A>
+	friend class list;
+	friend class const_iterator;
+
 	public:
 		iterator() : _ptr( nullptr ) { }
 		~iterator() { }
@@ -81,18 +85,27 @@ public:
 
 	class const_iterator : public ft::iterator<bidirectional_iterator_tag, value_type>
 	{
+	template<class U, class A>
+	friend class list;
 
 	public:
 		const_iterator() { this->_ptr = nullptr; }
 		~const_iterator() { }
 
 		const_iterator( const_iterator const & it ) { *this = it; }
-		const_iterator( iterator const & it ) { *this = it; }
+		const_iterator( iterator const & it ) {
+			*this = it;
+		}
 		const_iterator( _t_node * node ) { this->_ptr = node; }
 
 		const_iterator & operator=( const_iterator const & rhs ) {
 			if (this != &rhs)
 				_ptr = rhs._ptr;
+			return *this;
+		}
+
+		const_iterator & operator=( iterator const & rhs ) {
+			_ptr = rhs._ptr;
 			return *this;
 		}
 
@@ -114,12 +127,15 @@ public:
 
 	class reverse_iterator : public ft::iterator<bidirectional_iterator_tag, value_type>
 	{
+		template<class U, class A> friend class list;
+		friend class const_reverse_iterator;
+
 	public:
 		reverse_iterator() { this->_ptr = nullptr; }
 		~reverse_iterator() { }
 
 		reverse_iterator( reverse_iterator const & it ) { *this = it; }
-		reverse_iterator( _t_node const * node ) { this->_ptr = node; }
+		reverse_iterator( _t_node * node ) { this->_ptr = node; }
 
 		reverse_iterator & operator=( reverse_iterator const & rhs ) {
 			if (this != &rhs)
@@ -145,17 +161,24 @@ public:
 
 	class const_reverse_iterator : public ft::iterator<bidirectional_iterator_tag, value_type>
 	{
+		template<class U, class A> friend class list;
+
 	public:
 		const_reverse_iterator() { this->_ptr = nullptr; }
 		~const_reverse_iterator() { }
 
 		const_reverse_iterator( const_reverse_iterator const & it ) { *this = it; }
 		const_reverse_iterator( reverse_iterator const & it ) { *this = it; }
-		const_reverse_iterator( _t_node const * node ) { this->_ptr = node; }
+		const_reverse_iterator( _t_node * node ) { this->_ptr = node; }
 
 		const_reverse_iterator & operator=( const_reverse_iterator const & rhs ) {
 			if (this != &rhs)
 				_ptr = rhs._ptr;
+			return *this;
+		}
+
+		const_reverse_iterator & operator=( reverse_iterator const & rhs ) {
+			_ptr = rhs._ptr;
 			return *this;
 		}
 
@@ -245,6 +268,7 @@ public:
 		node->_data = data;
 		this->_begin_node->_prev = node;
 		this->_begin_node = node;
+		_end_node->_next = _begin_node;
 		this->_size += 1;
 	};
 //	void pop_front();

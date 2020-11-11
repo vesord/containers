@@ -29,6 +29,7 @@ class ft::iterator {
 	typedef Pointer		pointer;
 	typedef Reference	reference;
 	typedef Category	iterator_category;
+	// TODO: common void* as dataptr
 };
 
 template< class Iter >
