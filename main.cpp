@@ -5,13 +5,9 @@
 
 int main()
 {
-//	ft::list<int> l1;
-//
-//	l1.push_front(2);
-//	l1.push_front(3);
-//
-//	ft::list<int>::iterator it;
-//	ft::list<int>::iterator ite = l1.end();
-//	for (it = l1.begin(); it != ite; ++it)
-//		std::cout << *it << std::endl;
+	ft::list<int> l1;
+	ft::list<int>::iterator it = l1.end();
+	ft::list<int>::const_iterator ite = l1.end();
+	ft::list<int>::const_iterator iteCopy(ite);
+	ft::list<int>::const_iterator iteAssign = iteCopy;
 }

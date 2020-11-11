@@ -16,7 +16,7 @@
 #include "allocator.hpp"
 #include "iterator.hpp"
 
-template<class T, class Alloc = ft::allocator<T> >
+template< class T, class Alloc = ft::allocator<T> >
 class ft::list {
 
 public:
@@ -87,6 +87,7 @@ public:
 		~const_iterator() { }
 
 		const_iterator( const_iterator const & it ) { *this = it; }
+		const_iterator( iterator const & it ) { *this = it; }
 		const_iterator( _t_node * node ) { this->_ptr = node; }
 
 		const_iterator & operator=( const_iterator const & rhs ) {
@@ -149,6 +150,7 @@ public:
 		~const_reverse_iterator() { }
 
 		const_reverse_iterator( const_reverse_iterator const & it ) { *this = it; }
+		const_reverse_iterator( reverse_iterator const & it ) { *this = it; }
 		const_reverse_iterator( _t_node const * node ) { this->_ptr = node; }
 
 		const_reverse_iterator & operator=( const_reverse_iterator const & rhs ) {
@@ -209,14 +211,14 @@ public:
 //	list& operator= (const list& x);
 
 	/*** ITERATORS ***/
-	iterator begin() { return iterator(_begin_node); };
-	const_iterator begin() const { return const_iterator(_begin_node); };
-	iterator end() { return iterator(_end_node); };
-	const_iterator end() const { return const_iterator(_end_node); };
-	reverse_iterator rbegin() { return reverse_iterator(_end_node->_prev); };
-	const_reverse_iterator rbegin() const { return const_reverse_iterator(_end_node->_prev); };
-	reverse_iterator rend() { return reverse_iterator(_begin_node->_prev); };
-	const_reverse_iterator rend() const { return const_reverse_iterator(_begin_node->_prev); };
+	iterator begin() { return iterator(_begin_node); }
+	const_iterator begin() const { return const_iterator(_begin_node); }
+	iterator end() { return iterator(_end_node); }
+	const_iterator end() const { return const_iterator(_end_node); }
+	reverse_iterator rbegin() { return reverse_iterator(_end_node->_prev); }
+	const_reverse_iterator rbegin() const { return const_reverse_iterator(_end_node->_prev); }
+	reverse_iterator rend() { return reverse_iterator(_begin_node->_prev); }
+	const_reverse_iterator rend() const { return const_reverse_iterator(_begin_node->_prev); }
 
 	/*** CAPACITY ***/
 	bool empty() const { return this->_begin_node == this->_end_node; };
@@ -224,10 +226,10 @@ public:
 	size_type max_size() const { return std::numeric_limits<size_type>::max() / sizeof(value_type); }
 
 	/*** ELEMENT ACCESS ***/
-//	reference front();
-//	const_reference front() const;
-//	reference back();
-//	const_reference back() const;
+	reference front() { return this->_begin_node->_data; };
+	const_reference front() const { return this->_begin_node->_data; };
+	reference back() { return this->_end_node->_prev->_data; };
+	const_reference back() const { return this->_end_node->_prev->_data; };;
 
 	/*** MODIFIERS ***/
 //	template <class InputIterator>
