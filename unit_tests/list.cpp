@@ -9,7 +9,7 @@
 #include <string>
 #include <sstream>
 
-class ListIteratorTest : public ::testing::Test {
+class ListTest : public ::testing::Test {
 protected:
 	virtual void SetUp() {
 		for (int i = 0; i < 10; ++i)
@@ -23,19 +23,11 @@ protected:
 	std::list<int> stdList;
 };
 
-std::string itostring(int i)
-{
-	std::stringstream s;
-
-	s << i;
-	return s.str();
-}
-
 template <typename ftIter, typename stdIter>
-void	listIteratorTest(ft::list<int> ftList, std::list<int> stdList)
+void	listIteratorTest(ft::list<int> & ftList, std::list<int> & stdList)
 {
 	ftIter fIt = ftList.begin();
-	ftIter fIte = ftList.end();
+	ftIter fIte(ftList.end());
 	ftIter ftmpIt;
 	stdIter sIt = stdList.begin();
 	stdIter sIte = stdList.end();
@@ -58,11 +50,16 @@ void	listIteratorTest(ft::list<int> ftList, std::list<int> stdList)
 			ASSERT_EQ(*fIt, *fIte);
 			continue;
 		}
-		EXPECT_EQ(*fIt, *fIte);
+		EXPECT_EQ(*fIt, *sIt);
 	}
 }
 
-TEST_F(ListIteratorTest, forwardIterator)
+TEST_F(ListTest, forwardIterator)
 {
 	listIteratorTest<ft::list<int>::iterator, std::list<int>::iterator>(ftList, stdList);
+}
+
+TEST_F(ListTest, forwardIteratorConst)
+{
+	listIteratorTest<ft::list<int>::const_iterator, std::list<int>::const_iterator>(ftList, stdList);
 }
