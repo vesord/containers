@@ -223,8 +223,13 @@ public:
 		_begin_node = _end_node;
 		_size = 0;
 	}
-//	explicit list (size_type n, const value_type& val = value_type(),
-//				   const allocator_type& alloc = allocator_type());
+	explicit list (size_type n, const value_type& val = value_type(),
+				   const allocator_type& alloc = allocator_type()) : _size( 0 ) {
+		_createEndNode(alloc);
+		_begin_node = _end_node;
+		for (size_type size = 0; size < n; ++size)
+			push_front(val);
+	}
 //	template <class InputIterator>
 //	list (InputIterator first, InputIterator last,
 //		  const allocator_type& alloc = allocator_type());

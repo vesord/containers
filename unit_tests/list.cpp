@@ -447,3 +447,24 @@ TEST_F(ListTest, popFront) {
 	itS = s.begin(); itSe = s.end();
 	checkListEqual(itF, itFe, itS, itSe);
 }
+
+TEST_F(ListTest, fillConstruction) {
+	ft::list<std::string> f(5, "str");
+	std::list<std::string> s(5, "str");
+
+	ft::list<std::string>::iterator itF;
+	ft::list<std::string>::iterator itFe;
+	std::list<std::string>::iterator itS;
+	std::list<std::string>::iterator itSe;
+
+	itF = f.begin(); itFe = f.end();
+	itS = s.begin(); itSe = s.end();
+	checkListEqual(itF, itFe, itS, itSe);
+
+	f.push_front("front"); s.push_front("front");
+	f.push_back("back"); s.push_back("back");
+
+	itF = f.begin(); itFe = f.end();
+	itS = s.begin(); itSe = s.end();
+	checkListEqual(itF, itFe, itS, itSe);
+}
