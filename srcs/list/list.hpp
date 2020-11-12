@@ -50,12 +50,12 @@ public:
 
 	class iterator : public ft::iterator<bidirectional_iterator_tag, value_type> {
 
-	template<class U, class A>
-	friend class list;
-	friend class const_iterator;
+//	template<class U, class A>
+//	friend class list;
+//	friend class const_iterator;
 
 	public:
-		iterator() : _ptr( nullptr ) { }
+		iterator() { this->_ptr = nullptr; }
 		~iterator() { }
 
 		iterator( iterator const & it ) { *this = it; }
@@ -63,30 +63,30 @@ public:
 
 		iterator & operator=( iterator const & rhs ) {
 			if (this != &rhs)
-				_ptr = rhs._ptr;
+				this->_ptr = rhs._ptr;
 			return *this;
 		}
 
-		iterator & operator++() { this->_ptr = this->_ptr->_next; return *this; }
+		iterator & operator++() { this->_ptr = static_cast<_t_node*>(this->_ptr)->_next; return *this; }
 		iterator operator++(int) { iterator tmp = *this; this->operator++(); return tmp; }
 
 		bool operator==( iterator const & rhs ) { return this->_ptr == rhs._ptr; }
 		bool operator!=( iterator const & rhs ) { return this->_ptr != rhs._ptr; }
 
-		value_type & operator*() { return *this->_ptr->_data; }
-		value_type * operator->() { return this->_ptr->_data; }
+		value_type & operator*() { return *(static_cast<_t_node*>(this->_ptr)->_data); }
+		value_type * operator->() { return static_cast<_t_node*>(this->_ptr)->_data; }
 
-		iterator & operator--() { this->_ptr = _ptr->_prev; return *this; }
+		iterator & operator--() { this->_ptr = static_cast<_t_node*>(this->_ptr)->_prev; return *this; }
 		iterator operator--(int) { iterator tmp = *this; this->operator--(); return tmp; }
 
-	private:
-		_t_node* _ptr;
+//	private:
+//		_t_node* _ptr;
 	};
 
 	class const_iterator : public ft::iterator<bidirectional_iterator_tag, value_type>
 	{
-	template<class U, class A>
-	friend class list;
+//	template<class U, class A>
+//	friend class list;
 
 	public:
 		const_iterator() { this->_ptr = nullptr; }
@@ -100,16 +100,16 @@ public:
 
 		const_iterator & operator=( const_iterator const & rhs ) {
 			if (this != &rhs)
-				_ptr = rhs._ptr;
+				this->_ptr = rhs._ptr;
 			return *this;
 		}
 
 		const_iterator & operator=( iterator const & rhs ) {
-			_ptr = rhs._ptr;
+			this->_ptr = rhs._ptr;
 			return *this;
 		}
 
-		const_iterator & operator++() { this->_ptr = _ptr->_next; return *this; }
+		const_iterator & operator++() { this->_ptr = this->_ptr->_next; return *this; }
 		const_iterator operator++(int) { const_iterator tmp = *this; this->operator++(); return tmp; }
 
 		bool operator==( const_iterator const & rhs ) { return this->_ptr == rhs._ptr; }
@@ -118,14 +118,14 @@ public:
 		value_type const & operator*() { return *this->_ptr->_data; }
 		value_type const * operator->() { return this->_ptr->_data; }
 
-		const_iterator & operator--() { this->_ptr = _ptr->_prev; return *this; }
+		const_iterator & operator--() { this->_ptr = this->_ptr->_prev; return *this; }
 		const_iterator operator--(int) { const_iterator tmp = *this; this->operator--(); return tmp; }
 
-	private:
-		_t_node *_ptr;
+//	private:
+//		_t_node *_ptr;
 	};
 
-	class reverse_iterator : public ft::iterator<bidirectional_iterator_tag, value_type>
+/*	class reverse_iterator : public ft::iterator<bidirectional_iterator_tag, value_type>
 	{
 		template<class U, class A> friend class list;
 		friend class const_reverse_iterator;
@@ -196,7 +196,7 @@ public:
 
 	private:
 		_t_node *_ptr;
-	};
+	};*/
 
 	typedef ptrdiff_t difference_type;
 	typedef size_t size_type;
@@ -238,10 +238,10 @@ public:
 	const_iterator begin() const { return const_iterator(_begin_node); }
 	iterator end() { return iterator(_end_node); }
 	const_iterator end() const { return const_iterator(_end_node); }
-	reverse_iterator rbegin() { return reverse_iterator(_end_node->_prev); }
-	const_reverse_iterator rbegin() const { return const_reverse_iterator(_end_node->_prev); }
-	reverse_iterator rend() { return reverse_iterator(_begin_node->_prev); }
-	const_reverse_iterator rend() const { return const_reverse_iterator(_begin_node->_prev); }
+//	reverse_iterator rbegin() { return reverse_iterator(_end_node->_prev); }
+//	const_reverse_iterator rbegin() const { return const_reverse_iterator(_end_node->_prev); }
+//	reverse_iterator rend() { return reverse_iterator(_begin_node->_prev); }
+//	const_reverse_iterator rend() const { return const_reverse_iterator(_begin_node->_prev); }
 
 	/*** CAPACITY ***/
 	bool empty() const { return this->_begin_node == this->_end_node; };
