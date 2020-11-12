@@ -377,3 +377,73 @@ TEST_F(ListTest, accessBack) {
 	EXPECT_EQ(21, stdList.back());
 	EXPECT_EQ(ftList.back(), 21);
 }
+
+TEST_F(ListTest, popBack) {
+	ft::list<int> f;
+	std::list<int> s;
+	ft::list<int>::iterator itF;
+	ft::list<int>::iterator itFe;
+	std::list<int>::iterator itS;
+	std::list<int>::iterator itSe;
+
+	f.push_back(42); s.push_back(42);
+	f.push_back(21); s.push_back(21);
+
+	f.pop_back(); s.pop_back();
+	itF = f.begin(); itFe = f.end();
+	itS = s.begin(); itSe = s.end();
+	checkListEqual(itF, itFe, itS, itSe);
+
+	f.push_front(1); s.push_front(1);
+	f.push_front(2); s.push_front(2);
+
+	itF = f.begin(); itFe = f.end();
+	itS = s.begin(); itSe = s.end();
+	checkListEqual(itF, itFe, itS, itSe);
+
+	f.pop_back(); s.pop_back();
+	f.pop_back(); s.pop_back();
+	itF = f.begin(); itFe = f.end();
+	itS = s.begin(); itSe = s.end();
+	checkListEqual(itF, itFe, itS, itSe);
+
+	f.pop_back(); s.pop_back();
+	itF = f.begin(); itFe = f.end();
+	itS = s.begin(); itSe = s.end();
+	checkListEqual(itF, itFe, itS, itSe);
+}
+
+TEST_F(ListTest, popFront) {
+	ft::list<int> f;
+	std::list<int> s;
+	ft::list<int>::iterator itF;
+	ft::list<int>::iterator itFe;
+	std::list<int>::iterator itS;
+	std::list<int>::iterator itSe;
+
+	f.push_back(42); s.push_back(42);
+	f.push_back(21); s.push_back(21);
+
+	f.pop_front(); s.pop_front();
+	itF = f.begin(); itFe = f.end();
+	itS = s.begin(); itSe = s.end();
+	checkListEqual(itF, itFe, itS, itSe);
+
+	f.push_front(1); s.push_front(1);
+	f.push_front(2); s.push_front(2);
+
+	itF = f.begin(); itFe = f.end();
+	itS = s.begin(); itSe = s.end();
+	checkListEqual(itF, itFe, itS, itSe);
+
+	f.pop_front(); s.pop_front();
+	f.pop_front(); s.pop_front();
+	itF = f.begin(); itFe = f.end();
+	itS = s.begin(); itSe = s.end();
+	checkListEqual(itF, itFe, itS, itSe);
+
+	f.pop_front(); s.pop_front();
+	itF = f.begin(); itFe = f.end();
+	itS = s.begin(); itSe = s.end();
+	checkListEqual(itF, itFe, itS, itSe);
+}

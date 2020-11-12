@@ -219,7 +219,7 @@ public:
 
 	/*** CONSTRUCTION ***/
 	explicit list (const allocator_type& alloc = allocator_type()) : _size( 0 ) {
-		_create_end_node(alloc);
+		_createEndNode(alloc);
 		_begin_node = _end_node;
 		_size = 0;
 	}
@@ -229,7 +229,7 @@ public:
 //	list (InputIterator first, InputIterator last,
 //		  const allocator_type& alloc = allocator_type());
 	list (const list& x) : _size( 0 ) {
-		_create_end_node();
+		_createEndNode();
 		_begin_node = _end_node;
 		*this = x;
 	}
@@ -290,7 +290,13 @@ public:
 		_end_node->_next = _begin_node;
 		this->_size += 1;
 	};
-//	void pop_front();
+	void pop_front() {
+		_end_node->_next = _begin_node->_next;
+		_begin_node->_next->_prev = _end_node;
+		_destroyNode(_begin_node);
+		_begin_node = _end_node->_next;
+		_size -= 1;
+	}
 	void push_back (const value_type& val) {
 		_t_node *node = _alloc_rebind.allocate(1);
 		node->_next = _end_node;
@@ -304,7 +310,13 @@ public:
 			_begin_node = node;
 		_size += 1;
 	};
-//	void pop_back();
+	void pop_back() {
+		_t_node *back = _end_node->_prev;
+		_end_node->_prev->_prev->_next = _end_node;
+		_end_node->_prev = _end_node->_prev->_prev;
+		_destroyNode(back);
+		_size -= 1;
+	}
 
 //	iterator insert (iterator position, const value_type& val);
 //	void insert (iterator position, size_type n, const value_type& val);
@@ -322,9 +334,7 @@ public:
 		for (; 0 < _size; --_size) {
 			_t_node* tmp = _begin_node;
 			_begin_node = _begin_node->_next;
-			_alloc.destroy(tmp->_data);
-			_alloc.deallocate(tmp->_data, 1);
-			_alloc_rebind.deallocate(tmp, 1);
+			_destroyNode(tmp);
 		}
 		_begin_node = _end_node;
 		_end_node->_next = _end_node;
@@ -359,11 +369,17 @@ private:
 
 	size_type		_size;
 
-	void	_create_end_node(const allocator_type& alloc = allocator_type()) {
+	void	_createEndNode(const allocator_type& alloc = allocator_type()) {
 		_end_node = _alloc_rebind.allocate(1);
 		_end_node->_next = _end_node;
 		_end_node->_prev = _end_node;
 		_end_node->_data = alloc.allocate(1);
+	}
+
+	void	_destroyNode( _t_node* node ) {
+		_alloc.destroy(node->_data);
+		_alloc.deallocate(node->_data, 1);
+		_alloc_rebind.deallocate(node, 1);
 	}
 
 };
