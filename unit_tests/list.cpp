@@ -87,3 +87,22 @@ TEST_F(ListTest, reverseIteratorConst) {
 	std::list<int>::const_reverse_iterator stmpIt;
 	listIteratorTest(fIt, fIte, ftmpIt, sIt, sIte, stmpIt);
 }
+
+TEST_F(ListTest, creationAssignationIterators)
+{
+	ft::list<int>::iterator It1 = ftList.begin();
+	ft::list<int>::iterator It2;
+	ft::list<int>::const_iterator It1const = ftList.begin();
+	ft::list<int>::const_iterator It2const;
+	ft::list<int>::reverse_iterator It1rev = ftList.rbegin();
+	ft::list<int>::reverse_iterator It2rev;
+	ft::list<int>::const_reverse_iterator It1revConst = ftList.rbegin();
+	ft::list<int>::const_reverse_iterator It2revConst;
+
+//	It1 = It1const; // should not work
+	It1const = It1;
+	It2const = It1const;
+//	It1rev = It1revConst; // should not work
+	It1revConst = It1rev;
+	It2revConst = It1revConst;
+}

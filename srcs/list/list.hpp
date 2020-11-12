@@ -50,9 +50,9 @@ public:
 
 	class iterator : public ft::iterator<bidirectional_iterator_tag, value_type> {
 
-	template<class U, class A>
-	friend class list;
-	friend class const_iterator;
+//	template<class U, class A>
+//	friend class list;
+//	friend class const_iterator;
 
 	public:
 		iterator() : _ptr( nullptr ) { }
@@ -79,14 +79,16 @@ public:
 		iterator & operator--() { this->_ptr = _ptr->_prev; return *this; }
 		iterator operator--(int) { iterator tmp = *this; this->operator--(); return tmp; }
 
+		_t_node* getPtr() const { return _ptr; }
+
 	private:
 		_t_node* _ptr;
 	};
 
 	class const_iterator : public ft::iterator<bidirectional_iterator_tag, value_type>
 	{
-	template<class U, class A>
-	friend class list;
+//	template<class U, class A>
+//	friend class list;
 
 	public:
 		const_iterator() { this->_ptr = nullptr; }
@@ -105,7 +107,7 @@ public:
 		}
 
 		const_iterator & operator=( iterator const & rhs ) {
-			_ptr = rhs._ptr;
+			_ptr = rhs.getPtr();
 			return *this;
 		}
 
@@ -120,6 +122,8 @@ public:
 
 		const_iterator & operator--() { this->_ptr = _ptr->_prev; return *this; }
 		const_iterator operator--(int) { const_iterator tmp = *this; this->operator--(); return tmp; }
+
+		_t_node* getPtr() const { return _ptr; }
 
 	private:
 		_t_node *_ptr;
@@ -155,6 +159,8 @@ public:
 		reverse_iterator & operator--() { this->_ptr = _ptr->_next; return *this; }
 		reverse_iterator operator--(int) { reverse_iterator tmp = *this; this->operator--(); return tmp; }
 
+		_t_node* getPtr() const { return _ptr; }
+
 	private:
 		_t_node *_ptr;
 	};
@@ -173,7 +179,7 @@ public:
 
 		const_reverse_iterator & operator=( const_reverse_iterator const & rhs ) {
 			if (this != &rhs)
-				_ptr = rhs._ptr;
+				_ptr = rhs.getPtr();
 			return *this;
 		}
 
@@ -193,6 +199,8 @@ public:
 
 		const_reverse_iterator & operator--() { this->_ptr = _ptr->_next; return *this; }
 		const_reverse_iterator operator--(int) { const_reverse_iterator tmp = *this; this->operator--(); return tmp; }
+
+		_t_node* getPtr() const { return _ptr; }
 
 	private:
 		_t_node *_ptr;
