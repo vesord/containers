@@ -230,12 +230,19 @@ public:
 		for (size_type size = 0; size < n; ++size)
 			push_front(val);
 	}
-//	template <class InputIterator>
-//	list (InputIterator first, InputIterator last,
-//		  const allocator_type& alloc = allocator_type());
+	template <class InputIterator>
+	list (InputIterator first, InputIterator last,
+		  const allocator_type& alloc = allocator_type()) : _size( 0 ) {
+		_createEndNode(alloc);
+		_begin_node = _end_node;
+		for (; first != last; ++first) {
+			push_back(*first);
+		}
+	}
 	list (const list& x) : _size( 0 ) {
 		_createEndNode();
 		_begin_node = _end_node;
+		//there should be get allocator, but our list doesn't have one
 		*this = x;
 	}
 

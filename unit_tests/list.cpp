@@ -468,3 +468,46 @@ TEST_F(ListTest, fillConstruction) {
 	itS = s.begin(); itSe = s.end();
 	checkListEqual(itF, itFe, itS, itSe);
 }
+
+TEST_F(ListTest, rangeConstruction) {
+	ft::list<int>::iterator itF;
+	ft::list<int>::iterator itFe;
+	std::list<int>::iterator itS;
+	std::list<int>::iterator itSe;
+
+	itF = ftList.begin(); itFe = ftList.end();
+	itS = stdList.begin(); itSe	= stdList.end();
+	++itF; ++itF; ++itS; ++itS;
+	--itFe; --itFe; --itSe; --itSe;
+
+	ft::list<int> f(itF, itFe);
+	std::list<int> s(itS, itSe);
+	EXPECT_EQ(s.size(), f.size());
+	itF = f.begin(); itFe = f.end();
+	itS = s.begin(); itSe = s.end();
+	checkListEqual(itF, itFe, itS, itSe);
+
+	itF = f.end(); itS = s.end();
+	ft::list<int> f1(itF, itF);
+	std::list<int> s1(itS, itS);
+	EXPECT_EQ(s1.size(), f1.size());
+	itF = f1.begin(); itFe = f1.end();
+	itS = s1.begin(); itSe = s1.end();
+	checkListEqual(itF, itFe, itS, itSe);
+
+	itF = f.begin(); itS = s.begin();
+	ft::list<int> f2(itF, itF);
+	std::list<int> s2(itS, itS);
+	EXPECT_EQ(s2.size(), f2.size());
+	itF = f2.begin(); itFe = f2.end();
+	itS = s2.begin(); itSe = s2.end();
+	checkListEqual(itF, itFe, itS, itSe);
+
+	itF = f.begin(); itS = ++s.begin();
+	ft::list<int> f3(itF, itF);
+	std::list<int> s3(itS, itS);
+	EXPECT_EQ(s3.size(), f3.size());
+	itF = f3.begin(); itFe = f3.end();
+	itS = s3.begin(); itSe = s3.end();
+	checkListEqual(itF, itFe, itS, itSe);
+}
