@@ -13,7 +13,7 @@ set(INCLUDE_DIRS srcs/
 include_directories(${INCLUDE_DIRS})
 
 set(SRCS srcs/list/list.hpp srcs/allocator/allocator.hpp srcs/ft.hpp srcs/iterator/iterator.hpp)
-add_executable(ft_containers main.cpp ${SRCS} srcs/mutantlist.hpp)
+add_executable(ft_containers main.cpp ${SRCS})
 
 add_library(testlib ${SRCS} main.cpp)
 add_subdirectory(unit_tests)

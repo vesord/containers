@@ -218,8 +218,8 @@ public:
 	typedef size_t size_type;
 
 	/*** CONSTRUCTION ***/
-	explicit list (const allocator_type& alloc = allocator_type()) {
-		_create_end_node();
+	explicit list (const allocator_type& alloc = allocator_type()) : _size( 0 ) {
+		_create_end_node(alloc);
 		_begin_node = _end_node;
 		_size = 0;
 	}
@@ -228,7 +228,9 @@ public:
 //	template <class InputIterator>
 //	list (InputIterator first, InputIterator last,
 //		  const allocator_type& alloc = allocator_type());
-	list (const list& x) {
+	list (const list& x) : _size( 0 ) {
+		_create_end_node();
+		_begin_node = _end_node;
 		*this = x;
 	}
 
@@ -244,9 +246,9 @@ public:
 		if ( this == &x )
 			return *this;
 		clear();
-		iterator ite = x.end();
-		for (iterator it = x.begin(); it != ite; ++it)
-			push_back(*x);
+		const_iterator ite = x.end();
+		for (const_iterator it = x.begin(); it != ite; ++it)
+			push_back(*it);
 		return *this;
 	};
 
@@ -266,10 +268,10 @@ public:
 	size_type max_size() const { return std::numeric_limits<size_type>::max() / sizeof(value_type); }
 
 	/*** ELEMENT ACCESS ***/
-	reference front() { return this->_begin_node->_data; };
-	const_reference front() const { return this->_begin_node->_data; };
-	reference back() { return this->_end_node->_prev->_data; };
-	const_reference back() const { return this->_end_node->_prev->_data; };;
+	reference front() { return *this->_begin_node->_data; };
+	const_reference front() const { return *this->_begin_node->_data; };
+	reference back() { return *this->_end_node->_prev->_data; };
+	const_reference back() const { return *this->_end_node->_prev->_data; };;
 
 	/*** MODIFIERS ***/
 //	template <class InputIterator>
@@ -289,7 +291,19 @@ public:
 		this->_size += 1;
 	};
 //	void pop_front();
-//	void push_back (const value_type& val);
+	void push_back (const value_type& val) {
+		_t_node *node = _alloc_rebind.allocate(1);
+		node->_next = _end_node;
+		node->_prev = _end_node->_prev;
+		value_type *data = _alloc.allocate(1);
+		_alloc.construct( data, val );
+		node->_data = data;
+		_end_node->_prev->_next = node;
+		_end_node->_prev = node;
+		if (_size == 0)
+			_begin_node = node;
+		_size += 1;
+	};
 //	void pop_back();
 
 //	iterator insert (iterator position, const value_type& val);
@@ -345,11 +359,11 @@ private:
 
 	size_type		_size;
 
-	void	_create_end_node() {
+	void	_create_end_node(const allocator_type& alloc = allocator_type()) {
 		_end_node = _alloc_rebind.allocate(1);
 		_end_node->_next = _end_node;
 		_end_node->_prev = _end_node;
-		_end_node->_data = _alloc.allocate(1);
+		_end_node->_data = alloc.allocate(1);
 	}
 
 };

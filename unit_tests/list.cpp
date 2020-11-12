@@ -23,6 +23,28 @@ protected:
 	std::list<int> stdList;
 };
 
+template <typename itFt, typename itFtEnd, typename itStd, typename itStdEnd>
+void checkListEqual(itFt itF, itFtEnd itFe, itStd itS, itStdEnd itSe, size_t size = 25) {
+	for (size_t i = 0; i < size; ++i)
+	{
+		--itF; --itS;
+		if (itS == itSe) {
+			ASSERT_EQ(itF, itFe);
+			continue;
+		}
+		EXPECT_EQ(*itF, *itS);
+	}
+	for (size_t i = 0; i < size; ++i)
+	{
+		++itF; ++itS;
+		if (itS == itSe) {
+			ASSERT_EQ(itF, itFe);
+			continue;
+		}
+		EXPECT_EQ(*itF, *itS);
+	}
+};
+
 template <typename ftIter, typename stdIter>
 void	listIteratorTest(ftIter & fIt, ftIter & fIte, ftIter & ftmpIt,
 						 stdIter & sIt, stdIter & sIte, stdIter & stmpIt)
@@ -36,16 +58,7 @@ void	listIteratorTest(ftIter & fIt, ftIter & fIte, ftIter & ftmpIt,
 	EXPECT_EQ(*fIt, *sIt);
 	EXPECT_EQ(*stmpIt, *ftmpIt);
 
-	for (int i = 0; i < 25; ++i)
-	{
-		--fIt;
-		--sIt;
-		if (sIt == sIte) {
-			ASSERT_EQ(*fIt, *fIte);
-			continue;
-		}
-		EXPECT_EQ(*fIt, *sIt);
-	}
+	checkListEqual(fIt, fIte, sIt, sIte);
 }
 
 TEST_F(ListTest, forwardIterator) {
@@ -181,34 +194,186 @@ TEST_F(ListTest, pushFront) {
 }
 
 TEST_F(ListTest, pushBack) {
+	ft::list<int> f;
+	std::list<int> s;
 
+	ft::list<int>::iterator itF;
+	ft::list<int>::iterator itFe = f.end();
+	std::list<int>::iterator itS;
+	std::list<int>::iterator itSe = s.end();
+
+	f.push_back(42);
+	s.push_back(42);
+	itF = f.begin();
+	itS = s.begin();
+	EXPECT_EQ(*itS, *itF);
+	++itF;
+	++itS;
+	EXPECT_EQ(itF, itFe);
+	EXPECT_EQ(itS, itSe);
+	++itF;
+	++itS;
+	EXPECT_EQ(itF, f.begin());
+	EXPECT_EQ(itS, s.begin());
+	EXPECT_EQ(*itF, *itS);
+	EXPECT_EQ(*itF, 42);
+	EXPECT_EQ(*itS, 42);
+	f.push_back(21); s.push_back(21);
+	EXPECT_EQ(itF, f.begin());
+	EXPECT_EQ(itS, s.begin());
+	++itS; ++itF;
+	EXPECT_EQ(*itF, 21);
+	EXPECT_EQ(*itS, 21);
+	++itS; ++itF;
+	EXPECT_EQ(itF, itFe);
+	EXPECT_EQ(itS, itSe);
+	++itS; ++itF;
+	EXPECT_EQ(*itF, *itS);
+	EXPECT_EQ(*itF, 42);
 }
 
-TEST_F(ListTest, accessBack) {
+TEST_F(ListTest, assignationOperator) {
+	ft::list<int> f;
+	std::list<int> s;
 
-}
+	ft::list<int>::iterator itF;
+	ft::list<int>::iterator itFe;
+	std::list<int>::iterator itS;
+	std::list<int>::iterator itSe;
 
-TEST_F(ListTest, assignationList) {
-
+	f = ftList; s = stdList;
+	itFe = f.end(); itSe = s.end();
+	itF = f.begin(); itS = s.begin();
+	checkListEqual(itF, itFe, itS, itSe);
+	ft::list<int> f1;
+	std::list<int> s1;
+	f = f1; s = s1;
+	itFe = f.end(); itSe = s.end();
+	itF = f.begin(); itS = s.begin();
+	checkListEqual(itF, itFe, itS, itSe);
+	for (int i = 0; i < 15; ++i) {
+		f1.push_back(i - 8);
+		s1.push_back(i - 8);
+	}
+	itFe = f.end(); itSe = s.end();
+	itF = f.begin(); itS = s.begin();
+	checkListEqual(itF, itFe, itS, itSe);
+	f = f1; s = s1;
+	itFe = f.end(); itSe = s.end();
+	itF = f.begin(); itS = s.begin();
+	checkListEqual(itF, itFe, itS, itSe);
 }
 
 TEST_F(ListTest, clear) {
+	ftList.clear();
+	stdList.clear();
 
+	ft::list<int>::iterator itF = ftList.begin();
+	ft::list<int>::iterator itFe = ftList.end();
+	std::list<int>::iterator itS = stdList.begin();
+	std::list<int>::iterator itSe = stdList.end();
+
+	for (size_t i = 0; i < 10; ++i) {
+		EXPECT_EQ(itF, itFe);
+		EXPECT_EQ(itS, itSe);
+		++itF; ++itS;
+	}
+	ftList.clear();
+	stdList.clear();
+	for (size_t i = 0; i < 10; ++i) {
+		EXPECT_EQ(itF, itFe);
+		EXPECT_EQ(itS, itSe);
+		++itF; ++itS;
+	}
+	for (int i = 0; i < 15; ++i) {
+		ftList.push_back(i - 8);
+		stdList.push_back(i - 8);
+	}
+	itF = ftList.begin(); itFe = ftList.end();
+	itS = stdList.begin(); itSe = stdList.end();
+	checkListEqual(itF, itFe, itS, itSe);
+	ftList.clear();
+	stdList.clear();
+	itF = ftList.begin(); itFe = ftList.end();
+	itS = stdList.begin(); itSe = stdList.end();
+	for (size_t i = 0; i < 10; ++i) {
+		EXPECT_EQ(itF, itFe);
+		EXPECT_EQ(itS, itSe);
+		++itF; ++itS;
+	}
+}
+
+TEST_F(ListTest, defaultConstruction) {
+	ft::list<int> f;
+	std::list<int> s;
+
+	ft::list<int>::iterator itF = f.begin();
+	ft::list<int>::iterator itFe = f.end();
+	std::list<int>::iterator itS = s.begin();
+	std::list<int>::iterator itSe = s.end();
+
+	EXPECT_EQ(itS, itSe);
+	EXPECT_EQ(itF, itFe);
 }
 
 TEST_F(ListTest, copyConstruction) {
+	ft::list<int> f = ftList;
+	std::list<int> s = stdList;
 
+	ft::list<int>::iterator itF = f.begin();
+	ft::list<int>::iterator itFe = f.end();
+	std::list<int>::iterator itS = s.begin();
+	std::list<int>::iterator itSe = s.end();
+	checkListEqual(itF, itFe, itS, itSe);
+
+	ft::list<int> f1(f);
+	std::list<int> s1(s);
+
+	itF = f1.begin();
+	itFe = f1.end();
+	itS = s1.begin();
+	itSe = s1.end();
+	checkListEqual(itF, itFe, itS, itSe);
 }
 
 TEST_F(ListTest, accessFront) {
-	ft::list<int>::iterator itF = ftList.begin();
-	std::list<int>::iterator itS = stdList.begin();
-
-	EXPECT_EQ(*itF, *itS);
+	EXPECT_EQ(ftList.front(), stdList.front());
 	ftList.push_front(42);
 	stdList.push_front(42);
-	EXPECT_EQ(*itS, *itF);
-	--itS;
-	--itF;
-	EXPECT_EQ(*itS, *itF);
+	EXPECT_EQ(ftList.front(), stdList.front());
+	EXPECT_EQ(42, stdList.front());
+	EXPECT_EQ(ftList.front(), 42);
+
+	ftList.push_back(-42);
+	stdList.push_back(-42);
+	EXPECT_EQ(ftList.front(), stdList.front());
+	EXPECT_EQ(42, stdList.front());
+	EXPECT_EQ(ftList.front(), 42);
+
+	ftList.push_front(21);
+	stdList.push_front(21);
+	EXPECT_EQ(ftList.front(), stdList.front());
+	EXPECT_EQ(21, stdList.front());
+	EXPECT_EQ(ftList.front(), 21);
+}
+
+TEST_F(ListTest, accessBack) {
+	EXPECT_EQ(ftList.back(), stdList.back());
+	ftList.push_back(42);
+	stdList.push_back(42);
+	EXPECT_EQ(ftList.back(), stdList.back());
+	EXPECT_EQ(42, stdList.back());
+	EXPECT_EQ(ftList.back(), 42);
+
+	ftList.push_front(-42);
+	stdList.push_front(-42);
+	EXPECT_EQ(ftList.back(), stdList.back());
+	EXPECT_EQ(42, stdList.back());
+	EXPECT_EQ(ftList.back(), 42);
+
+	ftList.push_back(21);
+	stdList.push_back(21);
+	EXPECT_EQ(ftList.back(), stdList.back());
+	EXPECT_EQ(21, stdList.back());
+	EXPECT_EQ(ftList.back(), 21);
 }
