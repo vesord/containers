@@ -44,6 +44,8 @@ private:
 	_t_node *		_begin_node;
 	_t_node *		_end_node;
 
+public:
+
 	typedef typename allocator_type::template rebind<_t_node>::other allocator_rebind;
 	allocator_rebind _alloc_rebind;
 	allocator_type	 _alloc;
@@ -217,10 +219,7 @@ public:
 
 	/*** CONSTRUCTION ***/
 	explicit list (const allocator_type& alloc = allocator_type()) {
-		_end_node = _alloc_rebind.allocate(1);
-		_end_node->_next = _end_node;
-		_end_node->_prev = _end_node;
-		_end_node->_data = alloc.allocate(1);
+		_create_end_node();
 		_begin_node = _end_node;
 		_size = 0;
 	}
@@ -229,23 +228,27 @@ public:
 //	template <class InputIterator>
 //	list (InputIterator first, InputIterator last,
 //		  const allocator_type& alloc = allocator_type());
-//	list (const list& x);
+	list (const list& x) {
+		*this = x;
+	}
 
 	/*** DESTRUCTION ***/
 	~list() {
-		for (; 0 < _size; --_size) {
-			_t_node* tmp = _begin_node;
-			_begin_node = _begin_node->_next;
-			_alloc.destroy(tmp->_data);
-			_alloc.deallocate(tmp->_data, 1);
-			_alloc_rebind.deallocate(tmp, 1);
-		}
+		this->clear();
 		_alloc.deallocate(this->_end_node->_data, 1);
 		_alloc_rebind.deallocate(this->_end_node, 1);
 	};
 
 	/*** ASSIGNATION ***/
-//	list& operator= (const list& x);
+	list& operator= (const list& x) {
+		if ( this == &x )
+			return *this;
+		clear();
+		iterator ite = x.end();
+		for (iterator it = x.begin(); it != ite; ++it)
+			push_back(*x);
+		return *this;
+	};
 
 	/*** ITERATORS ***/
 	iterator begin() { return iterator(_begin_node); }
@@ -300,8 +303,19 @@ public:
 //	void swap (list& x);
 //
 //	void resize (size_type n, value_type val = value_type());
-//
-//	void clear();
+
+	void clear() {
+		for (; 0 < _size; --_size) {
+			_t_node* tmp = _begin_node;
+			_begin_node = _begin_node->_next;
+			_alloc.destroy(tmp->_data);
+			_alloc.deallocate(tmp->_data, 1);
+			_alloc_rebind.deallocate(tmp, 1);
+		}
+		_begin_node = _end_node;
+		_end_node->_next = _end_node;
+		_end_node->_prev = _end_node;
+	}
 
 	/*** OPERATIONS ***/
 //	void splice (iterator position, list& x);
@@ -330,6 +344,13 @@ public:
 private:
 
 	size_type		_size;
+
+	void	_create_end_node() {
+		_end_node = _alloc_rebind.allocate(1);
+		_end_node->_next = _end_node;
+		_end_node->_prev = _end_node;
+		_end_node->_data = _alloc.allocate(1);
+	}
 
 };
 

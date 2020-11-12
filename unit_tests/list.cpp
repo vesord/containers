@@ -188,6 +188,18 @@ TEST_F(ListTest, accessBack) {
 
 }
 
+TEST_F(ListTest, assignationList) {
+
+}
+
+TEST_F(ListTest, clear) {
+
+}
+
+TEST_F(ListTest, copyConstruction) {
+
+}
+
 TEST_F(ListTest, accessFront) {
 	ft::list<int>::iterator itF = ftList.begin();
 	std::list<int>::iterator itS = stdList.begin();
