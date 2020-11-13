@@ -54,7 +54,7 @@ public:
 
 	/*** ITERATORS ***/
 
-class iterator : public ft::iterator<ft::bidirectional_iterator_tag, value_type> {
+class iterator : public ft::iterator<std::bidirectional_iterator_tag, value_type> {
 
 	public:
 		iterator() : _ptr( nullptr ) { }
@@ -89,7 +89,7 @@ class iterator : public ft::iterator<ft::bidirectional_iterator_tag, value_type>
 		_t_node* _ptr;
 	};
 
-class const_iterator : public ft::iterator<ft::bidirectional_iterator_tag, value_type>
+class const_iterator : public ft::iterator<std::bidirectional_iterator_tag, value_type>
 	{
 
 	public:
@@ -287,7 +287,9 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 
 	/*** MODIFIERS ***/
 	template <class InputIterator>
-	void assign (InputIterator first, InputIterator last, typename ft::enable_if<ft::_is_input_iterator<InputIterator>::value>::type* = 0) {
+	void assign (InputIterator first, InputIterator last,
+			  typename ft::enable_if<ft::_is_input_iterator<InputIterator>::value>::type* = 0)
+			  {
 		clear();
 		for (; first != last; ++first) {
 			push_back(*first);

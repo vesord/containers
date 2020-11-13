@@ -514,6 +514,9 @@ TEST_F(ListTest, rangeConstruction) {
 	itF = f3.begin(); itFe = f3.end();
 	itS = s3.begin(); itSe = s3.end();
 	checkListEqual(itF, itFe, itS, itSe);
+
+	ft::list<int> f4(itS, itSe);
+	std::list<int> s4(itF, itFe);
 }
 
 TEST_F(ListTest, assign) {
@@ -525,10 +528,6 @@ TEST_F(ListTest, assign) {
 	f.assign(itF, itFe);
 	s.assign(itS, itSe);
 	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
-
-
-	ft::bidirectional_iterator_tag bi = itF;
-	ft::input_iterator_tag ii = bi;
 
 	f.assign(ftList.begin(), --ftList.end());
 	s.assign(stdList.begin(), --stdList.end());
