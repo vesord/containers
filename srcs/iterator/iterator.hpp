@@ -29,14 +29,6 @@ namespace ft {
 //struct bidirectional_iterator_tag : public forward_iterator_tag {};
 //struct random_access_iterator_tag : public bidirectional_iterator_tag {};
 
-	template<class T, class It>
-	struct _has_iterator_category_convertible_to
-		: public std::integral_constant<bool, std::is_convertible<T, It>::value> {};
-
-	template<class T>
-	struct _is_input_iterator
-		: public _has_iterator_category_convertible_to<T, std::input_iterator_tag> {};
-
 	/*
 	 * typedefs in class iterator{}; are public for access from
 	 * class reverse_iterator{};

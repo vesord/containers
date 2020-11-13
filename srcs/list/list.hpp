@@ -232,7 +232,8 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 	}
 	template <class InputIterator>	// TODO: enable_if
 	list (InputIterator first, InputIterator last,
-		  const allocator_type& alloc = allocator_type()) : _size( 0 ) {
+		  const allocator_type& alloc = allocator_type(),
+		  typename ft::enable_if<std::__is_input_iterator<InputIterator>::value>::type* = 0) : _size( 0 ) {
 		_createEndNode(alloc);
 		_begin_node = _end_node;
 		for (; first != last; ++first) {
@@ -288,7 +289,7 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 	/*** MODIFIERS ***/
 	template <class InputIterator>
 	void assign (InputIterator first, InputIterator last,
-			  typename ft::enable_if<ft::_is_input_iterator<InputIterator>::value>::type* = 0)
+			  typename ft::enable_if<std::__is_input_iterator<InputIterator>::value>::type* = 0)
 			  {
 		clear();
 		for (; first != last; ++first) {

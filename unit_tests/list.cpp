@@ -517,6 +517,18 @@ TEST_F(ListTest, rangeConstruction) {
 
 	ft::list<int> f4(itS, itSe);
 	std::list<int> s4(itF, itFe);
+	EXPECT_EQ(s4.size(), f4.size());
+	itF = f4.begin(); itFe = f4.end();
+	itS = s4.begin(); itSe = s4.end();
+	checkListEqual(itF, itFe, itS, itSe);
+
+	int arr[] = {9, 42, 21, 84, 543};
+	ft::list<int> f5(arr + 1, arr + 4);
+	std::list<int> s5(arr + 1, arr + 4);
+	EXPECT_EQ(s4.size(), f4.size());
+	itF = f4.begin(); itFe = f4.end();
+	itS = s4.begin(); itSe = s4.end();
+	checkListEqual(itF, itFe, itS, itSe);
 }
 
 TEST_F(ListTest, assign) {
@@ -539,5 +551,10 @@ TEST_F(ListTest, assign) {
 
 	f.assign(0, 42);
 	s.assign(0, 42);
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+
+	int arr[] = {9, 42, 21, 84, 543};
+	f.assign(arr + 1, arr + 4);
+	s.assign(arr + 1, arr + 4);
 	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
 }
