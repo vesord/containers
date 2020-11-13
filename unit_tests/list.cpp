@@ -568,6 +568,7 @@ TEST_F(ListTest, insertPosVal) {
 	sret = stdList.insert(itS, 442);
 	EXPECT_EQ(ftList.size(), stdList.size());
 	checkListEqual(fret, ftList.end(), sret, stdList.end());
+	checkListEqual(itF, ftList.end(), itS, stdList.end());
 	checkListEqual(ftList.begin(), ftList.end(), stdList.begin(), stdList.end());
 
 	ft::list<int> f;
@@ -589,5 +590,69 @@ TEST_F(ListTest, insertPosVal) {
 	EXPECT_EQ(f.size(), s.size());
 	checkListEqual(fret, f.end(), sret, s.end());
 	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+
+	f.clear(); s.clear();
+	fret = f.insert(f.end(), 4210);
+	sret = s.insert(s.end(), 4210);
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(fret, f.end(), sret, s.end());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
 }
 
+TEST_F(ListTest, insertRangeN) {
+	++itF; ++itS;
+	++itF; ++itS;
+	ftList.insert(itF, 4, 909);
+	stdList.insert(itS, 4, 909);
+	EXPECT_EQ(ftList.size(), stdList.size());
+	checkListEqual(itF, ftList.end(), itS, stdList.end());
+	checkListEqual(ftList.begin(), ftList.end(), stdList.begin(), stdList.end());
+
+	ft::list<int> f;
+	std::list<int>	s;
+	f.insert(f.begin(), 4, 42);
+	s.insert(s.begin(), 4, 42);
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+
+	f.clear(); s.clear();
+	f.insert(f.begin(), 1, 42);
+	s.insert(s.begin(), 1, 42);
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+
+	f.clear(); s.clear();
+	f.insert(f.begin(), 0, 42);
+	s.insert(s.begin(), 0, 42);
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+
+	f.insert(f.begin(), 1, 42);
+	s.insert(s.begin(), 1, 42);
+	f.insert(f.begin(), 5, 21);
+	s.insert(s.begin(), 5, 21);
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+
+	f.clear(); s.clear();
+	f.insert(f.begin(), 1, 42);
+	s.insert(s.begin(), 1, 42);
+	f.insert(--f.end(), 5, 21);
+	s.insert(--s.end(), 5, 21);
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+
+	f.clear(); s.clear();
+	f.insert(f.end(), 5, 21);
+	s.insert(s.end(), 5, 21);
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+
+	f.clear(); s.clear();
+	f.insert(f.begin(), 1, 42);
+	s.insert(s.begin(), 1, 42);
+	f.insert(f.end(), 5, 21);
+	s.insert(s.end(), 5, 21);
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+}

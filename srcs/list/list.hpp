@@ -344,12 +344,14 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 		_size += 1;
 		return iterator(node);
 	}
-//	void insert (iterator position, size_type n, const value_type& val) {
-//
-//	}
+	void insert (iterator position, size_type n, const value_type& val) {
+		for (; n > 0; --n) {
+			insert(position, val);
+		}
+	}
 //	template <class InputIterator>
 //	void insert (iterator position, InputIterator first, InputIterator last);
-//
+
 //	iterator erase (iterator position);
 //	iterator erase (iterator first, iterator last);
 //
