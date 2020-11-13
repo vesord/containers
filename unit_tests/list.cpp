@@ -28,7 +28,7 @@ protected:
 };
 
 template <typename itFt, typename itFtEnd, typename itStd, typename itStdEnd>
-void checkListEqual(itFt itF, itFtEnd itFe, itStd itS, itStdEnd itSe, size_t size = 25) {
+void checkListEqual(itFt itF, itFtEnd itFe, itStd itS, itStdEnd itSe, size_t size = 50) {
 	for (size_t i = 0; i < size; ++i)
 	{
 		--itF; --itS;
@@ -558,3 +558,36 @@ TEST_F(ListTest, assign) {
 	s.assign(arr + 1, arr + 4);
 	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
 }
+
+TEST_F(ListTest, insertPosVal) {
+	++itF; ++itS;
+	++itF; ++itS;
+	ft::list<int>::iterator fret;
+	std::list<int>::iterator sret;
+	fret = ftList.insert(itF, 442);
+	sret = stdList.insert(itS, 442);
+	EXPECT_EQ(ftList.size(), stdList.size());
+	checkListEqual(fret, ftList.end(), sret, stdList.end());
+	checkListEqual(ftList.begin(), ftList.end(), stdList.begin(), stdList.end());
+
+	ft::list<int> f;
+	std::list<int>	s;
+	fret = f.insert(f.begin(), 42);
+	sret = s.insert(s.begin(), 42);
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(fret, f.end(), sret, s.end());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+
+	fret = f.insert(f.begin(), 421);
+	sret = s.insert(s.begin(), 421);
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(fret, f.end(), sret, s.end());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+
+	fret = f.insert(--f.end(), 4210);
+	sret = s.insert(--s.end(), 4210);
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(fret, f.end(), sret, s.end());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+}
+

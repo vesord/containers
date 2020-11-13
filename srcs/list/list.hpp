@@ -223,14 +223,7 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 		_begin_node = _end_node;
 		_size = 0;
 	}
-	explicit list (size_type n, const value_type& val = value_type(),
-				   const allocator_type& alloc = allocator_type()) : _size( 0 ) {
-		_createEndNode(alloc);
-		_begin_node = _end_node;
-		for (size_type size = 0; size < n; ++size)
-			push_front(val);
-	}
-	template <class InputIterator>	// TODO: enable_if
+	template <class InputIterator>
 	list (InputIterator first, InputIterator last,
 		  const allocator_type& alloc = allocator_type(),
 		  typename ft::enable_if<std::__is_input_iterator<InputIterator>::value>::type* = 0) : _size( 0 ) {
@@ -239,6 +232,13 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 		for (; first != last; ++first) {
 			push_back(*first);
 		}
+	}
+	explicit list (size_type n, const value_type& val = value_type(),
+				   const allocator_type& alloc = allocator_type()) : _size( 0 ) {
+		_createEndNode(alloc);
+		_begin_node = _end_node;
+		for (size_type size = 0; size < n; ++size)
+			push_front(val);
 	}
 	list (const list& x) : _size( 0 ) {
 		_createEndNode();
@@ -304,12 +304,7 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 	}
 
 	void push_front (const value_type& val) {
-		_t_node *node = _alloc_rebind.allocate(1);
-		node->_prev = this->_end_node;
-		node->_next = this->_begin_node;
-		value_type *data = _alloc.allocate(1);
-		_alloc.construct( data, val );
-		node->_data = data;
+		_t_node *node = _createNode(val, this->_begin_node, this->_end_node);
 		this->_begin_node->_prev = node;
 		this->_begin_node = node;
 		_end_node->_next = _begin_node;
@@ -323,12 +318,7 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 		_size -= 1;
 	}
 	void push_back (const value_type& val) {
-		_t_node *node = _alloc_rebind.allocate(1);
-		node->_next = _end_node;
-		node->_prev = _end_node->_prev;
-		value_type *data = _alloc.allocate(1);
-		_alloc.construct( data, val );
-		node->_data = data;
+		_t_node *node = _createNode(val, _end_node, _end_node->_prev);
 		_end_node->_prev->_next = node;
 		_end_node->_prev = node;
 		if (_size == 0)
@@ -343,8 +333,20 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 		_size -= 1;
 	}
 
-//	iterator insert (iterator position, const value_type& val);
-//	void insert (iterator position, size_type n, const value_type& val);
+	iterator insert (iterator position, const value_type& val) {
+		_t_node* node = _createNode(val, position.getPtr(), position.getPtr()->_prev);
+		position.getPtr()->_prev->_next = node;
+		position.getPtr()->_prev = node;
+		if (position == begin())
+			_begin_node = node;
+		if (_size == 0)
+			_begin_node = node;
+		_size += 1;
+		return iterator(node);
+	}
+//	void insert (iterator position, size_type n, const value_type& val) {
+//
+//	}
 //	template <class InputIterator>
 //	void insert (iterator position, InputIterator first, InputIterator last);
 //
@@ -405,6 +407,17 @@ private:
 		_alloc.destroy(node->_data);
 		_alloc.deallocate(node->_data, 1);
 		_alloc_rebind.deallocate(node, 1);
+	}
+
+	_t_node*	_createNode(const value_type& val,
+					   _t_node* next = nullptr, _t_node* prev = nullptr,
+					   allocator_type alloc = allocator_type()) {
+		_t_node* node = _alloc_rebind.allocate(1);
+		node->_prev = prev;
+		node->_next = next;
+		node->_data = alloc.allocate(1);
+		alloc.construct(node->_data, val);
+		return node;
 	}
 
 };
