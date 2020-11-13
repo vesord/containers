@@ -656,3 +656,62 @@ TEST_F(ListTest, insertRangeN) {
 	EXPECT_EQ(f.size(), s.size());
 	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
 }
+
+TEST_F(ListTest, insertRangeIterator) {
+	++itF; ++itS;
+	++itF; ++itS;
+	int arr[] = {642, 543, 641, 6321, 346, 74432, 21, 6736, 1111};
+	ftList.insert(itF, arr + 2, arr + 7);
+	stdList.insert(itS, arr + 2, arr + 7);
+	EXPECT_EQ(ftList.size(), stdList.size());
+	checkListEqual(itF, ftList.end(), itS, stdList.end());
+	checkListEqual(ftList.begin(), ftList.end(), stdList.begin(), stdList.end());
+
+	ft::list<int> f;
+	std::list<int>	s;
+	f.insert(f.begin(), arr + 2, arr + 7);
+	s.insert(s.begin(), arr + 2, arr + 7);
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+
+	f.clear(); s.clear();
+	f.insert(f.begin(), arr + 2, arr + 7);
+	s.insert(s.begin(), arr + 2, arr + 7);
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+
+	f.clear(); s.clear();
+	f.insert(f.begin(), arr + 2, arr + 7);
+	s.insert(s.begin(), arr + 2, arr + 7);
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+
+	f.insert(f.begin(), arr + 2, arr + 7);
+	s.insert(s.begin(), arr + 2, arr + 7);
+	f.insert(f.begin(), arr + 2, arr + 7);
+	s.insert(s.begin(), arr + 2, arr + 7);
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+
+	f.clear(); s.clear();
+	f.insert(f.begin(), arr + 2, arr + 7);
+	s.insert(s.begin(), arr + 2, arr + 7);
+	f.insert(--f.end(), arr + 2, arr + 7);
+	s.insert(--s.end(), arr + 2, arr + 7);
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+
+	f.clear(); s.clear();
+	f.insert(f.end(), arr + 2, arr + 7);
+	s.insert(s.end(), arr + 2, arr + 7);
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+
+	f.clear(); s.clear();
+	f.insert(f.begin(), arr + 2, arr + 7);
+	s.insert(s.begin(), arr + 2, arr + 7);
+	f.insert(f.end(), arr + 2, arr + 7);
+	s.insert(s.end(), arr + 2, arr + 7);
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+}
