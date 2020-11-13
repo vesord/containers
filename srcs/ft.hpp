@@ -17,20 +17,13 @@
 
 namespace ft {
 
+	template<bool B, class T = void>
+	struct enable_if {};
+
+	template <class T>
+	struct enable_if <true, T> { typedef T type; };
+
 	template <class T> class allocator;
-
-	template <class Category,		// iterator::iterator_category
-		class T,					// iterator::value_type
-		class Distance = ptrdiff_t,	// iterator::difference_type
-		class Pointer = T*,			// iterator::pointer
-		class Reference = T&		// iterator::reference
-	> class iterator;
-
-	template< class Iter >
-	struct iterator_traits;
-
-	template< class Iter >
-	class reverse_iterator;
 
 	template < class T, class Alloc > class list;
 

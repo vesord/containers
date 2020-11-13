@@ -54,7 +54,7 @@ public:
 
 	/*** ITERATORS ***/
 
-	class iterator : public ft::iterator<bidirectional_iterator_tag, value_type> {
+class iterator : public ft::iterator<ft::bidirectional_iterator_tag, value_type> {
 
 	public:
 		iterator() : _ptr( nullptr ) { }
@@ -89,7 +89,7 @@ public:
 		_t_node* _ptr;
 	};
 
-	class const_iterator : public ft::iterator<bidirectional_iterator_tag, value_type>
+class const_iterator : public ft::iterator<ft::bidirectional_iterator_tag, value_type>
 	{
 
 	public:
@@ -133,7 +133,7 @@ public:
 		_t_node *_ptr;
 	};
 
-	class reverse_iterator : public ft::iterator<bidirectional_iterator_tag, value_type>
+class reverse_iterator : public ft::reverse_iterator<list::iterator>
 	{
 		template<class U, class A> friend class list;
 		friend class const_reverse_iterator;
@@ -171,7 +171,7 @@ public:
 		_t_node *_ptr;
 	};
 
-	class const_reverse_iterator : public ft::iterator<bidirectional_iterator_tag, value_type>
+class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 	{
 		template<class U, class A> friend class list;
 
@@ -230,7 +230,7 @@ public:
 		for (size_type size = 0; size < n; ++size)
 			push_front(val);
 	}
-	template <class InputIterator>
+	template <class InputIterator>	// TODO: enable_if
 	list (InputIterator first, InputIterator last,
 		  const allocator_type& alloc = allocator_type()) : _size( 0 ) {
 		_createEndNode(alloc);
@@ -286,9 +286,19 @@ public:
 	const_reference back() const { return *this->_end_node->_prev->_data; };;
 
 	/*** MODIFIERS ***/
-//	template <class InputIterator>
-//	void assign (InputIterator first, InputIterator last);
-//	void assign (size_type n, const value_type& val);
+	template <class InputIterator>
+	void assign (InputIterator first, InputIterator last, typename ft::enable_if<ft::_is_input_iterator<InputIterator>::value>::type* = 0) {
+		clear();
+		for (; first != last; ++first) {
+			push_back(*first);
+		}
+	};
+	void assign (size_type n, const value_type& val) {
+		clear();
+		for (; n > 0; --n) {
+			push_back(val);
+		}
+	}
 
 	void push_front (const value_type& val) {
 		_t_node *node = _alloc_rebind.allocate(1);

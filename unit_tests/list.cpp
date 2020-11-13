@@ -21,6 +21,10 @@ protected:
 
 	ft::list<int> ftList;
 	std::list<int> stdList;
+	ft::list<int>::iterator itF = ftList.begin();
+	ft::list<int>::iterator itFe = ftList.end();
+	std::list<int>::iterator itS = stdList.begin();
+	std::list<int>::iterator itSe = stdList.end();
 };
 
 template <typename itFt, typename itFtEnd, typename itStd, typename itStdEnd>
@@ -510,4 +514,31 @@ TEST_F(ListTest, rangeConstruction) {
 	itF = f3.begin(); itFe = f3.end();
 	itS = s3.begin(); itSe = s3.end();
 	checkListEqual(itF, itFe, itS, itSe);
+}
+
+TEST_F(ListTest, assign) {
+	++itF; ++itF; ++itS; ++itS;
+	--itFe; --itFe; --itSe; --itSe;
+
+	ft::list<int> f(ftList);
+	std::list<int> s(stdList);
+	f.assign(itF, itFe);
+	s.assign(itS, itSe);
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+
+
+	ft::bidirectional_iterator_tag bi = itF;
+	ft::input_iterator_tag ii = bi;
+
+	f.assign(ftList.begin(), --ftList.end());
+	s.assign(stdList.begin(), --stdList.end());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+
+	f.assign(80, 42);
+	s.assign(80, 42);
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+
+	f.assign(0, 42);
+	s.assign(0, 42);
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
 }
