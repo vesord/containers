@@ -855,11 +855,39 @@ TEST_F(ListTest, swap) {
 	checkListEqual(if13, f2.end(), is13, s2.end());
 	checkListEqual(if21, f1.end(), is21, s1.end());
 	checkListEqual(if22, f1.end(), is22, s1.end());
-//	checkListEqual(if23, f1.end(), is23, s1.end()); // is23 does not remains the same WTF??
+//	checkListEqual(if23, f1.end(), is23, s1.end()); // is23 does not remains the same. Check cpprefference on it
 
 	checkListEqual(f1.begin(), f1.end(), f2ref.begin(), f2ref.end());
 	checkListEqual(s1.begin(), s1.end(), s2ref.begin(), s2ref.end());
 
 	checkListEqual(f2.begin(), f2.end(), ftList.begin(), ftList.end());
 	checkListEqual(s2.begin(), s2.end(), stdList.begin(), stdList.end());
+}
+
+TEST_F(ListTest, resize) {
+	size_t tmpSize = ftList.size();
+
+	ftList.resize(ftList.size());
+	stdList.resize(stdList.size());
+	EXPECT_EQ(ftList.size(), stdList.size());
+	EXPECT_EQ(ftList.size(), tmpSize);
+	checkListEqual(ftList.begin(), ftList.end(), stdList.begin(), stdList.end());
+
+	ftList.resize(20);
+	stdList.resize(20);
+	EXPECT_EQ(ftList.size(), stdList.size());
+	EXPECT_EQ(ftList.size(), 20);
+	checkListEqual(ftList.begin(), ftList.end(), stdList.begin(), stdList.end());
+
+	ftList.resize(5);
+	stdList.resize(5);
+	EXPECT_EQ(ftList.size(), stdList.size());
+	EXPECT_EQ(ftList.size(), 5);
+	checkListEqual(ftList.begin(), ftList.end(), stdList.begin(), stdList.end());
+
+	ftList.resize(0);
+	stdList.resize(0);
+	EXPECT_EQ(ftList.size(), stdList.size());
+	EXPECT_EQ(ftList.size(), 0);
+	checkListEqual(ftList.begin(), ftList.end(), stdList.begin(), stdList.end());
 }

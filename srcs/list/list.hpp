@@ -397,7 +397,14 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 		x._size = tmpSize;
 	};
 
-//	void resize (size_type n, value_type val = value_type());
+	void resize (size_type n, value_type val = value_type()) {
+		for (; n > _size; ) {
+			push_back(val);
+		}
+		for (; n < _size; ) {
+			erase(iterator(_end_node->_prev));
+		}
+	};
 
 	void clear() {
 		for (; 0 < _size; --_size) {
