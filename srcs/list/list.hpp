@@ -418,8 +418,46 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 	}
 
 	/*** OPERATIONS ***/
-//	void splice (iterator position, list& x);
-//	void splice (iterator position, list& x, iterator i);
+	void splice (iterator position, list& x) {
+		if (position == begin()) {
+			_begin_node = x.begin().getPtr();
+		}
+
+		position.getPtr()->_prev->_next = x.begin().getPtr();
+		x.begin().getPtr()->_prev = position.getPtr()->_prev;
+
+		position.getPtr()->_prev = x._end_node->_prev;
+		x._end_node->_prev->_next = position.getPtr();
+
+		x.end().getPtr()->_prev = x.end().getPtr();
+		x.end().getPtr()->_next = x.end().getPtr();
+		x._begin_node = x._end_node;
+
+		this->_size += x._size;
+		x._size = 0;
+	}
+	void splice (iterator position, list& x, iterator i) {
+		if (position == begin()) {
+			_begin_node = i.getPtr();
+		}
+
+		if (i == x.begin()) {
+			x._begin_node = i.getPtr()->_next;
+			x._end_node->_next = x._begin_node;
+		}
+
+		i.getPtr()->_prev->_next = i.getPtr()->_next;
+		i.getPtr()->_next->_prev = i.getPtr()->_prev;
+
+		position.getPtr()->_prev->_next = i.getPtr();
+		i.getPtr()->_prev = position.getPtr()->_prev;
+
+		i.getPtr()->_next = position.getPtr();
+		position.getPtr()->_prev = i.getPtr();
+
+		this->_size += 1;
+		x._size -= 1;
+	};
 //	void splice (iterator position, list& x, iterator first, iterator last);
 
 //	void remove (const value_type& val);

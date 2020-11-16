@@ -891,3 +891,227 @@ TEST_F(ListTest, resize) {
 	EXPECT_EQ(ftList.size(), 0);
 	checkListEqual(ftList.begin(), ftList.end(), stdList.begin(), stdList.end());
 }
+
+TEST_F(ListTest, spliceAll_1) {
+	ft::list<int> f;
+	std::list<int> s;
+
+	f.splice(f.begin(), ftList);
+	s.splice(s.begin(), stdList);
+	EXPECT_EQ(f.size(), s.size());
+	EXPECT_EQ(ftList.size(), stdList.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+	checkListEqual(ftList.begin(), ftList.end(), stdList.begin(), stdList.end());
+}
+
+TEST_F(ListTest, spliceAll_2) {
+	ft::list<int> f;
+	std::list<int> s;
+
+	f.push_back(123);
+	s.push_back(123);
+	f.splice(f.begin(), ftList);
+	s.splice(s.begin(), stdList);
+	EXPECT_EQ(f.size(), s.size());
+	EXPECT_EQ(ftList.size(), stdList.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+	checkListEqual(ftList.begin(), ftList.end(), stdList.begin(), stdList.end());
+}
+
+TEST_F(ListTest, spliceAll_3) {
+	ft::list<int> f;
+	std::list<int> s;
+
+	f.push_back(123);
+	s.push_back(123);
+	f.splice(++f.begin(), ftList);
+	s.splice(++s.begin(), stdList);
+	EXPECT_EQ(f.size(), s.size());
+	EXPECT_EQ(ftList.size(), stdList.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+	checkListEqual(ftList.begin(), ftList.end(), stdList.begin(), stdList.end());
+}
+
+TEST_F(ListTest, spliceAll_5) {
+	ft::list<int> f;
+	std::list<int> s;
+
+	f.push_back(123);
+	s.push_back(123);
+	f.push_back(12356);
+	s.push_back(12356);
+	f.splice(++f.begin(), ftList);
+	s.splice(++s.begin(), stdList);
+	EXPECT_EQ(f.size(), s.size());
+	EXPECT_EQ(ftList.size(), stdList.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+	checkListEqual(ftList.begin(), ftList.end(), stdList.begin(), stdList.end());
+}
+
+TEST_F(ListTest, spliceAll_4) {
+	ft::list<int> f;
+	std::list<int> s;
+
+	f.splice(ftList.begin(), f);
+	s.splice(stdList.begin(), s);
+	EXPECT_EQ(f.size(), s.size());
+	EXPECT_EQ(ftList.size(), stdList.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+	checkListEqual(ftList.begin(), ftList.end(), stdList.begin(), stdList.end());
+}
+
+TEST_F(ListTest, spliceOne_1) {		// To empty from middle
+	ft::list<int> f;
+	std::list<int> s;
+
+	f.splice(f.begin(), ftList, ++ftList.begin());
+	s.splice(s.begin(), stdList, ++stdList.begin());
+	EXPECT_EQ(f.size(), s.size());
+	EXPECT_EQ(ftList.size(), stdList.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+	checkListEqual(ftList.begin(), ftList.end(), stdList.begin(), stdList.end());
+}
+
+TEST_F(ListTest, spliceOne_2) {		// To empty from begin
+	ft::list<int> f;
+	std::list<int> s;
+
+	f.splice(f.begin(), ftList, ftList.begin());
+	s.splice(s.begin(), stdList, stdList.begin());
+	EXPECT_EQ(f.size(), s.size());
+	EXPECT_EQ(ftList.size(), stdList.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+	checkListEqual(ftList.begin(), ftList.end(), stdList.begin(), stdList.end());
+}
+
+TEST_F(ListTest, spliceOne_3) {		// To empty from end-1
+	ft::list<int> f;
+	std::list<int> s;
+
+	f.splice(f.begin(), ftList, --ftList.end());
+	s.splice(s.begin(), stdList, --stdList.end());
+	EXPECT_EQ(f.size(), s.size());
+	EXPECT_EQ(ftList.size(), stdList.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+	checkListEqual(ftList.begin(), ftList.end(), stdList.begin(), stdList.end());
+}
+
+TEST_F(ListTest, spliceOne_4) {		// To empty from size = 1
+	ft::list<int> f;
+	std::list<int> s;
+	ft::list<int> f1;
+	std::list<int> s1;
+
+	f1.push_back(123);
+	s1.push_back(123);
+
+	f.splice(f.begin(), f1, --f1.end());
+	s.splice(s.begin(), s1, --s1.end());
+	EXPECT_EQ(f.size(), s.size());
+	EXPECT_EQ(f1.size(), s1.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+	checkListEqual(f1.begin(), f1.end(), s1.begin(), s1.end());
+}
+
+TEST_F(ListTest, spliceOne_5) {		// To begin from size = 1
+	ft::list<int> f1;
+	std::list<int> s1;
+
+	f1.push_back(123);
+	s1.push_back(123);
+
+	ftList.splice(ftList.begin(), f1, --f1.end());
+	stdList.splice(stdList.begin(), s1, --s1.end());
+	EXPECT_EQ(ftList.size(), stdList.size());
+	EXPECT_EQ(f1.size(), s1.size());
+	checkListEqual(ftList.begin(), ftList.end(), stdList.begin(), stdList.end());
+	checkListEqual(f1.begin(), f1.end(), s1.begin(), s1.end());
+}
+
+TEST_F(ListTest, spliceOne_6) {		// To end from size = 1
+	ft::list<int> f1;
+	std::list<int> s1;
+
+	f1.push_back(123);
+	s1.push_back(123);
+
+	ftList.splice(ftList.end(), f1, --f1.end());
+	stdList.splice(stdList.end(), s1, --s1.end());
+	EXPECT_EQ(ftList.size(), stdList.size());
+	EXPECT_EQ(f1.size(), s1.size());
+	checkListEqual(ftList.begin(), ftList.end(), stdList.begin(), stdList.end());
+	checkListEqual(f1.begin(), f1.end(), s1.begin(), s1.end());
+}
+
+TEST_F(ListTest, spliceOne_7) {		// To middle from size = 1
+	ft::list<int> f1;
+	std::list<int> s1;
+
+	f1.push_back(123);
+	s1.push_back(123);
+
+	ftList.splice(--(--(--ftList.end())), f1, --f1.end());
+	stdList.splice(--(--(--stdList.end())), s1, --s1.end());
+	EXPECT_EQ(ftList.size(), stdList.size());
+	EXPECT_EQ(f1.size(), s1.size());
+	checkListEqual(ftList.begin(), ftList.end(), stdList.begin(), stdList.end());
+	checkListEqual(f1.begin(), f1.end(), s1.begin(), s1.end());
+}
+
+TEST_F(ListTest, spliceOne_8) {		// To begin from mid
+	ft::list<int> f1;
+	std::list<int> s1;
+
+	f1.push_back(123);
+	f1.push_back(321);
+	f1.push_back(213);
+	s1.push_back(123);
+	s1.push_back(321);
+	s1.push_back(213);
+
+	ftList.splice(ftList.begin(), f1, --(--f1.end()));
+	stdList.splice(stdList.begin(), s1, --(--s1.end()));
+	EXPECT_EQ(ftList.size(), stdList.size());
+	EXPECT_EQ(f1.size(), s1.size());
+	checkListEqual(ftList.begin(), ftList.end(), stdList.begin(), stdList.end());
+	checkListEqual(f1.begin(), f1.end(), s1.begin(), s1.end());
+}
+
+TEST_F(ListTest, spliceOne_9) {		// To end from mid
+	ft::list<int> f1;
+	std::list<int> s1;
+
+	f1.push_back(123);
+	f1.push_back(321);
+	f1.push_back(213);
+	s1.push_back(123);
+	s1.push_back(321);
+	s1.push_back(213);
+
+	ftList.splice(ftList.begin(), f1, --(--f1.end()));
+	stdList.splice(stdList.begin(), s1, --(--s1.end()));
+	EXPECT_EQ(ftList.size(), stdList.size());
+	EXPECT_EQ(f1.size(), s1.size());
+	checkListEqual(ftList.begin(), ftList.end(), stdList.begin(), stdList.end());
+	checkListEqual(f1.begin(), f1.end(), s1.begin(), s1.end());
+}
+
+TEST_F(ListTest, spliceOne_10) {		// To middle from mid
+	ft::list<int> f1;
+	std::list<int> s1;
+
+	f1.push_back(123);
+	f1.push_back(321);
+	f1.push_back(213);
+	s1.push_back(123);
+	s1.push_back(321);
+	s1.push_back(213);
+
+	ftList.splice(ftList.begin(), f1, --(--f1.end()));
+	stdList.splice(stdList.begin(), s1, --(--s1.end()));
+	EXPECT_EQ(ftList.size(), stdList.size());
+	EXPECT_EQ(f1.size(), s1.size());
+	checkListEqual(ftList.begin(), ftList.end(), stdList.begin(), stdList.end());
+	checkListEqual(f1.begin(), f1.end(), s1.begin(), s1.end());
+}
+
