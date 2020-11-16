@@ -458,7 +458,14 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 		this->_size += 1;
 		x._size -= 1;
 	};
-//	void splice (iterator position, list& x, iterator first, iterator last);
+	void splice (iterator position, list& x, iterator first, iterator last) {
+		iterator tmp;
+
+		for (; first != last; ) {
+			tmp = first++;
+			splice(position, x, tmp);
+		}
+	}
 
 //	void remove (const value_type& val);
 
