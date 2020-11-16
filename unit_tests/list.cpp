@@ -1238,3 +1238,61 @@ TEST_F(ListTest, spliceRange_8) { // to empty mid-end
 	checkListEqual(ftList.begin(), ftList.end(), stdList.begin(), stdList.end());
 	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
 }
+
+class ListRemoveTest : public ::testing::Test {
+	protected:
+	virtual void SetUp() {
+		f.push_back(1); s.push_back(1);
+		f.push_back(5); s.push_back(5);
+		f.push_back(1); s.push_back(1);
+		f.push_back(7); s.push_back(7);
+		f.push_back(1); s.push_back(1);
+		f.push_back(5); s.push_back(5);
+		f.push_back(1); s.push_back(1);
+	}
+	ft::list<int> f;
+	std::list<int> s;
+};
+
+TEST_F(ListRemoveTest, doesNotContain) {
+
+	ft::list<int> f;
+	std::list<int> s;
+
+	f.remove(0);
+	s.remove(0);
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+}
+
+TEST_F(ListRemoveTest, firstLastMid) {
+	s.remove(1);
+	f.remove(1);
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+}
+
+TEST_F(ListRemoveTest, Mid) {
+	f.remove(7);
+	s.remove(7);
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+}
+
+TEST_F(ListRemoveTest, first) {
+	f.push_front(42);
+	s.push_front(42);
+	f.remove(42);
+	s.remove(42);
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+}
+
+TEST_F(ListRemoveTest, last) {
+	f.push_back(42);
+	s.push_back(42);
+	f.remove(42);
+	s.remove(42);
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+}

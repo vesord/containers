@@ -467,8 +467,29 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 		}
 	}
 
-//	void remove (const value_type& val);
+	void remove (const value_type& val) {
+		iterator it;
+		iterator ite = end();
+		iterator tmp;
 
+		for (it = begin(); it != ite;) {
+			tmp = it++;
+			if (*tmp == val) {
+				if (tmp == begin()) {
+					_begin_node = _begin_node->_next;
+					_end_node->_next = _begin_node;
+				}
+				if (tmp == --end()) {
+					_end_node->_prev->_prev->_next = _end_node;
+					_end_node->_prev = _end_node->_prev->_prev;
+				}
+				tmp.getPtr()->_prev->_next = tmp.getPtr()->_next;
+				tmp.getPtr()->_next->_prev = tmp.getPtr()->_prev;
+				_destroyNode(tmp.getPtr());
+				_size -= 1;
+			}
+		}
+	}
 //	template <class Predicate>
 //	void remove_if (Predicate pred);
 
