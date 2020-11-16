@@ -357,11 +357,46 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 		}
 	}
 
-//	iterator erase (iterator position);
-//	iterator erase (iterator first, iterator last);
+	iterator erase (iterator position) {
+		_t_node	*toDestroy = position.getPtr();
+		position.getPtr()->_prev->_next = position.getPtr()->_next;
+		position.getPtr()->_next->_prev = position.getPtr()->_prev;
+		if (position == begin())
+			_begin_node = position.getPtr()->_next;
+		_destroyNode(toDestroy);
+		_size--;
+		return (++position);
+	}
+	iterator erase (iterator first, iterator last) {
+		for (; first != last;)
+			first = erase(first);
+		return (first);
+	}
+
+	void swap (list& x) {
+		_t_node *tmp;
+		tmp = this->_begin_node;
+		this->_begin_node = x._begin_node;
+		x._begin_node = tmp;
+
+//		tmp = this->_end_node->_next;
+//		this->_end_node->_next = x._end_node->_next;
+//		x._end_node->_next = tmp;
 //
-//	void swap (list& x);
-//
+//		tmp = this->_end_node->_prev;
+//		this->_end_node->_prev = x._end_node->_prev;
+//		x._end_node->_prev = tmp;
+
+		tmp = this->_end_node;
+		this->_end_node = x._end_node;
+		x._end_node = tmp;
+
+		size_type tmpSize;
+		tmpSize = this->_size;
+		this->_size = x._size;
+		x._size = tmpSize;
+	};
+
 //	void resize (size_type n, value_type val = value_type());
 
 	void clear() {

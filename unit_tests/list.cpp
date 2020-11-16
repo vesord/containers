@@ -715,3 +715,151 @@ TEST_F(ListTest, insertRangeIterator) {
 	EXPECT_EQ(f.size(), s.size());
 	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
 }
+
+TEST_F(ListTest, erase) {
+	++itF; ++itS;
+	++itF; ++itS;
+	ft::list<int>::iterator fret;
+	std::list<int>::iterator sret;
+
+	fret = ftList.erase(itF);
+	sret = stdList.erase(itS);
+	checkListEqual(fret, ftList.end(), sret, stdList.end());
+	checkListEqual(ftList.begin(), ftList.end(), stdList.begin(), stdList.end());
+
+	itF = --ftList.end();
+	itS = --stdList.end();
+	fret = ftList.erase(itF);
+	sret = stdList.erase(itS);
+	EXPECT_EQ(fret, itFe);
+	EXPECT_EQ(sret, itSe);
+	checkListEqual(ftList.begin(), ftList.end(), stdList.begin(), stdList.end());
+
+	fret = ftList.erase(ftList.begin());
+	sret = stdList.erase(stdList.begin());
+	checkListEqual(fret, ftList.end(), sret, stdList.end());
+	checkListEqual(ftList.begin(), ftList.end(), stdList.begin(), stdList.end());
+
+//	ft::list<int> f;
+//	std::list<int> s;
+
+//	fret = f.erase(f.begin());
+//	sret = s.erase(s.begin());
+//	checkListEqual(fret, ftList.end(), sret, stdList.end());
+//	checkListEqual(ftList.begin(), ftList.end(), stdList.begin(), stdList.end());
+
+	fret = ftList.begin();
+	sret = stdList.begin();
+	while (sret != itSe)
+		sret = stdList.erase(stdList.begin());
+	while (fret != itFe)
+		fret = ftList.erase(ftList.begin());
+	EXPECT_EQ(true, ftList.empty());
+	EXPECT_EQ(true, stdList.empty());
+	EXPECT_EQ(fret++, itFe);
+	EXPECT_EQ(sret++, itSe);
+	EXPECT_EQ(fret++, itFe);
+	EXPECT_EQ(sret++, itSe);
+	EXPECT_EQ(fret--, itFe);
+	EXPECT_EQ(sret--, itSe);
+	EXPECT_EQ(fret--, itFe);
+	EXPECT_EQ(sret--, itSe);
+}
+
+TEST_F(ListTest, eraseRange) {
+	++itF; ++itS; --itFe; --itFe;
+	++itF; ++itS; --itSe; --itSe;
+	ft::list<int>::iterator fret;
+	std::list<int>::iterator sret;
+
+	fret = ftList.erase(itF, itFe);
+	sret = stdList.erase(itS, itSe);
+	checkListEqual(fret, ftList.end(), sret, stdList.end());
+	checkListEqual(ftList.begin(), ftList.end(), stdList.begin(), stdList.end());
+
+	fret = ftList.erase(ftList.begin(), ftList.end());
+	sret = stdList.erase(stdList.begin(), stdList.end());
+	EXPECT_EQ(true, ftList.empty());
+	EXPECT_EQ(true, stdList.empty());
+	itFe = ftList.end();
+	itSe = stdList.end();
+	EXPECT_EQ(fret++, itFe);
+	EXPECT_EQ(sret++, itSe);
+	EXPECT_EQ(fret++, itFe);
+	EXPECT_EQ(sret++, itSe);
+	EXPECT_EQ(fret--, itFe);
+	EXPECT_EQ(sret--, itSe);
+	EXPECT_EQ(fret--, itFe);
+	EXPECT_EQ(sret--, itSe);
+
+	ftList.push_back(1);
+	stdList.push_back(1);
+	fret = ftList.erase(ftList.end(), ftList.end());
+	sret = stdList.erase(stdList.end(), stdList.end());
+	EXPECT_EQ(1, ftList.size());
+	EXPECT_EQ(1, stdList.size());
+	checkListEqual(fret, ftList.end(), sret, stdList.end());
+	checkListEqual(ftList.begin(), ftList.end(), stdList.begin(), stdList.end());
+
+	ftList.push_back(2);
+	stdList.push_back(2);
+	fret = ftList.erase(--ftList.end(), ftList.end());
+	sret = stdList.erase(--stdList.end(), stdList.end());
+	EXPECT_EQ(1, ftList.size());
+	EXPECT_EQ(1, stdList.size());
+	checkListEqual(fret, ftList.end(), sret, stdList.end());
+	checkListEqual(ftList.begin(), ftList.end(), stdList.begin(), stdList.end());
+}
+
+TEST_F(ListTest, swap) {
+	ft::list<int> f1 = ftList;
+	ft::list<int> f2;
+	std::list<int> s1 = stdList;
+	std::list<int> s2;
+
+	int arr[] = {543, 54231, 1234, 341231, 4234, 4355555, 0};
+	f2.insert(f2.begin(), arr, arr + 5);
+	s2.insert(s2.begin(), arr, arr + 5);
+
+	ft::list<int> f2ref = f2;
+	std::list<int> s2ref = s2;
+
+	ft::list<int>::iterator if11 = f1.begin();
+	ft::list<int>::iterator if12 = ++(++f1.begin());
+	ft::list<int>::iterator if13 = --f1.end();
+	ft::list<int>::iterator if21 = f2.begin();
+	ft::list<int>::iterator if22 = ++(++(++(f2.begin())));
+	ft::list<int>::iterator if23 = f2.end();
+
+	std::list<int>::iterator is11 = s1.begin();
+	std::list<int>::iterator is12 = ++(++(s1.begin()));
+	std::list<int>::iterator is13 = --s1.end();
+	std::list<int>::iterator is21 = s2.begin();
+	std::list<int>::iterator is22 = ++(++(++(s2.begin())));
+	std::list<int>::iterator is23 = s2.end();
+
+	size_t fsize1 = f1.size();
+	size_t fsize2 = f2.size();
+	size_t ssize1 = s1.size();
+	size_t ssize2 = s2.size();
+
+	f1.swap(f2);
+	s1.swap(s2);
+	EXPECT_EQ(fsize1, f2.size());
+	EXPECT_EQ(fsize2, f1.size());
+	EXPECT_EQ(ssize1, s2.size());
+	EXPECT_EQ(ssize2, s1.size());
+
+	checkListEqual(if11, f2.end(), is11, s2.end());
+	checkListEqual(if12, f2.end(), is12, s2.end());
+	checkListEqual(if13, f2.end(), is13, s2.end());
+	checkListEqual(if21, f1.end(), is21, s1.end());
+	checkListEqual(if22, f1.end(), is22, s1.end());
+//	checkListEqual(if23, f1.end(), is23, s1.end()); // is23 does not remains the same WTF??
+
+	checkListEqual(f1.begin(), f1.end(), f2ref.begin(), f2ref.end());
+	checkListEqual(s1.begin(), s1.end(), s2ref.begin(), s2ref.end());
+
+	checkListEqual(f2.begin(), f2.end(), ftList.begin(), ftList.end());
+	checkListEqual(s2.begin(), s2.end(), stdList.begin(), stdList.end());
+}
