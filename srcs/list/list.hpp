@@ -97,9 +97,7 @@ class const_iterator : public ft::iterator<std::bidirectional_iterator_tag, valu
 		~const_iterator() { }
 
 		const_iterator( const_iterator const & it ) { *this = it; }
-		const_iterator( iterator const & it ) {
-			*this = it;
-		}
+		const_iterator( iterator const & it ) { *this = it; }
 		const_iterator( _t_node * node ) { this->_ptr = node; }
 
 		const_iterator & operator=( const_iterator const & rhs ) {
@@ -315,20 +313,27 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 		_begin_node->_next->_prev = _end_node;
 		_destroyNode(_begin_node);
 		_begin_node = _end_node->_next;
+		if (_size == 1) {
+			_changeBeginNode(_end_node, _end_node);
+		}
 		_size -= 1;
 	}
 	void push_back (const value_type& val) {
 		_t_node *node = _createNode(val, _end_node, _end_node->_prev);
 		_end_node->_prev->_next = node;
 		_end_node->_prev = node;
-		if (_size == 0)
-			_begin_node = node;
+		if (_size == 0) {
+			_changeBeginNode(node, node);
+		}
 		_size += 1;
 	};
 	void pop_back() {
 		_t_node *back = _end_node->_prev;
 		_end_node->_prev->_prev->_next = _end_node;
 		_end_node->_prev = _end_node->_prev->_prev;
+		if (_size == 1) {
+			_changeBeginNode(_end_node, _end_node);
+		}
 		_destroyNode(back);
 		_size -= 1;
 	}
@@ -337,10 +342,12 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 		_t_node* node = _createNode(val, position.getPtr(), position.getPtr()->_prev);
 		position.getPtr()->_prev->_next = node;
 		position.getPtr()->_prev = node;
-		if (position == begin())
-			_begin_node = node;
-		if (_size == 0)
-			_begin_node = node;
+		if (position == begin()) {
+			_changeBeginNode(node, _end_node->_prev);
+		}
+		if (_size == 0) {
+			_changeBeginNode(node, node);
+		}
 		_size += 1;
 		return iterator(node);
 	}
@@ -361,11 +368,16 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 		_t_node	*toDestroy = position.getPtr();
 		position.getPtr()->_prev->_next = position.getPtr()->_next;
 		position.getPtr()->_next->_prev = position.getPtr()->_prev;
-		if (position == begin())
-			_begin_node = position.getPtr()->_next;
+		if (position == begin()) {
+			_changeBeginNode(position.getPtr()->_next, _end_node->_prev);
+		}
+		if (_size == 1) {
+			_changeBeginNode(_end_node, _end_node);
+		}
+		++position;
 		_destroyNode(toDestroy);
 		_size--;
-		return (++position);
+		return (position);
 	}
 	iterator erase (iterator first, iterator last) {
 		for (; first != last;)
@@ -378,14 +390,6 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 		tmp = this->_begin_node;
 		this->_begin_node = x._begin_node;
 		x._begin_node = tmp;
-
-//		tmp = this->_end_node->_next;
-//		this->_end_node->_next = x._end_node->_next;
-//		x._end_node->_next = tmp;
-//
-//		tmp = this->_end_node->_prev;
-//		this->_end_node->_prev = x._end_node->_prev;
-//		x._end_node->_prev = tmp;
 
 		tmp = this->_end_node;
 		this->_end_node = x._end_node;
@@ -420,7 +424,7 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 	/*** OPERATIONS ***/
 	void splice (iterator position, list& x) {
 		if (position == begin()) {
-			_begin_node = x.begin().getPtr();
+			_changeBeginNode(x.begin().getPtr(), _size == 0 ? x.end().getPtr()->_prev : _end_node->_prev);
 		}
 
 		position.getPtr()->_prev->_next = x.begin().getPtr();
@@ -438,7 +442,7 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 	}
 	void splice (iterator position, list& x, iterator i) {
 		if (position == begin()) {
-			_begin_node = i.getPtr();
+			_changeBeginNode(i.getPtr(), _size == 0 ? i.getPtr() : _end_node->_prev);
 		}
 
 		if (i == x.begin()) {
@@ -515,17 +519,48 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 		}
 	}
 
-//	void unique();
+	void unique() {
+		iterator itFirst = begin();
+		iterator itSecond = ++begin();
+		iterator ite = end();
+
+		while (itSecond != ite) {
+			if (*itFirst == *itSecond) {
+				itSecond = erase(itSecond);
+				continue;
+			}
+			++itFirst;
+			++itSecond;
+		}
+	}
 //	template <class BinaryPredicate>
 //	void unique (BinaryPredicate binary_pred);
 
 //	void merge (list& x);
 //	template <class Compare>
 //	void merge (list& x, Compare comp);
+	void sort() {
+		sort(_less());
+	}
+	template <class Compare>
+	void sort (Compare comp) {
+		iterator iFirst;
+		iterator iSecond;
+		iterator iEnd = this->end();
 
-//	void sort();
-//	template <class Compare>
-//	void sort (Compare comp);
+		while (iEnd != ++begin()) {
+			iFirst = begin();
+			iSecond = ++begin();
+			while (iSecond != iEnd) {
+				if (!comp(*iFirst, *iSecond)) {
+					_swapNodes(iFirst, iSecond);
+				}
+				++iFirst;
+				++iSecond;
+			}
+			iEnd = iFirst;
+		}
+	}
 
 //	void reverse();
 
@@ -557,6 +592,42 @@ private:
 		return node;
 	}
 
+	void	_changeBeginNode(_t_node *newBegin, _t_node *endPrev) {
+		_begin_node = newBegin;
+		_end_node->_next = newBegin;
+		_end_node->_prev = endPrev;
+	}
+
+	/*
+	 * Swap nodes. Changes link to _begin_node accordingly. Swaps iterators.
+	 */
+
+	void	_swapNodes(iterator & it1, iterator & it2) {
+		_t_node *n1 = it1.getPtr();
+		_t_node *n2 = it2.getPtr();
+		_t_node *tmp;
+
+		tmp = n1->_prev;
+		n1->_prev = n2;
+		n1->_next = n2->_next;
+		n1->_next->_prev = n1;
+
+		n2->_prev = tmp;
+		n2->_next = n1;
+		n2->_prev->_next = n2;
+
+		if (it1 == begin()) {
+			_changeBeginNode(it2.getPtr(), it2 == --end() ? it1.getPtr() : _end_node->_prev);
+		}
+
+		iterator itmp = it1;
+		it1 = it2;
+		it2 = itmp;
+	}
+
+	struct _less {
+		bool operator()(value_type const & _x, value_type const & _y) { return _x < _y; }
+	};
 };
 
 #endif

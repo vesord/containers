@@ -8,6 +8,21 @@
 #include <list>
 #include <string>
 #include <sstream>
+#include <cmath>
+
+/* functions to check manually:
+ * erase (1 elem)
+ * pop (1 elem)
+ * push (1 elem)
+ */
+
+template< class T >
+void print_list(T & l) {
+	for (typename T::iterator it = l.begin(); it != l.end(); ++it) {
+		std::cout << *it << ' ';
+	}
+	std::cout << std::endl;
+}
 
 class ListTest : public ::testing::Test {
 protected:
@@ -1337,4 +1352,167 @@ TEST_F(ListRemoveTest, ifMid) {
 	s.remove_if(isEven);
 	EXPECT_EQ(f.size(), s.size());
 	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+}
+
+class ListUniqueTest : public ::testing::Test {
+protected:
+	virtual void SetUp() {
+		double mydoubles[] = { 12.15,  2.72, 73.0,  12.77,  3.14,
+							   12.77, 73.35, 72.25, 15.3,  72.25 };
+		f.insert(f.begin(), mydoubles,mydoubles+10);
+		s.insert(s.begin(), mydoubles,mydoubles+10);
+	}
+	ft::list<double> f;
+	std::list<double> s;
+};
+
+TEST_F(ListUniqueTest, notSorted) {
+	f.unique();
+	s.unique();
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+}
+
+//TEST_F(ListUniqueTest, sorted) {
+////	f.sort();
+//	s.sort();
+//	f.unique();
+//	s.unique();
+//	EXPECT_EQ(f.size(), s.size());
+//	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+//}
+
+TEST_F(ListUniqueTest, equalElems) {
+	f.clear();
+	s.clear();
+	f.push_back(42); s.push_back(42);
+	f.push_back(42); s.push_back(42);
+	f.push_back(42); s.push_back(42);
+	f.unique();
+	s.unique();
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+}
+
+TEST_F(ListUniqueTest, uniqueElems) {
+	f.clear();
+	s.clear();
+	f.push_back(42); s.push_back(42);
+	f.push_back(21); s.push_back(21);
+	f.push_back(12); s.push_back(12);
+	f.unique();
+	s.unique();
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+}
+
+bool same_integral_part (double first, double second)
+{ return ( int(first)==int(second) ); }
+struct is_near {
+	bool operator() (double first, double second)
+	{ return (fabs(first - second) < 5.0); }
+};
+
+/* SOME TESTS ON UNIQUE( FUNCTION ) */
+
+class ListSortTest : public ::testing::Test {
+protected:
+	virtual void SetUp() {
+		double mydoubles[] = { 12.15,  2.72, 73.0,  12.77,  3.14,
+							   12.77, 73.35, 72.25, 15.3,  72.25 };
+		f.insert(f.begin(), mydoubles,mydoubles+10);
+		s.insert(s.begin(), mydoubles,mydoubles+10);
+	}
+	ft::list<double> f;
+	std::list<double> s;
+};
+
+TEST_F(ListSortTest, sort) {
+	f.sort();
+	s.sort();
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+//	print_list(f);
+//	print_list(s);
+}
+
+TEST_F(ListSortTest, sortEmpty) {
+	f.clear();
+	s.clear();
+	f.sort();
+	s.sort();
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+}
+
+TEST_F(ListSortTest, sort_case1) {
+	f.clear();
+	s.clear();
+
+	double mydoubles2[] = { 1, 2, 4, 5 };
+	f.insert(f.begin(), mydoubles2,mydoubles2+4);
+	s.insert(s.begin(), mydoubles2,mydoubles2+4);
+
+	f.sort();
+	s.sort();
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+}
+
+TEST_F(ListSortTest, sort_case2) {
+	f.clear();
+	s.clear();
+
+	double mydoubles2[] = { 5, 4, 2, 1 };
+	f.insert(f.begin(), mydoubles2,mydoubles2+4);
+	s.insert(s.begin(), mydoubles2,mydoubles2+4);
+
+	f.sort();
+	s.sort();
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+}
+
+TEST_F(ListSortTest, sort_case3) {
+	f.clear();
+	s.clear();
+
+	double mydoubles2[] = { 5, 1, 2, 1 };
+	f.insert(f.begin(), mydoubles2,mydoubles2+4);
+	s.insert(s.begin(), mydoubles2,mydoubles2+4);
+
+	f.sort();
+	s.sort();
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+}
+
+TEST_F(ListSortTest, sort_case4) {
+	f.clear();
+	s.clear();
+
+	double mydoubles2[] = { 5, 4, 2, 5 };
+	f.insert(f.begin(), mydoubles2,mydoubles2+4);
+	s.insert(s.begin(), mydoubles2,mydoubles2+4);
+
+	f.sort();
+	s.sort();
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+}
+
+TEST_F(ListSortTest, sort_case5) {
+	f.clear();
+	s.clear();
+
+	double mydoubles2[] = { 1, 4, 2, 1 };
+	f.insert(f.begin(), mydoubles2,mydoubles2+4);
+	s.insert(s.begin(), mydoubles2,mydoubles2+4);
+
+	f.sort();
+	s.sort();
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+//	print_list(f);
+//	print_list(s);
 }
