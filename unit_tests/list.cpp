@@ -1373,14 +1373,14 @@ TEST_F(ListUniqueTest, notSorted) {
 	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
 }
 
-//TEST_F(ListUniqueTest, sorted) {
-////	f.sort();
-//	s.sort();
-//	f.unique();
-//	s.unique();
-//	EXPECT_EQ(f.size(), s.size());
-//	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
-//}
+TEST_F(ListUniqueTest, sorted) {
+	f.sort();
+	s.sort();
+	f.unique();
+	s.unique();
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+}
 
 TEST_F(ListUniqueTest, equalElems) {
 	f.clear();
@@ -1413,7 +1413,31 @@ struct is_near {
 	{ return (fabs(first - second) < 5.0); }
 };
 
-/* SOME TESTS ON UNIQUE( FUNCTION ) */
+struct is_near_mutant {
+	bool operator() (double first, double second)
+	{ return (first - second < 5.0); }
+};
+
+TEST_F(ListUniqueTest, uniqueFun1) {
+	f.unique(same_integral_part);
+	s.unique(same_integral_part);
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+}
+
+TEST_F(ListUniqueTest, uniqueFun2) {
+	f.unique(is_near());
+	s.unique(is_near());
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+}
+
+TEST_F(ListUniqueTest, uniqueFun3) {
+	f.unique(is_near_mutant());
+	s.unique(is_near_mutant());
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+}
 
 class ListSortTest : public ::testing::Test {
 protected:

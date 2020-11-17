@@ -423,15 +423,15 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 
 	/*** OPERATIONS ***/
 	void splice (iterator position, list& x) {
-		if (position == begin()) {
-			_changeBeginNode(x.begin().getPtr(), _size == 0 ? x.end().getPtr()->_prev : _end_node->_prev);
-		}
-
 		position.getPtr()->_prev->_next = x.begin().getPtr();
 		x.begin().getPtr()->_prev = position.getPtr()->_prev;
 
 		position.getPtr()->_prev = x._end_node->_prev;
 		x._end_node->_prev->_next = position.getPtr();
+
+		if (position == begin()) {
+			_changeBeginNode(x.begin().getPtr(), _size == 0 ? x.end().getPtr()->_prev : _end_node->_prev);
+		}
 
 		x.end().getPtr()->_prev = x.end().getPtr();
 		x.end().getPtr()->_next = x.end().getPtr();
@@ -441,13 +441,11 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 		x._size = 0;
 	}
 	void splice (iterator position, list& x, iterator i) {
-		if (position == begin()) {
-			_changeBeginNode(i.getPtr(), _size == 0 ? i.getPtr() : _end_node->_prev);
-		}
-
 		if (i == x.begin()) {
 			x._begin_node = i.getPtr()->_next;
 			x._end_node->_next = x._begin_node;
+			if (x._size == 1)
+				x._end_node->_prev = x._end_node;
 		}
 
 		i.getPtr()->_prev->_next = i.getPtr()->_next;
@@ -455,6 +453,10 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 
 		position.getPtr()->_prev->_next = i.getPtr();
 		i.getPtr()->_prev = position.getPtr()->_prev;
+
+		if (position == begin()) {
+			_changeBeginNode(i.getPtr(), _size == 0 ? i.getPtr() : _end_node->_prev);
+		}
 
 		i.getPtr()->_next = position.getPtr();
 		position.getPtr()->_prev = i.getPtr();
@@ -520,12 +522,16 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 	}
 
 	void unique() {
+		unique(_equal());
+	}
+	template <class BinaryPredicate>
+	void unique (BinaryPredicate binary_pred) {
 		iterator itFirst = begin();
 		iterator itSecond = ++begin();
 		iterator ite = end();
 
 		while (itSecond != ite) {
-			if (*itFirst == *itSecond) {
+			if (binary_pred(*itFirst, *itSecond)) {
 				itSecond = erase(itSecond);
 				continue;
 			}
@@ -533,8 +539,6 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 			++itSecond;
 		}
 	}
-//	template <class BinaryPredicate>
-//	void unique (BinaryPredicate binary_pred);
 
 //	void merge (list& x);
 //	template <class Compare>
@@ -627,6 +631,10 @@ private:
 
 	struct _less {
 		bool operator()(value_type const & _x, value_type const & _y) { return _x < _y; }
+	};
+
+	struct _equal {
+		bool operator()(value_type const & _x, value_type const & _y) { return _x == _y; }
 	};
 };
 
