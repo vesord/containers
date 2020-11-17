@@ -566,7 +566,22 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 		}
 	}
 
-//	void reverse();
+	void reverse() {
+		_t_node *cur = begin().getPtr();
+		_t_node *nxt;
+		_t_node *tmp;
+		_begin_node = _end_node->_prev;
+		for (size_type i = 0; i <= _size; ++i) {
+			nxt = cur->_next;
+
+			tmp = cur->_prev;
+			cur->_prev = cur->_next;
+			cur->_next = tmp;
+
+			cur = nxt;
+		}
+
+	}
 
 private:
 

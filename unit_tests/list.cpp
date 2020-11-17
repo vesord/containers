@@ -1540,3 +1540,50 @@ TEST_F(ListSortTest, sort_case5) {
 //	print_list(f);
 //	print_list(s);
 }
+
+class ListReverseTest : public ::testing::Test {
+protected:
+	virtual void SetUp() {
+		for (int i = 0; i < 5; ++i) {
+			f.push_back(i);
+		}
+		for (int i = 0; i < 5; ++i) {
+			s.push_back(i);
+		}
+	}
+	ft::list<int> f;
+	std::list<int> s;
+};
+
+TEST_F(ListReverseTest, reverseNormal) {
+	f.reverse();
+	s.reverse();
+	EXPECT_EQ(f.size(), s.size());
+	EXPECT_EQ(f.front(), s.front());
+	EXPECT_EQ(f.back(), s.back());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+}
+
+TEST_F(ListReverseTest, reverseOneElem) {
+	f.clear();
+	s.clear();
+	f.push_back(123);
+	s.push_back(123);
+	f.reverse();
+	s.reverse();
+	EXPECT_EQ(f.size(), s.size());
+	EXPECT_EQ(f.front(), s.front());
+	EXPECT_EQ(f.back(), s.back());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+}
+
+TEST_F(ListReverseTest, reverseEmpty) {
+	f.clear();
+	s.clear();
+	f.reverse();
+	s.reverse();
+	EXPECT_EQ(f.size(), s.size());
+	EXPECT_EQ(f.front(), s.front());
+	EXPECT_EQ(f.back(), s.back());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+}
