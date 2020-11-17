@@ -1255,10 +1255,6 @@ class ListRemoveTest : public ::testing::Test {
 };
 
 TEST_F(ListRemoveTest, doesNotContain) {
-
-	ft::list<int> f;
-	std::list<int> s;
-
 	f.remove(0);
 	s.remove(0);
 	EXPECT_EQ(f.size(), s.size());
@@ -1293,6 +1289,52 @@ TEST_F(ListRemoveTest, last) {
 	s.push_back(42);
 	f.remove(42);
 	s.remove(42);
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+}
+
+bool isEven(int val) { return val % 2 == 0; }
+bool isOdd(int val) { return val % 2 == 1; }
+
+TEST_F(ListRemoveTest, ifNoContain) {
+	f.remove_if(isEven);
+	s.remove_if(isEven);
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+}
+
+TEST_F(ListRemoveTest, ifAll) {
+	f.remove_if(isOdd);
+	s.remove_if(isOdd);
+	EXPECT_EQ(f.size(), s.size());
+	EXPECT_EQ(true, f.empty());
+	EXPECT_EQ(true, s.empty());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+}
+
+TEST_F(ListRemoveTest, ifLast) {
+	f.push_back(42);
+	s.push_back(42);
+	f.remove_if(isEven);
+	s.remove_if(isEven);
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+}
+
+TEST_F(ListRemoveTest, ifFirst) {
+	f.push_front(42);
+	s.push_front(42);
+	f.remove_if(isEven);
+	s.remove_if(isEven);
+	EXPECT_EQ(f.size(), s.size());
+	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+}
+
+TEST_F(ListRemoveTest, ifMid) {
+	f.insert(++(++(f.begin())), 42);
+	s.insert(++(++(s.begin())), 42);
+	f.remove_if(isEven);
+	s.remove_if(isEven);
 	EXPECT_EQ(f.size(), s.size());
 	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
 }

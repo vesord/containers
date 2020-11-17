@@ -490,8 +490,30 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 			}
 		}
 	}
-//	template <class Predicate>
-//	void remove_if (Predicate pred);
+	template <class Predicate>
+	void remove_if (Predicate pred) {
+		iterator it;
+		iterator ite = end();
+		iterator tmp;
+
+		for (it = begin(); it != ite;) {
+			tmp = it++;
+			if (pred(*tmp)) {
+				if (tmp == begin()) {
+					_begin_node = _begin_node->_next;
+					_end_node->_next = _begin_node;
+				}
+				if (tmp == --end()) {
+					_end_node->_prev->_prev->_next = _end_node;
+					_end_node->_prev = _end_node->_prev->_prev;
+				}
+				tmp.getPtr()->_prev->_next = tmp.getPtr()->_next;
+				tmp.getPtr()->_next->_prev = tmp.getPtr()->_prev;
+				_destroyNode(tmp.getPtr());
+				_size -= 1;
+			}
+		}
+	}
 
 //	void unique();
 //	template <class BinaryPredicate>
