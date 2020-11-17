@@ -16,6 +16,11 @@
 #include "allocator.hpp"
 #include "iterator.hpp"
 
+template <class T, class Alloc>
+void swap (ft::list<T,Alloc>& x, ft::list<T,Alloc>& y) {
+	x.swap(y);
+}
+
 template< class T, class Alloc = ft::allocator<T> >
 class ft::list {
 
@@ -540,9 +545,25 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 		}
 	}
 
-//	void merge (list& x);
-//	template <class Compare>
-//	void merge (list& x, Compare comp);
+	void merge (list& x) {
+		merge(x, _less());
+	}
+	template <class Compare>
+	void merge (list& x, Compare comp) {
+		if (this == &x)
+			return;
+		iterator itThis = this->begin();
+		iterator itThisEnd = this->end();
+		iterator itx = x.begin();
+		iterator itxEnd = x.end();
+
+		while (itx != itxEnd) {
+			while (itThis != itThisEnd && !comp(*itx, *itThis)) {
+				++itThis;
+			}
+			splice(itThis, x, itx++);
+		}
+	}
 	void sort() {
 		sort(_less());
 	}
@@ -580,10 +601,12 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 
 			cur = nxt;
 		}
-
 	}
 
 private:
+
+//	template <class P, class AllocSwap>
+//	friend void ft::swap (ft::list<P,AllocSwap>& x, ft::list<P,AllocSwap>& y);
 
 	size_type		_size;
 
@@ -652,5 +675,12 @@ private:
 		bool operator()(value_type const & _x, value_type const & _y) { return _x == _y; }
 	};
 };
+
+template <class P, class AllocSwap>
+void ft::swap (ft::list<P,AllocSwap>& x, ft::list<P,AllocSwap>& y) {
+	x.swap(y);
+}
+
+
 
 #endif

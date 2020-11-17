@@ -10,10 +10,10 @@
 #include <sstream>
 #include <cmath>
 
-/* functions to check manually:
- * erase (1 elem)
- * pop (1 elem)
- * push (1 elem)
+/*
+ * what to check on evaluations
+ *
+ * erase pop push 1 elem should not destroy _begin_node _end_node ect.
  */
 
 template< class T >
@@ -1586,4 +1586,198 @@ TEST_F(ListReverseTest, reverseEmpty) {
 	EXPECT_EQ(f.front(), s.front());
 	EXPECT_EQ(f.back(), s.back());
 	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
+}
+
+class ListMergeTest : public ::testing::Test {
+protected:
+	virtual void SetUp() {
+		s1.push_back (3.1); f1.push_back (3.1);
+		s1.push_back (2.2); f1.push_back (2.2);
+		s1.push_back (2.9); f1.push_back (2.9);
+
+		s2.push_back (3.7); f2.push_back (3.7);
+		s2.push_back (7.1); f2.push_back (7.1);
+		s2.push_back (1.4); f2.push_back (1.4);
+
+		s1.sort(); f1.sort();
+		s2.sort(); f2.sort();
+	}
+	std::list<double> s1, s2;
+	ft::list<double> f1, f2;
+};
+
+bool mycomparison (double first, double second)
+{ return ( int(first)<int(second) ); }
+
+TEST_F(ListMergeTest, simpleMergeF) {
+	f1.merge(f2, mycomparison);
+	s1.merge(s2, mycomparison);
+//	print_list(f1);
+//	print_list(s1);
+	EXPECT_EQ(f1.front(), s1.front());
+	EXPECT_EQ(f1.back(), s1.back());
+	EXPECT_EQ(true, f2.empty());
+	EXPECT_EQ(true, s2.empty());
+	EXPECT_EQ(f1.size(), s1.size());
+	checkListEqual(f1.begin(), f1.end(), s1.begin(), s1.end());
+	checkListEqual(f2.begin(), f2.end(), s2.begin(), s2.end());
+}
+
+TEST_F(ListMergeTest, simpleMergeToLastF) {
+	f2.clear(); f2.push_back(765); f2.push_back(7345);
+	s2.clear(); s2.push_back(765); s2.push_back(7345);
+	f1.merge(f2, mycomparison);
+	s1.merge(s2, mycomparison);
+//	print_list(f1);
+//	print_list(s1);
+	EXPECT_EQ(f1.front(), s1.front());
+	EXPECT_EQ(f1.back(), s1.back());
+	EXPECT_EQ(true, f2.empty());
+	EXPECT_EQ(true, s2.empty());
+	EXPECT_EQ(f1.size(), s1.size());
+	checkListEqual(f1.begin(), f1.end(), s1.begin(), s1.end());
+	checkListEqual(f2.begin(), f2.end(), s2.begin(), s2.end());
+}
+
+TEST_F(ListMergeTest, simpleMergeToBeginF) {
+	f2.clear(); f2.push_back(-1); f2.push_back(-7345);
+	s2.clear(); s2.push_back(-1); s2.push_back(-7345);
+	f1.merge(f2, mycomparison);
+	s1.merge(s2, mycomparison);
+//	print_list(f1);
+//	print_list(s1);
+	EXPECT_EQ(f1.front(), s1.front());
+	EXPECT_EQ(f1.back(), s1.back());
+	EXPECT_EQ(true, f2.empty());
+	EXPECT_EQ(true, s2.empty());
+	EXPECT_EQ(f1.size(), s1.size());
+	checkListEqual(f1.begin(), f1.end(), s1.begin(), s1.end());
+	checkListEqual(f2.begin(), f2.end(), s2.begin(), s2.end());
+}
+
+TEST_F(ListMergeTest, simpleMergeEqualF) {
+	f2.clear(); f2.push_back(2.25); f2.push_back(2.05);
+	s2.clear(); s2.push_back(2.25); s2.push_back(2.05);
+	f1.merge(f2, mycomparison);
+	s1.merge(s2, mycomparison);
+//	print_list(f1);
+//	print_list(s1);
+	EXPECT_EQ(f1.front(), s1.front());
+	EXPECT_EQ(f1.back(), s1.back());
+	EXPECT_EQ(true, f2.empty());
+	EXPECT_EQ(true, s2.empty());
+	EXPECT_EQ(f1.size(), s1.size());
+	checkListEqual(f1.begin(), f1.end(), s1.begin(), s1.end());
+	checkListEqual(f2.begin(), f2.end(), s2.begin(), s2.end());
+}
+
+TEST_F(ListMergeTest, simpleMerge) {
+	f1.merge(f2);
+	s1.merge(s2);
+	EXPECT_EQ(f1.front(), s1.front());
+	EXPECT_EQ(f1.back(), s1.back());
+	EXPECT_EQ(true, f2.empty());
+	EXPECT_EQ(true, s2.empty());
+	EXPECT_EQ(f1.size(), s1.size());
+	checkListEqual(f1.begin(), f1.end(), s1.begin(), s1.end());
+	checkListEqual(f2.begin(), f2.end(), s2.begin(), s2.end());
+}
+
+TEST_F(ListMergeTest, simpleMergeToLast) {
+	f2.clear(); f2.push_back(765); f2.push_back(7345);
+	s2.clear(); s2.push_back(765); s2.push_back(7345);
+	f1.merge(f2);
+	s1.merge(s2);
+	EXPECT_EQ(f1.front(), s1.front());
+	EXPECT_EQ(f1.back(), s1.back());
+	EXPECT_EQ(true, f2.empty());
+	EXPECT_EQ(true, s2.empty());
+	EXPECT_EQ(f1.size(), s1.size());
+	checkListEqual(f1.begin(), f1.end(), s1.begin(), s1.end());
+	checkListEqual(f2.begin(), f2.end(), s2.begin(), s2.end());
+}
+
+TEST_F(ListMergeTest, simpleMergeToBegin) {
+	f2.clear(); f2.push_back(-1); f2.push_back(-7345);
+	s2.clear(); s2.push_back(-1); s2.push_back(-7345);
+	f1.merge(f2);
+	s1.merge(s2);
+//	print_list(f1);
+//	print_list(s1);
+	EXPECT_EQ(f1.front(), s1.front());
+	EXPECT_EQ(f1.back(), s1.back());
+	EXPECT_EQ(true, f2.empty());
+	EXPECT_EQ(true, s2.empty());
+	EXPECT_EQ(f1.size(), s1.size());
+	checkListEqual(f1.begin(), f1.end(), s1.begin(), s1.end());
+	checkListEqual(f2.begin(), f2.end(), s2.begin(), s2.end());
+}
+
+TEST_F(ListMergeTest, simpleMergeEqual) {
+	f2.clear(); f2.push_back(2.25); f2.push_back(2.05);
+	s2.clear(); s2.push_back(2.25); s2.push_back(2.05);
+	f1.merge(f2);
+	s1.merge(s2);
+//	print_list(f1);
+//	print_list(s1);
+	EXPECT_EQ(f1.front(), s1.front());
+	EXPECT_EQ(f1.back(), s1.back());
+	EXPECT_EQ(true, f2.empty());
+	EXPECT_EQ(true, s2.empty());
+	EXPECT_EQ(f1.size(), s1.size());
+	checkListEqual(f1.begin(), f1.end(), s1.begin(), s1.end());
+	checkListEqual(f2.begin(), f2.end(), s2.begin(), s2.end());
+}
+
+TEST_F(ListTest, swapFunction) {
+	ft::list<int> f1 = ftList;
+	ft::list<int> f2;
+	std::list<int> s1 = stdList;
+	std::list<int> s2;
+
+	int arr[] = {543, 54231, 1234, 341231, 4234, 4355555, 0};
+	f2.insert(f2.begin(), arr, arr + 5);
+	s2.insert(s2.begin(), arr, arr + 5);
+
+	ft::list<int> f2ref = f2;
+	std::list<int> s2ref = s2;
+
+	ft::list<int>::iterator if11 = f1.begin();
+	ft::list<int>::iterator if12 = ++(++f1.begin());
+	ft::list<int>::iterator if13 = --f1.end();
+	ft::list<int>::iterator if21 = f2.begin();
+	ft::list<int>::iterator if22 = ++(++(++(f2.begin())));
+	ft::list<int>::iterator if23 = f2.end();
+
+	std::list<int>::iterator is11 = s1.begin();
+	std::list<int>::iterator is12 = ++(++(s1.begin()));
+	std::list<int>::iterator is13 = --s1.end();
+	std::list<int>::iterator is21 = s2.begin();
+	std::list<int>::iterator is22 = ++(++(++(s2.begin())));
+	std::list<int>::iterator is23 = s2.end();
+
+	size_t fsize1 = f1.size();
+	size_t fsize2 = f2.size();
+	size_t ssize1 = s1.size();
+	size_t ssize2 = s2.size();
+
+	ft::swap(f1, f2);
+	std::swap(s1, s2);
+	EXPECT_EQ(fsize1, f2.size());
+	EXPECT_EQ(fsize2, f1.size());
+	EXPECT_EQ(ssize1, s2.size());
+	EXPECT_EQ(ssize2, s1.size());
+
+	checkListEqual(if11, f2.end(), is11, s2.end());
+	checkListEqual(if12, f2.end(), is12, s2.end());
+	checkListEqual(if13, f2.end(), is13, s2.end());
+	checkListEqual(if21, f1.end(), is21, s1.end());
+	checkListEqual(if22, f1.end(), is22, s1.end());
+//	checkListEqual(if23, f1.end(), is23, s1.end()); // is23 does not remains the same. Check cpprefference on it
+
+	checkListEqual(f1.begin(), f1.end(), f2ref.begin(), f2ref.end());
+	checkListEqual(s1.begin(), s1.end(), s2ref.begin(), s2ref.end());
+
+	checkListEqual(f2.begin(), f2.end(), ftList.begin(), ftList.end());
+	checkListEqual(s2.begin(), s2.end(), stdList.begin(), stdList.end());
 }
