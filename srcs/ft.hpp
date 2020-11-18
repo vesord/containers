@@ -30,6 +30,8 @@ namespace ft {
 	template <class T, class Alloc>
 	void swap (ft::list<T,Alloc>& x, ft::list<T,Alloc>& y);
 
+	template < class T, class Alloc > class vector;
+
 }
 
 #endif
