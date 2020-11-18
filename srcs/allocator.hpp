@@ -64,7 +64,7 @@ public:
 	}
 
 	size_type max_size() const throw() {
-		return std::numeric_limits<size_type>::max() / sizeof(value_type);
+		return std::numeric_limits<size_type>::max() / sizeof(ft::allocator<value_type>);
 	};
 
 	void construct ( pointer p, const_reference val ) {

@@ -15,6 +15,7 @@
 
 #include "allocator.hpp"
 #include "iterator.hpp"
+#include <iostream>
 
 template< class T, class Alloc = ft::allocator<T> >
 class ft::vector {
@@ -49,12 +50,36 @@ public:
 
 	/*** CONSTRUCTION ***/
 
-	explicit vector (const allocator_type& alloc = allocator_type());
+	explicit vector (const allocator_type& alloc = allocator_type()) : _size(0), _capacity(0) {
+		static_cast<void>(alloc);
+		_first_elem = _end_elem = nullptr;
+	}
 	explicit vector (size_type n, const value_type& val = value_type(),
-					 const allocator_type& alloc = allocator_type());
+					 const allocator_type& alloc = allocator_type()) : _size(n), _capacity(n) {
+		_first_elem = alloc.allocate(n);
+		pointer ptr = _first_elem;
+		for (; n > 0; --n) {
+			alloc.construct(ptr++, val);
+		}
+		_end_elem = ptr;
+	}
 	template <class InputIterator>
 	vector (InputIterator first, InputIterator last,
-			const allocator_type& alloc = allocator_type());
+			const allocator_type& alloc = allocator_type(),
+			typename ft::enable_if<std::__is_input_iterator<InputIterator>::value>::type* = 0) : _size(0), _capacity(0) {
+		InputIterator	ibegin = first;
+		size_type		size = 0;
+		while (ibegin != last) {
+			++ibegin;
+			++size;
+		}
+		_first_elem = alloc.allocate(size);
+		pointer ptr = _first_elem;
+		while (first != last) {
+			alloc.construct(ptr++, *first++);
+		}
+		_end_elem = ptr;
+	}
 	vector (const vector& x);
 
 	/*** DESTRUCTION ***/
@@ -114,6 +139,13 @@ public:
 
 	void swap (vector& x); // no throw
 	void clear(); // no throw
+
+private:
+
+	size_type 	_capacity;
+	size_type	_size;
+	pointer 	_first_elem;
+	pointer 	_end_elem;
 
 };
 

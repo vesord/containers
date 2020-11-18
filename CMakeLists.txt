@@ -9,8 +9,8 @@ set(INCLUDE_DIRS srcs)
 
 include_directories(${INCLUDE_DIRS})
 
-set(SRCS srcs/list.hpp srcs/allocator.hpp srcs/ft.hpp srcs/iterator.hpp)
-add_executable(ft_containers main.cpp ${SRCS} srcs/vector.hpp)
+set(SRCS srcs/list.hpp srcs/allocator.hpp srcs/ft.hpp srcs/iterator.hpp srcs/vector.hpp)
+add_executable(ft_containers main.cpp ${SRCS} )
 
 add_library(testlib ${SRCS} main.cpp)
 add_subdirectory(unit_tests)
