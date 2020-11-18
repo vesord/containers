@@ -4,10 +4,7 @@
 
 #include "gtest/gtest.h"
 
-TEST(prestart, prestart_1)
-{
-	int i = 1;
-	int j = 2;
-
-	ASSERT_EQ(i, j);
+int main(int argc, char **argv) {
+	::testing::InitGoogleTest(&argc, argv);
+	return RUN_ALL_TESTS();
 }

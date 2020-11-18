@@ -3,7 +3,6 @@
 //
 
 #include "gtest/gtest.h"
-//#include "allocator.hpp"
 #include "list.hpp"
 #include <list>
 #include <string>
@@ -32,7 +31,6 @@ protected:
 		for (int i = 0; i < 10; ++i)
 			stdList.push_front(i);
 	}
-//	virtual void TearDown();
 
 	ft::list<int> ftList;
 	std::list<int> stdList;
