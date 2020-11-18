@@ -15,6 +15,7 @@
 
 #include "allocator.hpp"
 #include "iterator.hpp"
+#include <iostream>
 
 template< class T, class Alloc = ft::allocator<T> >
 class ft::list {
@@ -276,7 +277,7 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 	/*** CAPACITY ***/
 	bool empty() const { return this->_begin_node == this->_end_node; };
 	size_type size() const { return this->_size; }
-	size_type max_size() const { return std::numeric_limits<size_type>::max() / sizeof(value_type); }
+	size_type max_size() const { return std::numeric_limits<size_type>::max() / sizeof(ft::list<value_type>); }
 
 	/*** ELEMENT ACCESS ***/
 	reference front() { return *this->_begin_node->_data; };
