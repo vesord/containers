@@ -16,11 +16,6 @@
 #include "allocator.hpp"
 #include "iterator.hpp"
 
-template <class T, class Alloc>
-void swap (ft::list<T,Alloc>& x, ft::list<T,Alloc>& y) {
-	x.swap(y);
-}
-
 template< class T, class Alloc = ft::allocator<T> >
 class ft::list {
 
