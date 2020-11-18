@@ -681,6 +681,55 @@ void ft::swap (ft::list<P,AllocSwap>& x, ft::list<P,AllocSwap>& y) {
 	x.swap(y);
 }
 
+template <class T, class Alloc>
+bool operator== (const ft::list<T,Alloc>& lhs, const ft::list<T,Alloc>& rhs) {
+	if (lhs.size() != rhs.size()) {
+		return false;
+	}
+	typename ft::list<T, Alloc>::const_iterator lit;
+	typename ft::list<T, Alloc>::const_iterator lite = lhs.end();
+	typename ft::list<T, Alloc>::const_iterator rit = rhs.begin();
+	typename ft::list<T, Alloc>::const_iterator rite = rhs.end();
+
+	for (lit = lhs.begin(); lit != lite; ++lit) {
+		if (rit == rite || *lit != *rit)
+			return false;
+		++rit;
+	}
+	return true;
+}
+
+template <class T, class Alloc>
+bool operator!= (const ft::list<T,Alloc>& lhs, const ft::list<T,Alloc>& rhs) { return !(lhs == rhs); }
+
+template <class T, class Alloc>
+bool operator<  (const ft::list<T,Alloc>& lhs, const ft::list<T,Alloc>& rhs) {
+	if (lhs.size() < rhs.size()) {
+		return true;
+	}
+	typename ft::list<T, Alloc>::const_iterator lit;
+	typename ft::list<T, Alloc>::const_iterator lite = lhs.end();
+	typename ft::list<T, Alloc>::const_iterator rit = rhs.begin();
+	typename ft::list<T, Alloc>::const_iterator rite = rhs.end();
+
+	for (lit = lhs.begin(); lit != lite; ++lit) {
+		if (rit == rite)
+			return false;
+		if (*lit < *rit)
+			return true;
+		++rit;
+	}
+	return false;
+}
+
+template <class T, class Alloc>
+bool operator<= (const ft::list<T,Alloc>& lhs, const ft::list<T,Alloc>& rhs) { return !(rhs < lhs); };
+
+template <class T, class Alloc>
+bool operator>  (const ft::list<T,Alloc>& lhs, const ft::list<T,Alloc>& rhs) { return rhs < lhs; };
+
+template <class T, class Alloc>
+bool operator>= (const ft::list<T,Alloc>& lhs, const ft::list<T,Alloc>& rhs) { return !(lhs < rhs); };
 
 
 #endif
