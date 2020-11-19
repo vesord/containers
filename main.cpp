@@ -1,6 +1,6 @@
 //#include <iostream>
-//#include <vector>
-//#include <list>
+#include <vector>
+#include <list>
 #include "list.hpp"
 #include "vector.hpp"
 
@@ -38,4 +38,8 @@ int main()
 
 /*	VECTOR COMPILES	*/
 	ft::vector<int> v;
+	std::vector<int> s(3);
+
+	std::cout << s.capacity() << std::endl;
+//	s.push_front(3);
 }

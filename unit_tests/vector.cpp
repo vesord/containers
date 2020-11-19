@@ -64,6 +64,25 @@ TEST_F(VectorConstructorTest, valueConstructor2) {
 	checkIfVectorsAreEqual(f1, s1);
 }
 
-TEST_F(VectorConstructorTest, rangeConstructor) {}
+TEST_F(VectorConstructorTest, rangeConstructor) {
+	std::vector<int> sample;
+	sample.push_back(54);
+	sample.push_back(42);
+	sample.push_back(21);
+	ft::vector<int> f(sample.begin(), sample.end());
+	std::vector<int> s(sample.begin(), sample.end());
+	checkIfVectorsAreEqual(f, s);
+}
 
-TEST_F(VectorConstructorTest, copyConstructor) {}
+TEST_F(VectorConstructorTest, copyConstructor) {
+	ft::vector<std::string> f1(60, "Hello World!");
+	std::vector<std::string> s1(60, "Hello World!");
+	ft::vector<std::string> f2(f1);
+	std::vector<std::string> s2(s1);
+	checkIfVectorsAreEqual(f2, s2);
+	ft::vector<std::string> f3 = f2;
+	std::vector<std::string> s3 = s2;
+	checkIfVectorsAreEqual(f3, s3);
+}
+
+/*** ITERATORS TEST ***/

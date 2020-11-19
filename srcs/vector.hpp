@@ -292,15 +292,17 @@ public:
 			alloc.construct(ptr++, *first++);
 		}
 		_end_elem = ptr;
+		_size = size;
+		_capacity = _size;
 	}
 	vector (const vector& x) : _size(x._size), _capacity(x._capacity) {
-		// set size; set capacity
 		_end_elem = _alloc.allocate(_capacity);
 		pointer ptr = _end_elem;
-		pointer ptrx = x._end_elem;
+		pointer ptrx = x.begin().getPtr();
 		for (size_type i = 0; i < _size; ++i) {
-			p
+			_alloc.construct(ptr++, *ptrx++);
 		}
+		_end_elem = ptr;
 	}
 
 	/*** DESTRUCTION ***/
