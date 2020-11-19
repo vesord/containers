@@ -67,7 +67,7 @@ public:
 		return std::numeric_limits<size_type>::max() / sizeof(ft::allocator<value_type>);
 	};
 
-	void construct ( pointer p, const_reference val ) {
+	void construct ( pointer p, const_reference val ) const {
 		new (static_cast<void*>(p)) value_type (val);
 	};
 
