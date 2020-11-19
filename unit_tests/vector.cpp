@@ -85,4 +85,36 @@ TEST_F(VectorConstructorTest, copyConstructor) {
 	checkIfVectorsAreEqual(f3, s3);
 }
 
-/*** ITERATORS TEST ***/
+class VectorIteratorTest : public ::testing::Test {
+protected:
+	virtual void SetUp() {
+		std::vector<int> sample;
+		sample.push_back(54);
+		sample.push_back(42);
+		sample.push_back(21);
+		sample.push_back(12);
+		sample.push_back(99);
+		sample.push_back(66);
+
+		std::vector<int> s(sample.begin(), sample.end());
+		ft::vector<int> f(sample.begin(), sample.end());
+
+		std::vector<int>::iterator its =			s.begin();
+		std::vector<int>::iterator itse =			s.end();
+		std::vector<int>::const_iterator cits =		s.begin();
+		std::vector<int>::const_iterator citse =	s.end();
+		std::vector<int>::reverse_iterator rits =	s.rbegin();
+		std::vector<int>::reverse_iterator ritse =	s.rend();
+		std::vector<int>::reverse_iterator crits =	s.rbegin();
+		std::vector<int>::reverse_iterator critse =	s.rend();
+
+		ft::vector<int>::iterator itf =						f.begin();
+		ft::vector<int>::iterator itfe =					f.end();
+		ft::vector<int>::const_iterator citf =				f.begin();
+		ft::vector<int>::const_iterator citfe =				f.end();
+		ft::vector<int>::reverse_iterator ritf =			f.rbegin();
+		ft::vector<int>::reverse_iterator ritfe =			f.rend();
+		ft::vector<int>::const_reverse_iterator critf =		f.rbegin();
+		ft::vector<int>::const_reverse_iterator critfe =	f.rend();
+	}
+};

@@ -87,6 +87,7 @@ public:
 		bool  operator<( const_iterator const & rhs ) const { return this->_ptr  < rhs.getPtr(); }
 		bool  operator>( const_iterator const & rhs ) const { return this->_ptr  > rhs.getPtr(); }
 
+		value_type & operator[]() ;
 		value_type & operator*() const { return *this->_ptr; }
 		value_type * operator->() const { return this->_ptr; }
 
