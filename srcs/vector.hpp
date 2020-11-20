@@ -391,7 +391,7 @@ public:
 		if (_size + 1 > _capacity)
 			_reallocate(_capacity * 2);
 		pointer curPosPtr = position.getPtr();
-		std::memmove(curPosPtr + 1, curPosPtr, _end_elem - curPosPtr);
+		std::memmove(curPosPtr + 1, curPosPtr, static_cast<size_t>(_end_elem - curPosPtr));
 		_alloc.construct(curPosPtr, val);
 		_size += 1;
 		return iterator(curPosPtr);

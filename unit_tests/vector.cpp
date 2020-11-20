@@ -411,11 +411,41 @@ protected:
 		}
 	}
 	std::vector<int> sample;
+	ft::vector<int>::iterator itf;
+	ft::vector<int>::iterator itfe;
+	ft::vector<int>::iterator itfret;
+	std::vector<int>::iterator its;
+	std::vector<int>::iterator itse;
+	std::vector<int>::iterator itsret;
 };
 
-TEST_F(VectorInsertTest, insertInPosition_1) {
+TEST_F(VectorInsertTest, insertInPosition1) { // insert into begin with reallocation
 	ft::vector<int> f(sample.begin(), sample.end());
 	std::vector<int> s(sample.begin(), sample.end());
 
-	// test on iterators validity (beyond pos and after pos)
+	itf = f.begin(); itfe = f.end();
+	its = s.begin(); itse = s.end();
+
+	itfret = f.insert(itf, 42);
+	itsret = s.insert(its, 42);
+	checkIfVectorsAreEqual(f, s);
+	checkVectorsAreEqualIt(itfret, f.end(), itsret, s.end());
 }
+
+TEST_F(VectorInsertTest, insertInPosition2) { // insert into begin without reallocation
+	ft::vector<int> f(sample.begin(), sample.end());
+	std::vector<int> s(sample.begin(), sample.end());
+
+	f.reserve(30);
+	s.reserve(30);
+
+	itf = f.begin(); itfe = f.end();
+	its = s.begin(); itse = s.end();
+
+	itfret = f.insert(itf, 42);
+	itsret = s.insert(its, 42);
+	checkIfVectorsAreEqual(f, s);
+	checkVectorsAreEqualIt(itfret, f.end(), itsret, s.end());
+}
+
+// test on iterators validity (beyond pos and after pos)
