@@ -387,8 +387,20 @@ public:
 	void push_back (const value_type& val); // throws bad_alloc
 	void pop_back(); // no throw
 
-	iterator insert (iterator position, const value_type& val); // if throws container in a valid state
-	void insert (iterator position, size_type n, const value_type& val); // if throws container in a valid state
+	iterator insert (iterator position, const value_type& val) {
+		if (_size + 1 > _capacity)
+			_reallocate(_capacity * 2);
+		pointer curPosPtr = position.getPtr();
+		std::memmove(curPosPtr + 1, curPosPtr, _end_elem - curPosPtr);
+		_alloc.construct(curPosPtr, val);
+		_size += 1;
+	}
+	void insert (iterator position, size_type n, const value_type& val) {
+		if (_size + n > _capacity)
+			_reallocate((_size + n) * 2);
+		pointer curPosPtr = position.getPtr();
+		std::memmove(curPosPtr + n, curPosPtr, _end_elem - curPosPtr);
+	}
 	template <class InputIterator>
 	void insert (iterator position, InputIterator first, InputIterator last); // if throws container in a valid state
 
