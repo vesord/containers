@@ -6,8 +6,8 @@
 #include "vector.hpp"
 #include <vector>
 #include <string>
-#include <sstream>
-#include <cmath>
+#include <stdexcept>
+
 
 template< class T >
 void printContainer(T & l) {
@@ -344,5 +344,27 @@ TEST_F(VectorAccessTest, operatorBrackets) {
 	std::vector<int> s(sample.begin(), sample.end());
 	ft::vector<int> f(sample.begin(), sample.end());
 
-	EXPECT_EQ(f[0], s[0]);
+	for (size_t i = 0; i < 10; ++i) {
+		EXPECT_EQ(f[i], s[i]) << "operator[] fails on " << i << " iteration";
+	}
+}
+
+TEST_F(VectorAccessTest, at) {
+	std::vector<int> s(sample.begin(), sample.end());
+	ft::vector<int> f(sample.begin(), sample.end());
+	int nouse = 0;
+
+	for (size_t i = 0; i < 10; ++i) {
+		EXPECT_EQ(f.at(i), s.at(i)) << "at() fails on " << i << " iteration";
+	}
+	EXPECT_THROW(nouse += s.at(10), std::out_of_range) << "at() does not throw std::out_of_range";
+	EXPECT_THROW(nouse += f.at(10), std::out_of_range) << "at() does not throw std::out_of_range";
+}
+
+TEST_F(VectorAccessTest, frontBack) {
+	std::vector<int> s(sample.begin(), sample.end());
+	ft::vector<int> f(sample.begin(), sample.end());
+
+	EXPECT_EQ(s.front(), f.front());
+	EXPECT_EQ(s.back(), f.back());
 }

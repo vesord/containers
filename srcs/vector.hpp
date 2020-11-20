@@ -357,14 +357,14 @@ public:
 		return *(_end_elem - _size + static_cast<difference_type>(n));
 	} // if n > size undefined behavior
 	reference at (size_type n) {
-		if (n < 0 || n > _size)
+		if (n < 0 || n >= _size)
 			throw std::out_of_range("index out of range");
-		this->operator[](n);
+		return this->operator[](n);
 	} // throws out_of_bounds
 	const_reference at (size_type n) const {
-		if (n < 0 || n > _size)
+		if (n < 0 || n >= _size)
 			throw std::out_of_range("index out of range");
-		this->operator[](n);
+		return this->operator[](n);
 	}; // throws out_of_bounds
 	reference front() { return *(_end_elem - _size); } // if empty() undefined behaviour
 	const_reference front() const { return *(_end_elem - _size); } // if empty() undefined behaviour
