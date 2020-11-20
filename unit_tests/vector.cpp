@@ -85,10 +85,84 @@ TEST_F(VectorConstructorTest, copyConstructor) {
 	checkIfVectorsAreEqual(f3, s3);
 }
 
+template <typename itFt, typename itFtEnd, typename itStd, typename itStdEnd>
+void checkVectorsAreEqualIt(itFt itF, itFtEnd itFe, itStd itS, itStdEnd itSe) {
+	for (; itS != itSe; ) {
+		EXPECT_EQ(*itS++, *itF++);
+	}
+	EXPECT_EQ(itF, itFe);
+};
+
+template <typename ftIter, typename stdIter, typename ftIterTmp, typename stdIterTmp>
+void	vectorIteratorTest(ftIter & fIt, ftIter & fIte, ftIterTmp & ftmpIt,
+						 stdIter & sIt, stdIter & sIte, stdIterTmp & stmpIt)
+{
+	ftmpIt = fIt;
+	stmpIt = sIt;
+	EXPECT_EQ(ftmpIt, fIt) << "Assignation or operator== fails.";
+	EXPECT_EQ(stmpIt, sIt);
+	EXPECT_GE(fIt, ftmpIt) << "operator>= fails.";
+	EXPECT_GE(sIt, stmpIt);
+	EXPECT_LE(ftmpIt, fIt) << "operator<= fails.";
+	EXPECT_LE(stmpIt, sIt);
+
+	ASSERT_EQ(*fIt, *sIt) << "Dereference fails.";
+
+	++fIt;
+	++sIt;
+	EXPECT_EQ(*fIt, *sIt) << "++operator fails.";
+
+	EXPECT_NE(fIt, ftmpIt) << "operator!= fails.";
+	EXPECT_NE(sIt, stmpIt);
+	EXPECT_GT(fIt, ftmpIt) << "operator> fails.";
+	EXPECT_GT(sIt, stmpIt);
+	EXPECT_GE(fIt, ftmpIt) << "operator>= fails.";
+	EXPECT_GE(sIt, stmpIt);
+	EXPECT_LT(ftmpIt, fIt) << "operator< fails.";
+	EXPECT_LT(stmpIt, sIt);
+	EXPECT_LE(ftmpIt, fIt) << "operator<= fails.";
+	EXPECT_LE(stmpIt, sIt);
+
+
+
+	--fIt;
+	--sIt;
+	EXPECT_EQ(*fIt, *sIt) << "--operator fails.";
+
+	EXPECT_EQ(fIt[3], sIt[3]) << "operator[] fails.";
+	EXPECT_EQ(*(fIt + 3), *(sIt + 3)) << "operator+ fails.";
+	EXPECT_EQ(sIt[3], *(sIt + 3)) << "operator+ or operator[] fails.";
+	EXPECT_EQ(fIt[3], *(fIt + 3)) << "operator+ or operator[] fails.";
+
+	ftmpIt = fIt++;
+	stmpIt = sIt++;
+	EXPECT_EQ(*fIt, *sIt) << "operator++ fails.";
+	EXPECT_EQ(*stmpIt, *ftmpIt) << "operator++ fails.";
+
+	ftmpIt = fIt--;
+	stmpIt = sIt--;
+	EXPECT_EQ(*fIt, *sIt) << "operator-- fails.";
+	EXPECT_EQ(*stmpIt, *ftmpIt) << "operator-- fails.";
+
+	fIt += 4;
+	sIt += 4;
+	EXPECT_EQ(*fIt, *sIt) << "operator+= fails.";
+
+	EXPECT_EQ(fIt[-3], sIt[-3]) << "operator[] fails.";
+	EXPECT_EQ(*(fIt - 3), *(sIt - 3)) << "operator- fails.";
+	EXPECT_EQ(sIt[-3], *(sIt - 3)) << "operator- or operator[] fails.";
+	EXPECT_EQ(fIt[-3], *(fIt - 3)) << "operator- or operator[] fails.";
+
+	fIt -= 4;
+	sIt -= 4;
+	EXPECT_EQ(*fIt, *sIt) << "operator-= fails.";
+
+	checkVectorsAreEqualIt(fIt, fIte, sIt, sIte);
+}
+
 class VectorIteratorTest : public ::testing::Test {
 protected:
 	virtual void SetUp() {
-		std::vector<int> sample;
 		sample.push_back(54);
 		sample.push_back(42);
 		sample.push_back(21);
@@ -96,25 +170,148 @@ protected:
 		sample.push_back(99);
 		sample.push_back(66);
 
-		std::vector<int> s(sample.begin(), sample.end());
-		ft::vector<int> f(sample.begin(), sample.end());
 
-		std::vector<int>::iterator its =			s.begin();
-		std::vector<int>::iterator itse =			s.end();
-		std::vector<int>::const_iterator cits =		s.begin();
-		std::vector<int>::const_iterator citse =	s.end();
-		std::vector<int>::reverse_iterator rits =	s.rbegin();
-		std::vector<int>::reverse_iterator ritse =	s.rend();
-		std::vector<int>::reverse_iterator crits =	s.rbegin();
-		std::vector<int>::reverse_iterator critse =	s.rend();
 
-		ft::vector<int>::iterator itf =						f.begin();
-		ft::vector<int>::iterator itfe =					f.end();
-		ft::vector<int>::const_iterator citf =				f.begin();
-		ft::vector<int>::const_iterator citfe =				f.end();
-		ft::vector<int>::reverse_iterator ritf =			f.rbegin();
-		ft::vector<int>::reverse_iterator ritfe =			f.rend();
-		ft::vector<int>::const_reverse_iterator critf =		f.rbegin();
-		ft::vector<int>::const_reverse_iterator critfe =	f.rend();
+//		std::vector<int>::iterator its =			s.begin();
+//		std::vector<int>::iterator itse =			s.end();
+//		std::vector<int>::const_iterator cits =		s.begin();
+//		std::vector<int>::const_iterator citse =	s.end();
+//		std::vector<int>::reverse_iterator rits =	s.rbegin();
+//		std::vector<int>::reverse_iterator ritse =	s.rend();
+//		std::vector<int>::reverse_iterator crits =	s.rbegin();
+//		std::vector<int>::reverse_iterator critse =	s.rend();
+//
+//		ft::vector<int>::iterator itf =						f.begin();
+//		ft::vector<int>::iterator itfe =					f.end();
+//		ft::vector<int>::const_iterator citf =				f.begin();
+//		ft::vector<int>::const_iterator citfe =				f.end();
+//		ft::vector<int>::reverse_iterator ritf =			f.rbegin();
+//		ft::vector<int>::reverse_iterator ritfe =			f.rend();
+//		ft::vector<int>::const_reverse_iterator critf =		f.rbegin();
+//		ft::vector<int>::const_reverse_iterator critfe =	f.rend();
 	}
+	std::vector<int> sample;
 };
+
+TEST_F(VectorIteratorTest, IteratorInputInputTest) {
+	std::vector<int> s(sample.begin(), sample.end());
+	ft::vector<int> f(sample.begin(), sample.end());
+
+	ft::vector<int>::iterator itf =		f.begin();
+	ft::vector<int>::iterator itfe =	f.end();
+	ft::vector<int>::iterator tmpf;
+
+	std::vector<int>::iterator its =	s.begin();
+	std::vector<int>::iterator itse =	s.end();
+	std::vector<int>::iterator tmps;
+
+	vectorIteratorTest(itf, itfe, tmpf, its, itse, tmps);
+}
+
+TEST_F(VectorIteratorTest, IteratorInputConstInputTest) {
+	std::vector<int> s(sample.begin(), sample.end());
+	ft::vector<int> f(sample.begin(), sample.end());
+
+	ft::vector<int>::iterator itf =		f.begin();
+	ft::vector<int>::iterator itfe =	f.end();
+	ft::vector<int>::const_iterator tmpf;
+
+	std::vector<int>::iterator its =	s.begin();
+	std::vector<int>::iterator itse =	s.end();
+	std::vector<int>::const_iterator tmps;
+
+	vectorIteratorTest(itf, itfe, tmpf, its, itse, tmps);
+}
+
+TEST_F(VectorIteratorTest, IteratorConstInputConstInputTest) {
+	std::vector<int> s(sample.begin(), sample.end());
+	ft::vector<int> f(sample.begin(), sample.end());
+
+	ft::vector<int>::const_iterator itf =		f.begin();
+	ft::vector<int>::const_iterator itfe =	f.end();
+	ft::vector<int>::const_iterator tmpf;
+
+	std::vector<int>::const_iterator its =	s.begin();
+	std::vector<int>::const_iterator itse =	s.end();
+	std::vector<int>::const_iterator tmps;
+
+	vectorIteratorTest(itf, itfe, tmpf, its, itse, tmps);
+}
+
+/* THIS TEST NORMALLY SHOULD NOT COMPILE */
+/*
+TEST_F(VectorIteratorTest, IteratorConstInputInputTest) {
+	std::vector<int> s(sample.begin(), sample.end());
+	ft::vector<int> f(sample.begin(), sample.end());
+
+	ft::vector<int>::const_iterator itf =		f.begin();
+	ft::vector<int>::const_iterator itfe =	f.end();
+	ft::vector<int>::iterator tmpf;
+
+	std::vector<int>::const_iterator its =	s.begin();
+	std::vector<int>::const_iterator itse =	s.end();
+	std::vector<int>::iterator tmps;
+
+	vectorIteratorTest(itf, itfe, tmpf, its, itse, tmps);
+}*/
+
+TEST_F(VectorIteratorTest, IteratorReverseReverseTest) {
+	std::vector<int> s(sample.begin(), sample.end());
+	ft::vector<int> f(sample.begin(), sample.end());
+
+	ft::vector<int>::reverse_iterator itf =		f.rbegin();
+	ft::vector<int>::reverse_iterator itfe =	f.rend();
+	ft::vector<int>::reverse_iterator tmpf;
+
+	std::vector<int>::reverse_iterator its =	s.rbegin();
+	std::vector<int>::reverse_iterator itse =	s.rend();
+	std::vector<int>::reverse_iterator tmps;
+
+	vectorIteratorTest(itf, itfe, tmpf, its, itse, tmps);
+}
+
+TEST_F(VectorIteratorTest, IteratorReverseConstReverseTest) {
+	std::vector<int> s(sample.begin(), sample.end());
+	ft::vector<int> f(sample.begin(), sample.end());
+
+	ft::vector<int>::reverse_iterator itf =		f.rbegin();
+	ft::vector<int>::reverse_iterator itfe =	f.rend();
+	ft::vector<int>::const_reverse_iterator tmpf;
+
+	std::vector<int>::reverse_iterator its =	s.rbegin();
+	std::vector<int>::reverse_iterator itse =	s.rend();
+	std::vector<int>::const_reverse_iterator tmps;
+
+	vectorIteratorTest(itf, itfe, tmpf, its, itse, tmps);
+}
+
+TEST_F(VectorIteratorTest, IteratorConstReverseConstReverseTest) {
+	std::vector<int> s(sample.begin(), sample.end());
+	ft::vector<int> f(sample.begin(), sample.end());
+
+	ft::vector<int>::const_reverse_iterator itf =		f.rbegin();
+	ft::vector<int>::const_reverse_iterator itfe =	f.rend();
+	ft::vector<int>::const_reverse_iterator tmpf;
+
+	std::vector<int>::const_reverse_iterator its =	s.rbegin();
+	std::vector<int>::const_reverse_iterator itse =	s.rend();
+	std::vector<int>::const_reverse_iterator tmps;
+
+	vectorIteratorTest(itf, itfe, tmpf, its, itse, tmps);
+}
+
+/* THIS TEST NORMALLY SHOULD NOT COMPILE */
+/*TEST_F(VectorIteratorTest, IteratorConstReverseReverseTest) {
+	std::vector<int> s(sample.begin(), sample.end());
+	ft::vector<int> f(sample.begin(), sample.end());
+
+	ft::vector<int>::const_reverse_iterator itf =		f.rbegin();
+	ft::vector<int>::const_reverse_iterator itfe =	f.rend();
+	ft::vector<int>::reverse_iterator tmpf;
+
+	std::vector<int>::const_reverse_iterator its =	s.rbegin();
+	std::vector<int>::const_reverse_iterator itse =	s.rend();
+	std::vector<int>::reverse_iterator tmps;
+
+	vectorIteratorTest(itf, itfe, tmpf, its, itse, tmps);
+}*/
