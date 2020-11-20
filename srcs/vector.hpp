@@ -15,6 +15,7 @@
 
 #include "allocator.hpp"
 #include "iterator.hpp"
+#include <stdexcept>
 #include <iostream>
 
 template< class T, class Alloc = ft::allocator<T> >
@@ -312,7 +313,19 @@ public:
 
 	/*** ASSIGNATION ***/
 
-	vector& operator= (const vector& x); // if throws container in valid state
+	vector& operator=(const vector& x) { // if throws container in valid state
+		clear();
+		this->_size = x._size;
+		this->_capacity = x._capacity;
+		_end_elem = _alloc.allocate(_capacity);
+		pointer ptr = _end_elem;
+		pointer ptrx = x.begin().getPtr();
+		for (size_type i = 0; i < _size; ++i) {
+			_alloc.construct(ptr++, *ptrx++);
+		}
+		_end_elem = ptr;
+		return *this;
+	}
 
 	/*** ITERATORS ***/
 
@@ -337,14 +350,26 @@ public:
 
 	/*** ELEMENT ACCESS ***/
 
-	reference operator[] (size_type n); // if n > size undefined behavior
-	const_reference operator[] (size_type n) const; // if n > size undefined behavior
-	reference at (size_type n); // throws out_of_bounds
-	const_reference at (size_type n) const; // throws out_of_bounds
-	reference front(); // if empty() undefined behaviour
-	const_reference front() const; // if empty() undefined behaviour
-	reference back(); // if empty() undefined behaviour
-	const_reference back() const; // if empty() undefined behaviour
+	reference operator[] (size_type n) {
+		return *(_end_elem - _size + static_cast<difference_type>(n));
+	} // if n > size undefined behavior
+	const_reference operator[] (size_type n) const {
+		return *(_end_elem - _size + static_cast<difference_type>(n));
+	} // if n > size undefined behavior
+	reference at (size_type n) {
+		if (n < 0 || n > _size)
+			throw std::out_of_range("index out of range");
+		this->operator[](n);
+	} // throws out_of_bounds
+	const_reference at (size_type n) const {
+		if (n < 0 || n > _size)
+			throw std::out_of_range("index out of range");
+		this->operator[](n);
+	}; // throws out_of_bounds
+	reference front() { return *(_end_elem - _size); } // if empty() undefined behaviour
+	const_reference front() const { return *(_end_elem - _size); } // if empty() undefined behaviour
+	reference back() { return *(_end_elem - 1); } // if empty() undefined behaviour
+	const_reference back() const { return *(_end_elem - 1); } // if empty() undefined behaviour
 
 	/*** MODIFIERS ***/
 

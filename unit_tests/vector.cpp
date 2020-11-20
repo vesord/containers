@@ -123,8 +123,6 @@ void	vectorIteratorTest(ftIter & fIt, ftIter & fIte, ftIterTmp & ftmpIt,
 	EXPECT_LE(ftmpIt, fIt) << "operator<= fails.";
 	EXPECT_LE(stmpIt, sIt);
 
-
-
 	--fIt;
 	--sIt;
 	EXPECT_EQ(*fIt, *sIt) << "--operator fails.";
@@ -170,25 +168,6 @@ protected:
 		sample.push_back(99);
 		sample.push_back(66);
 
-
-
-//		std::vector<int>::iterator its =			s.begin();
-//		std::vector<int>::iterator itse =			s.end();
-//		std::vector<int>::const_iterator cits =		s.begin();
-//		std::vector<int>::const_iterator citse =	s.end();
-//		std::vector<int>::reverse_iterator rits =	s.rbegin();
-//		std::vector<int>::reverse_iterator ritse =	s.rend();
-//		std::vector<int>::reverse_iterator crits =	s.rbegin();
-//		std::vector<int>::reverse_iterator critse =	s.rend();
-//
-//		ft::vector<int>::iterator itf =						f.begin();
-//		ft::vector<int>::iterator itfe =					f.end();
-//		ft::vector<int>::const_iterator citf =				f.begin();
-//		ft::vector<int>::const_iterator citfe =				f.end();
-//		ft::vector<int>::reverse_iterator ritf =			f.rbegin();
-//		ft::vector<int>::reverse_iterator ritfe =			f.rend();
-//		ft::vector<int>::const_reverse_iterator critf =		f.rbegin();
-//		ft::vector<int>::const_reverse_iterator critfe =	f.rend();
 	}
 	std::vector<int> sample;
 };
@@ -315,3 +294,55 @@ TEST_F(VectorIteratorTest, IteratorConstReverseConstReverseTest) {
 
 	vectorIteratorTest(itf, itfe, tmpf, its, itse, tmps);
 }*/
+
+class VectorAssignationTest : public ::testing::Test {
+protected:
+	virtual void SetUp() {
+		sample.push_back(54);
+		sample.push_back(42);
+		sample.push_back(21);
+		sample.push_back(12);
+		sample.push_back(99);
+		sample.push_back(66);
+	}
+	std::vector<int> sample;
+};
+
+TEST_F(VectorAssignationTest, emptyAssign) {
+	std::vector<int> s;
+	std::vector<int> s1;
+	ft::vector<int> f;
+	ft::vector<int> f1;
+
+	s = s1;
+	f = f1;
+	checkIfVectorsAreEqual(f, s);
+}
+
+TEST_F(VectorAssignationTest, nonEmptyAssign) {
+	std::vector<int> s(sample.begin(), sample.end());
+	std::vector<int> s1;
+	ft::vector<int> f(sample.begin(), sample.end());
+	ft::vector<int> f1;
+
+	s = s1;
+	f = f1;
+	checkIfVectorsAreEqual(f, s);
+}
+
+class VectorAccessTest : public ::testing::Test {
+protected:
+	virtual void SetUp() {
+		for (int i = 0; i < 10; ++i) {
+			sample.push_back(i);
+		}
+	}
+	std::vector<int> sample;
+};
+
+TEST_F(VectorAccessTest, operatorBrackets) {
+	std::vector<int> s(sample.begin(), sample.end());
+	ft::vector<int> f(sample.begin(), sample.end());
+
+	EXPECT_EQ(f[0], s[0]);
+}
