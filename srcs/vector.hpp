@@ -394,15 +394,24 @@ public:
 		std::memmove(curPosPtr + 1, curPosPtr, _end_elem - curPosPtr);
 		_alloc.construct(curPosPtr, val);
 		_size += 1;
+		return iterator(curPosPtr);
 	}
 	void insert (iterator position, size_type n, const value_type& val) {
 		if (_size + n > _capacity)
 			_reallocate((_size + n) * 2);
 		pointer curPosPtr = position.getPtr();
 		std::memmove(curPosPtr + n, curPosPtr, _end_elem - curPosPtr);
+		for (size_type i = 0; i < n; ++i) {
+			_alloc.construct(&curPosPtr[i], val);
+		}
+		_size += n;
 	}
 	template <class InputIterator>
-	void insert (iterator position, InputIterator first, InputIterator last); // if throws container in a valid state
+	void insert (iterator position, InputIterator first, InputIterator last) {
+		for(; first != last; ++first) {
+			insert(position, *first);
+		}
+	} // if throws container in a valid state
 
 	iterator erase (iterator position); // no throw
 	iterator erase (iterator first, iterator last); // no throw

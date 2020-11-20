@@ -402,3 +402,20 @@ TEST_F(VectorReserveTest, reserveEmpty) {
 	EXPECT_THROW(f1.reserve(f1.max_size() + 1), std::length_error);
 	EXPECT_THROW(s1.reserve(s1.max_size() + 1), std::length_error);
 }
+
+class VectorInsertTest : public ::testing::Test {
+protected:
+	virtual void SetUp() {
+		for (int i = 0; i < 10; ++i) {
+			sample.push_back(i);
+		}
+	}
+	std::vector<int> sample;
+};
+
+TEST_F(VectorInsertTest, insertInPosition_1) {
+	ft::vector<int> f(sample.begin(), sample.end());
+	std::vector<int> s(sample.begin(), sample.end());
+
+	// test on iterators validity (beyond pos and after pos)
+}
