@@ -37,7 +37,9 @@ public:
 
 private:
 
-	// Some internal stuff
+	size_type	_size;
+	size_type 	_capacity;
+	pointer 	_end_elem;
 
 public:
 
@@ -346,30 +348,36 @@ public:
 	void resize (size_type n, value_type val = value_type()); // if throws container still in a valid state
 	size_type capacity() const { return this->_capacity; }
 	bool empty() const { return _size == 0; }
-	void reserve (size_type n); // throws length_error, bad_alloc
+	void reserve (size_type n) {
+		if (n > max_size())
+			throw std::length_error("can not reserve more then max_size() elements");
+		if (n < _capacity)
+			return ;
+		_reallocate(n);
+	}; // throws length_error, bad_alloc
 
 	/*** ELEMENT ACCESS ***/
 
 	reference operator[] (size_type n) {
 		return *(_end_elem - _size + static_cast<difference_type>(n));
-	} // if n > size undefined behavior
+	} 						// if n > size undefined behavior
 	const_reference operator[] (size_type n) const {
 		return *(_end_elem - _size + static_cast<difference_type>(n));
-	} // if n > size undefined behavior
+	}			// if n > size undefined behavior
 	reference at (size_type n) {
 		if (n < 0 || n >= _size)
 			throw std::out_of_range("index out of range");
 		return this->operator[](n);
-	} // throws out_of_bounds
+	}								// throws out_of_bounds
 	const_reference at (size_type n) const {
 		if (n < 0 || n >= _size)
 			throw std::out_of_range("index out of range");
 		return this->operator[](n);
-	}; // throws out_of_bounds
-	reference front() { return *(_end_elem - _size); } // if empty() undefined behaviour
-	const_reference front() const { return *(_end_elem - _size); } // if empty() undefined behaviour
-	reference back() { return *(_end_elem - 1); } // if empty() undefined behaviour
-	const_reference back() const { return *(_end_elem - 1); } // if empty() undefined behaviour
+	};					// throws out_of_bounds
+	reference front() { return *(_end_elem - _size); }				// if empty() undefined behaviour
+	const_reference front() const { return *(_end_elem - _size); }	// if empty() undefined behaviour
+	reference back() { return *(_end_elem - 1); }					// if empty() undefined behaviour
+	const_reference back() const { return *(_end_elem - 1); }		// if empty() undefined behaviour
 
 	/*** MODIFIERS ***/
 
@@ -401,10 +409,18 @@ public:
 
 private:
 
-	size_type	_size;
-	size_type 	_capacity;
-	pointer 	_end_elem;
-
+	void	_reallocate(size_type n) {
+		pointer newV = _alloc.allocate(n);
+		pointer begin = _end_elem - _size;
+		size_type i;
+		for (i = 0; i < _size; ++i) {
+			newV[i] = begin[i];
+		}
+		clear();
+		_capacity = n;
+		_size = i;
+		_end_elem = &newV[i];
+	}
 };
 
 #endif

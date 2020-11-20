@@ -368,3 +368,37 @@ TEST_F(VectorAccessTest, frontBack) {
 	EXPECT_EQ(s.front(), f.front());
 	EXPECT_EQ(s.back(), f.back());
 }
+
+class VectorReserveTest : public ::testing::Test {
+protected:
+	virtual void SetUp() {
+		for (int i = 0; i < 10; ++i) {
+			sample.push_back(i);
+		}
+	}
+	std::vector<int> sample;
+};
+
+TEST_F(VectorReserveTest, reserveEmpty) {
+	std::vector<int> s;
+	ft::vector<int> f;
+	std::vector<int> s1(sample.begin(), sample.end());
+	ft::vector<int> f1(sample.begin(), sample.end());
+
+	s.reserve(10);
+	f.reserve(10);
+	EXPECT_GE(s.capacity(), 10);
+	EXPECT_GE(f.capacity(), 10);
+	s1.reserve(11);
+	f1.reserve(11);
+	EXPECT_GE(s1.capacity(), 11);
+	EXPECT_GE(f1.capacity(), 11);
+	checkIfVectorsAreEqual(f1, s1);
+	f1.reserve(200000);
+	s1.reserve(200000);
+	EXPECT_GE(s1.capacity(), 200000);
+	EXPECT_GE(f1.capacity(), 200000);
+	checkIfVectorsAreEqual(f1, s1);
+	EXPECT_THROW(f1.reserve(f1.max_size() + 1), std::length_error);
+	EXPECT_THROW(s1.reserve(s1.max_size() + 1), std::length_error);
+}
