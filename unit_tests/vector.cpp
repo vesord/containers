@@ -969,3 +969,170 @@ TEST_F(VectorEraseTest, eraseIterator5) { // erase end, noting should happen
 	checkVectorsAreEqualIt(itf, f.end(), its, s.end());
 	checkVectorsAreEqualIt(itfret, f.end(), itsret, s.end());
 }
+
+class VectorPushBackTest : public ::testing::Test {
+protected:
+	virtual void SetUp() {
+		for (int i = 0; i < 10; ++i) {
+			sample.push_back(i);
+		}
+	}
+	std::vector<int> sample;
+	ft::vector<int>::iterator itf;
+	ft::vector<int>::iterator itfe;
+	ft::vector<int>::iterator itfret;
+	std::vector<int>::iterator its;
+	std::vector<int>::iterator itse;
+	std::vector<int>::iterator itsret;
+};
+
+TEST_F(VectorPushBackTest, toEmpty) { // to empty with reallocation
+	std::vector<int> es;
+	ft::vector<int> ef;
+
+	es.push_back(42);
+	ef.push_back(42);
+
+	checkIfVectorsAreEqual(ef, es);
+}
+
+TEST_F(VectorPushBackTest, toEmptyNoRealloc) { // to empty without reallocation
+	std::vector<int> es;
+	ft::vector<int> ef;
+
+	es.reserve(10);
+	ef.reserve(10);
+
+	es.push_back(42);
+	ef.push_back(42);
+
+	checkIfVectorsAreEqual(ef, es);
+}
+
+TEST_F(VectorPushBackTest, withRealloc) { // to empty with reallocation
+	std::vector<int> s(sample.begin(), sample.end());
+	ft::vector<int> f(sample.begin(), sample.end());
+
+	s.push_back(42);
+	f.push_back(42);
+
+	checkIfVectorsAreEqual(f, s);
+}
+
+TEST_F(VectorPushBackTest, withoutRealloc) { // to empty without reallocation
+	std::vector<int> s(sample.begin(), sample.end());
+	ft::vector<int> f(sample.begin(), sample.end());
+
+	s.reserve(15);
+	f.reserve(15);
+
+	s.push_back(42);
+	f.push_back(42);
+
+	checkIfVectorsAreEqual(f, s);
+}
+
+class VectorPopBackTest : public ::testing::Test {
+protected:
+	virtual void SetUp() {
+		for (int i = 0; i < 10; ++i) {
+			sample.push_back(i);
+		}
+	}
+	std::vector<int> sample;
+	ft::vector<int>::iterator itf;
+	ft::vector<int>::iterator itfe;
+	ft::vector<int>::iterator itfret;
+	std::vector<int>::iterator its;
+	std::vector<int>::iterator itse;
+	std::vector<int>::iterator itsret;
+};
+
+TEST_F(VectorPopBackTest, single) {
+	std::vector<int> s(sample.begin(), ++sample.begin());
+	 ft::vector<int> f(sample.begin(), ++sample.begin());
+
+	s.pop_back();
+	f.pop_back();
+
+	EXPECT_EQ(s.size(), 0);
+	EXPECT_EQ(f.size(), 0);
+	checkIfVectorsAreEqual(f, s);
+}
+
+TEST_F(VectorPopBackTest, simple) {
+	std::vector<int> s(sample.begin(), sample.end());
+	ft::vector<int> f(sample.begin(), sample.end());
+
+	s.pop_back();
+	f.pop_back();
+
+	EXPECT_EQ(s.size(), 9);
+	EXPECT_EQ(f.size(), 9);
+	checkIfVectorsAreEqual(f, s);
+}
+
+class VectorResizeTest : public ::testing::Test {
+protected:
+	virtual void SetUp() {
+		for (int i = 0; i < 10; ++i) {
+			sample.push_back(i);
+		}
+	}
+	std::vector<int> sample;
+	ft::vector<int>::iterator itf;
+	ft::vector<int>::iterator itfe;
+	ft::vector<int>::iterator itfret;
+	std::vector<int>::iterator its;
+	std::vector<int>::iterator itse;
+	std::vector<int>::iterator itsret;
+};
+
+TEST_F(VectorResizeTest, toUp) {
+	std::vector<int> s(sample.begin(), sample.end());
+	ft::vector<int> f(sample.begin(), sample.end());
+
+	for (int i = 0; i < 5; ++i) {
+		s.resize(static_cast<size_t>(12 * i));
+		f.resize(static_cast<size_t>(12 * i));
+		EXPECT_EQ(s.size(), 12 * i);
+		EXPECT_EQ(f.size(), 12 * i);
+		checkIfVectorsAreEqual(f, s);
+	}
+}
+
+TEST_F(VectorResizeTest, toDown) {
+	std::vector<int> s(sample.begin(), sample.end());
+	ft::vector<int> f(sample.begin(), sample.end());
+
+	for (int i = 10; i > 0; --i) {
+		s.resize(static_cast<size_t>(i));
+		f.resize(static_cast<size_t>(i));
+		EXPECT_EQ(s.size(), i);
+		EXPECT_EQ(f.size(), i);
+		checkIfVectorsAreEqual(f, s);
+	}
+}
+
+TEST_F(VectorResizeTest, toMixed) {
+	std::vector<int> s(sample.begin(), sample.end());
+	ft::vector<int> f(sample.begin(), sample.end());
+
+	s.resize(5);
+	f.resize(5);
+	EXPECT_EQ(s.size(), 5);
+	EXPECT_EQ(f.size(), 5);
+	checkIfVectorsAreEqual(f, s);
+
+	s.resize(20);
+	f.resize(20);
+	EXPECT_EQ(s.size(), 20);
+	EXPECT_EQ(f.size(), 20);
+	checkIfVectorsAreEqual(f, s);
+
+	s.resize(15);
+	f.resize(15);
+	EXPECT_EQ(s.size(), 15);
+	EXPECT_EQ(f.size(), 15);
+	checkIfVectorsAreEqual(f, s);
+}

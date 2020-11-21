@@ -345,7 +345,12 @@ public:
 
 	size_type size() const { return this->_size; }
 	size_type max_size() const { return std::numeric_limits<size_type>::max() / sizeof(ft::vector<value_type>); }
-	void resize (size_type n, value_type val = value_type()); // if throws container still in a valid state
+	void resize (size_type n, value_type val = value_type()) {
+		if (n > _size)
+			insert(end(), n - _size, val);
+		if (n < _size)
+			erase(iterator(end().getPtr() - (_size - n)), end());
+	}
 	size_type capacity() const { return this->_capacity; }
 	bool empty() const { return _size == 0; }
 	void reserve (size_type n) {
@@ -384,8 +389,12 @@ public:
 	template <class InputIterator>
 	void assign (InputIterator first, InputIterator last); // if throws container in a valid state
 	void assign (size_type n, const value_type& val); // if throws container in a valid state
-	void push_back (const value_type& val); // throws bad_alloc
-	void pop_back(); // no throw
+	void push_back (const value_type& val) {
+		insert(end(), val);
+	}
+	void pop_back() {
+		erase(--end());
+	}
 
 	iterator insert (iterator position, const value_type& val) {
 		pointer curPosPtr = position.getPtr();
@@ -456,6 +465,8 @@ public:
 private:
 
 	void	_reallocate(size_type n) {
+		if (n == 0)
+			n = 1;
 		pointer newV = _alloc.allocate(n);
 		pointer begin = _end_elem - _size;
 		size_type i;
