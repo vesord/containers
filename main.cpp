@@ -42,8 +42,10 @@ int main()
 	s.push_back(1);
 	s.push_back(2);
 	s.push_back(3);
-	std::vector<int>::iterator its = ++s.begin();
+//	std::vector<int>::iterator its = ++s.begin();
 
-//	std::cout << its << std::endl;
+	s.clear();
+	std::cout << s.size() << std::endl;
+	std::cout << s.capacity() << std::endl;
 //	s.push_front(3);
 }

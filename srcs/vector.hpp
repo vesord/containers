@@ -311,12 +311,12 @@ public:
 
 	/*** DESTRUCTION ***/
 
-	~vector() { clear(); }
+	~vector() { _full_clear(); }
 
 	/*** ASSIGNATION ***/
 
 	vector& operator=(const vector& x) { // if throws container in valid state
-		clear();
+		_full_clear();
 		this->_size = x._size;
 		this->_capacity = x._capacity;
 		_end_elem = _alloc.allocate(_capacity);
@@ -387,7 +387,10 @@ public:
 	/*** MODIFIERS ***/
 
 	template <class InputIterator>
-	void assign (InputIterator first, InputIterator last); // if throws container in a valid state
+//	void assign (InputIterator first, InputIterator last) {
+//		clear();
+//		insert()
+//	}
 	void assign (size_type n, const value_type& val); // if throws container in a valid state
 	void push_back (const value_type& val) {
 		insert(end(), val);
@@ -456,13 +459,18 @@ public:
 		for (size_type i = 0; i < _size; ++i) {
 			_alloc.destroy(--ptr);
 		}
-		_alloc.deallocate(ptr, _size);
 		_size = 0;
-		_capacity = 0;
-		_end_elem = nullptr;
+		_end_elem = ptr;
 	}
 
 private:
+
+	void	_full_clear() {
+		clear();
+		_alloc.deallocate(_end_elem, _size);
+		_capacity = 0;
+		_end_elem = nullptr;
+	}
 
 	void	_reallocate(size_type n) {
 		if (n == 0)
@@ -473,7 +481,7 @@ private:
 		for (i = 0; i < _size; ++i) {
 			newV[i] = begin[i];
 		}
-		clear();
+		_full_clear();
 		_capacity = n;
 		_size = i;
 		_end_elem = &newV[i];

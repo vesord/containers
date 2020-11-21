@@ -295,6 +295,32 @@ TEST_F(VectorIteratorTest, IteratorConstReverseConstReverseTest) {
 	vectorIteratorTest(itf, itfe, tmpf, its, itse, tmps);
 }*/
 
+class VectorClearTest : public ::testing::Test {
+protected:
+	virtual void SetUp() {
+		for (int i = 0; i < 10; ++i) {
+			sample.push_back(i);
+		}
+	}
+	std::vector<int> sample;
+};
+
+TEST_F(VectorClearTest, capacityRemainsTheSame) {
+	std::vector<int> s(sample.begin(), sample.end());
+	ft::vector<int> f(sample.begin(), sample.end());
+
+	size_t caps = s.capacity();
+	size_t capf = f.capacity();
+
+	s.clear();
+	f.clear();
+
+	EXPECT_EQ(capf, f.capacity()) << "capacity should remain the same after clear";
+	EXPECT_EQ(caps, s.capacity());
+	EXPECT_EQ(0, f.size());
+	EXPECT_EQ(0, s.size());
+}
+
 class VectorAssignationTest : public ::testing::Test {
 protected:
 	virtual void SetUp() {
@@ -327,6 +353,22 @@ TEST_F(VectorAssignationTest, nonEmptyAssign) {
 
 	s = s1;
 	f = f1;
+	checkIfVectorsAreEqual(f, s);
+}
+
+TEST_F(VectorAssignationTest, nonEmptyAssignCapacityCheck) {
+	std::vector<int> s(sample.begin(), sample.end());
+	std::vector<int> s1;
+	ft::vector<int> f(sample.begin(), sample.end());
+	ft::vector<int> f1;
+
+	s1.reserve(30);
+	f1.reserve(30);
+
+	s1 = s;
+	f1 = f;
+	EXPECT_EQ(s1.capacity(), 30);
+	EXPECT_EQ(f1.capacity(), 30);
 	checkIfVectorsAreEqual(f, s);
 }
 
