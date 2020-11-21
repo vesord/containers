@@ -388,33 +388,58 @@ public:
 	void pop_back(); // no throw
 
 	iterator insert (iterator position, const value_type& val) {
-		if (_size + 1 > _capacity)
-			_reallocate(_capacity * 2);
 		pointer curPosPtr = position.getPtr();
-		std::memmove(curPosPtr + 1, curPosPtr, static_cast<size_t>(_end_elem - curPosPtr));
+		if (_size + 1 > _capacity) {
+			difference_type offset = _end_elem - curPosPtr;
+			_reallocate(_capacity * 2);
+			curPosPtr = _end_elem - offset;
+		}
+		std::memmove(curPosPtr + 1, curPosPtr,
+			   static_cast<size_t>(abs(_end_elem - curPosPtr)) * sizeof(value_type));
 		_alloc.construct(curPosPtr, val);
+		_end_elem += 1;
 		_size += 1;
 		return iterator(curPosPtr);
 	}
 	void insert (iterator position, size_type n, const value_type& val) {
-		if (_size + n > _capacity)
-			_reallocate((_size + n) * 2);
 		pointer curPosPtr = position.getPtr();
-		std::memmove(curPosPtr + n, curPosPtr, _end_elem - curPosPtr);
+		if (_size + n > _capacity) {
+			difference_type offset = _end_elem - curPosPtr;
+			_reallocate((_size + n) * 2);
+			curPosPtr = _end_elem - offset;
+		}
+		std::memmove(curPosPtr + n, curPosPtr,
+			   static_cast<size_t>(abs(_end_elem - curPosPtr)) * sizeof(value_type));
 		for (size_type i = 0; i < n; ++i) {
 			_alloc.construct(&curPosPtr[i], val);
 		}
+		_end_elem += n;
 		_size += n;
 	}
 	template <class InputIterator>
-	void insert (iterator position, InputIterator first, InputIterator last) {
+	void insert (iterator position, InputIterator first, InputIterator last,
+				 typename ft::enable_if<std::__is_input_iterator<InputIterator>::value>::type* = 0) {
 		for(; first != last; ++first) {
-			insert(position, *first);
+			position = insert(position, *first);
+			++position;
 		}
-	} // if throws container in a valid state
+	}
 
-	iterator erase (iterator position); // no throw
-	iterator erase (iterator first, iterator last); // no throw
+	iterator erase (iterator position) {
+		pointer erasePosPtr = position.getPtr();
+		_alloc.destroy(erasePosPtr);
+		std::memmove(erasePosPtr, erasePosPtr + 1,
+			   static_cast<size_t>(abs(_end_elem - erasePosPtr)) * sizeof(value_type));
+		_size -= 1;
+		_end_elem -= 1;
+		return (erasePosPtr);
+	}
+	iterator erase (iterator first, iterator last) {
+		for(; first != last; ) {
+			erase(--last);
+		}
+		return last;
+	}
 
 	void swap (vector& x); // no throw
 	void clear() {
