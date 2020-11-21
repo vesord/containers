@@ -368,7 +368,7 @@ TEST_F(VectorAssignationTest, nonEmptyAssignCapacityCheck) {
 	s1 = s;
 	f1 = f;
 	EXPECT_EQ(s1.capacity(), 30);
-	EXPECT_EQ(f1.capacity(), 30);
+	EXPECT_EQ(f1.capacity(), 30) << "Capacity should not be changed if you're assigning a smaller vector";
 	checkIfVectorsAreEqual(f, s);
 }
 

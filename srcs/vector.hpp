@@ -316,16 +316,8 @@ public:
 	/*** ASSIGNATION ***/
 
 	vector& operator=(const vector& x) { // if throws container in valid state
-		_full_clear();
-		this->_size = x._size;
-		this->_capacity = x._capacity;
-		_end_elem = _alloc.allocate(_capacity);
-		pointer ptr = _end_elem;
-		pointer ptrx = x.begin().getPtr();
-		for (size_type i = 0; i < _size; ++i) {
-			_alloc.construct(ptr++, *ptrx++);
-		}
-		_end_elem = ptr;
+		clear();
+		insert(begin(), x.begin(), x.end());
 		return *this;
 	}
 
