@@ -17,7 +17,7 @@
 #include "iterator.hpp"
 #include <iostream>
 
-template< class T, class Alloc = ft::allocator<T> >
+template< class T, class Alloc >
 class ft::list {
 
 public:
@@ -217,32 +217,31 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 	typedef size_t size_type;
 
 	/*** CONSTRUCTION ***/
-	explicit list (const allocator_type& alloc = allocator_type()) : _size( 0 ) {
-		_createEndNode(alloc);
+	explicit list (const allocator_type& alloc = allocator_type()) : _alloc(alloc), _size( 0 ) {
+		_createEndNode();
 		_begin_node = _end_node;
 		_size = 0;
 	}
 	template <class InputIterator>
 	list (InputIterator first, InputIterator last,
 		  const allocator_type& alloc = allocator_type(),
-		  typename ft::enable_if<std::__is_input_iterator<InputIterator>::value>::type* = 0) : _size( 0 ) {
-		_createEndNode(alloc);
+		  typename ft::enable_if<std::__is_input_iterator<InputIterator>::value>::type* = 0) : _alloc(alloc), _size( 0 ) {
+		_createEndNode();
 		_begin_node = _end_node;
 		for (; first != last; ++first) {
 			push_back(*first);
 		}
 	}
 	explicit list (size_type n, const value_type& val = value_type(),
-				   const allocator_type& alloc = allocator_type()) : _size( 0 ) {
-		_createEndNode(alloc);
+				   const allocator_type& alloc = allocator_type()) : _alloc(alloc), _size( 0 ) {
+		_createEndNode();
 		_begin_node = _end_node;
 		for (size_type size = 0; size < n; ++size)
 			push_front(val);
 	}
-	list (const list& x) : _size( 0 ) {
+	list (const list& x) : _alloc(x._alloc), _size( 0 ) {
 		_createEndNode();
 		_begin_node = _end_node;
-		//there should be get allocator, but our list doesn't have one
 		*this = x;
 	}
 
@@ -606,11 +605,11 @@ private:
 
 	size_type		_size;
 
-	void	_createEndNode(const allocator_type& alloc = allocator_type()) {
+	void	_createEndNode() {
 		_end_node = _alloc_rebind.allocate(1);
 		_end_node->_next = _end_node;
 		_end_node->_prev = _end_node;
-		_end_node->_data = alloc.allocate(1);
+		_end_node->_data = _alloc.allocate(1);
 	}
 
 	void	_destroyNode( _t_node* node ) {

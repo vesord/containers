@@ -18,7 +18,7 @@
 #include <stdexcept>
 #include <iostream>
 
-template< class T, class Alloc = ft::allocator<T> >
+template< class T, class Alloc >
 class ft::vector {
 
 public:
@@ -267,39 +267,39 @@ public:
 
 	/*** CONSTRUCTION ***/
 
-	explicit vector (const allocator_type& alloc = allocator_type()) : _size(0), _capacity(0) {
+	explicit vector (const allocator_type& alloc = allocator_type()) : _size(0), _capacity(0), _alloc(alloc) {
 		static_cast<void>(alloc);
 		_end_elem = nullptr;
 	}
 	explicit vector (size_type n, const value_type& val = value_type(),
-					 const allocator_type& alloc = allocator_type()) : _size(n), _capacity(n) {
-		_end_elem = alloc.allocate(n);
+					 const allocator_type& alloc = allocator_type()) : _size(n), _capacity(n), _alloc(alloc) {
+		_end_elem = _alloc.allocate(n);
 		pointer ptr = _end_elem;
 		for (; n > 0; --n) {
-			alloc.construct(ptr++, val);
+			_alloc.construct(ptr++, val);
 		}
 		_end_elem = ptr;
 	}
 	template <class InputIterator>
 	vector (InputIterator first, InputIterator last,
 			const allocator_type& alloc = allocator_type(),
-			typename ft::enable_if<std::__is_input_iterator<InputIterator>::value>::type* = 0) : _size(0), _capacity(0) {
+			typename ft::enable_if<std::__is_input_iterator<InputIterator>::value>::type* = 0) : _size(0), _capacity(0), _alloc(alloc) {
 		InputIterator	ibegin = first;
 		size_type		size = 0;
 		while (ibegin != last) {
 			++ibegin;
 			++size;
 		}
-		_end_elem = alloc.allocate(size);
+		_end_elem = _alloc.allocate(size);
 		pointer ptr = _end_elem;
 		while (first != last) {
-			alloc.construct(ptr++, *first++);
+			_alloc.construct(ptr++, *first++);
 		}
 		_end_elem = ptr;
 		_size = size;
 		_capacity = _size;
 	}
-	vector (const vector& x) : _size(x._size), _capacity(x._capacity) {
+	vector (const vector& x) : _size(x._size), _capacity(x._capacity), _alloc(x._alloc) {
 		_end_elem = _alloc.allocate(_capacity);
 		pointer ptr = _end_elem;
 		pointer ptrx = x.begin().getPtr();
@@ -478,7 +478,7 @@ private:
 		pointer begin = _end_elem - _size;
 		size_type i;
 		for (i = 0; i < _size; ++i) {
-			newV[i] = begin[i];
+			_alloc.construct(&newV[i], begin[i]);
 		}
 		_full_clear();
 		_capacity = n;

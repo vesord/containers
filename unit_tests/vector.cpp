@@ -979,7 +979,6 @@ TEST_F(VectorInsertStrTest, insertIntRangeN3) {	// insert into begin with reallo
 	ft::vector<std::string> f(sample.begin(), sample.end());
 	std::vector<std::string> s(sample.begin(), sample.end());
 
-//	printContainer(f);
 	f.insert(f.begin(), 15, std::to_string(42));
 	s.insert(s.begin(), 15,std::to_string(42));
 
