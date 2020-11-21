@@ -1178,3 +1178,111 @@ TEST_F(VectorResizeTest, toMixed) {
 	EXPECT_EQ(f.size(), 15);
 	checkIfVectorsAreEqual(f, s);
 }
+
+class VectorAssignTest : public ::testing::Test {
+protected:
+	virtual void SetUp() {
+		for (int i = 0; i < 10; ++i) {
+			sample.push_back(i);
+		}
+	}
+	std::vector<int> sample;
+	ft::vector<int>::iterator itf;
+	ft::vector<int>::iterator itfe;
+	ft::vector<int>::iterator itfret;
+	std::vector<int>::iterator its;
+	std::vector<int>::iterator itse;
+	std::vector<int>::iterator itsret;
+};
+
+TEST_F(VectorAssignTest, toEmpty) {
+	std::vector<int> s(sample.begin(), sample.end());
+	 ft::vector<int> f(sample.begin(), sample.end());
+
+	std::vector<int> s1;
+	 ft::vector<int> f1;
+
+	s1.assign(s.begin(), s.end());
+	f1.assign(f.begin(), f.end());
+	checkIfVectorsAreEqual(f1, s1);
+}
+
+TEST_F(VectorAssignTest, toNotEmpty) {
+	std::vector<int> s(sample.begin(), sample.end());
+	ft::vector<int> f(sample.begin(), sample.end());
+
+	std::vector<int> s1(s);
+	ft::vector<int> f1(f);
+
+	s1.assign(++++s.begin(), --s.end());
+	f1.assign(++++f.begin(), --f.end());
+	checkIfVectorsAreEqual(f1, s1);
+}
+
+TEST_F(VectorAssignTest, capacityCheck) { // capacity check
+	std::vector<int> s(sample.begin(), sample.end());
+	ft::vector<int> f(sample.begin(), sample.end());
+
+	std::vector<int> s1;
+	ft::vector<int> f1;
+
+	s1.reserve(30);
+	f1.reserve(30);
+
+	s1.assign(++++s.begin(), --s.end());
+	f1.assign(++++f.begin(), --f.end());
+
+	EXPECT_EQ(s1.capacity(), 30);
+	EXPECT_EQ(f1.capacity(), 30);
+	checkIfVectorsAreEqual(f1, s1);
+}
+
+
+
+TEST_F(VectorAssignTest, toEmptyN) {
+	std::vector<int> s(sample.begin(), sample.end());
+	ft::vector<int> f(sample.begin(), sample.end());
+
+	std::vector<int> s1;
+	ft::vector<int> f1;
+
+	s1.assign(42, 42);
+	f1.assign(42, 42);
+	checkIfVectorsAreEqual(f1, s1);
+}
+
+TEST_F(VectorAssignTest, toNotEmptyN) {
+	std::vector<int> s(sample.begin(), sample.end());
+	ft::vector<int> f(sample.begin(), sample.end());
+
+	std::vector<int> s1(s);
+	ft::vector<int> f1(f);
+
+	s1.assign(42, 42);
+	f1.assign(42, 42);
+	checkIfVectorsAreEqual(f1, s1);
+}
+
+TEST_F(VectorAssignTest, capacityCheckN) { // capacity check
+	std::vector<int> s(sample.begin(), sample.end());
+	ft::vector<int> f(sample.begin(), sample.end());
+
+	std::vector<int> s1;
+	ft::vector<int> f1;
+
+	s1.reserve(50);
+	f1.reserve(50);
+
+	s1.assign(42, 42);
+	f1.assign(42, 42);
+
+	EXPECT_EQ(s1.capacity(), 50);
+	EXPECT_EQ(f1.capacity(), 50);
+	checkIfVectorsAreEqual(f1, s1);
+}
+
+
+
+
+
+//capacity check

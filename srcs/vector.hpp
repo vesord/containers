@@ -379,11 +379,15 @@ public:
 	/*** MODIFIERS ***/
 
 	template <class InputIterator>
-//	void assign (InputIterator first, InputIterator last) {
-//		clear();
-//		insert()
-//	}
-	void assign (size_type n, const value_type& val); // if throws container in a valid state
+	void assign (InputIterator first, InputIterator last,
+			  typename ft::enable_if<std::__is_input_iterator<InputIterator>::value>::type* = 0) {
+		clear();
+		insert(begin(), first, last);
+	}
+	void assign (size_type n, const value_type& val) {
+		clear();
+		insert(begin(), n, val);
+	}
 	void push_back (const value_type& val) {
 		insert(end(), val);
 	}
