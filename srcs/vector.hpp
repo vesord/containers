@@ -520,16 +520,16 @@ bool operator<  (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
 	typename ft::vector<T, Alloc>::const_iterator itr = rhs.begin();
 	typename ft::vector<T, Alloc>::const_iterator itre = rhs.end();
 
-	for (; itl != itle; ++itl) {
+	for (; itl != itle; ++itl, ++itr) {
 		if (itr == itre)
 			return false;
 		if (*itl < *itr)
 			return true;
-		++itr;
+//		++itr;
 	}
-	if (itr != itle)
-		return false;
-	return true;
+	if (itr != itle/* && itl == itle*/)
+		return true;
+	return false;
 }
 
 template <class T, class Alloc>
