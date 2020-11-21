@@ -26,12 +26,13 @@ namespace ft {
 	template <class T> class allocator;
 
 	template < class T, class Alloc > class list;
-
 	template <class T, class Alloc>
 	void swap (ft::list<T,Alloc>& x, ft::list<T,Alloc>& y);
+	//list 10k and resize to 5
 
 	template < class T, class Alloc > class vector;
-
+	template <class T, class Alloc>
+	void swap (vector<T,Alloc>& x, vector<T,Alloc>& y);
 }
 
 #endif

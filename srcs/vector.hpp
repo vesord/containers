@@ -410,14 +410,17 @@ public:
 		return iterator(curPosPtr);
 	}
 	void insert (iterator position, size_type n, const value_type& val) {
+		std::cout << "1" << std::endl;
 		pointer curPosPtr = position.getPtr();
 		if (_size + n > _capacity) {
 			difference_type offset = _end_elem - curPosPtr;
 			_reallocate((_size + n) * 2);
 			curPosPtr = _end_elem - offset;
 		}
+		std::cout << "1" << std::endl;
 		std::memmove(curPosPtr + n, curPosPtr,
 			   static_cast<size_t>(abs(_end_elem - curPosPtr)) * sizeof(value_type));
+		std::cout << "1" << std::endl;
 		for (size_type i = 0; i < n; ++i) {
 			_alloc.construct(&curPosPtr[i], val);
 		}
@@ -483,5 +486,59 @@ private:
 		_end_elem = &newV[i];
 	}
 };
+
+template <class T, class Alloc>
+void ft::swap (vector<T,Alloc>& x, vector<T,Alloc>& y) {
+	x.swap(y);
+}
+
+template <class T, class Alloc>
+bool operator== (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs) {
+	if (lhs.size() != rhs.size())
+		return false;
+
+	typename ft::vector<T, Alloc>::const_iterator itl = lhs.begin();
+	typename ft::vector<T, Alloc>::const_iterator itle = lhs.end();
+	typename ft::vector<T, Alloc>::const_iterator itr = rhs.begin();
+	typename ft::vector<T, Alloc>::const_iterator itre = rhs.end();
+
+	for (; itl != itle; ++itl) {
+		if ( itr == itre || *itl != *itr)
+			return false;
+		++itr;
+	}
+	return true;
+}
+
+template <class T, class Alloc>
+bool operator!= (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs);
+
+template <class T, class Alloc>
+bool operator<  (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs) {
+	typename ft::vector<T, Alloc>::const_iterator itl = lhs.begin();
+	typename ft::vector<T, Alloc>::const_iterator itle = lhs.end();
+	typename ft::vector<T, Alloc>::const_iterator itr = rhs.begin();
+	typename ft::vector<T, Alloc>::const_iterator itre = rhs.end();
+
+	for (; itl != itle; ++itl) {
+		if (itr == itre)
+			return false;
+		if (*itl < *itr)
+			return true;
+		++itr;
+	}
+	if (itr != itle)
+		return false;
+	return true;
+}
+
+template <class T, class Alloc>
+bool operator<= (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs);
+
+template <class T, class Alloc>
+bool operator>  (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs);
+
+template <class T, class Alloc>
+bool operator>= (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs);
 
 #endif

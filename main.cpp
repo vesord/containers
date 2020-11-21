@@ -38,13 +38,13 @@ int main()
 
 /*	VECTOR COMPILES	*/
 	ft::vector<int> v;
-	std::vector<int> s;
-	s.push_back(1);
-	s.push_back(2);
-	s.push_back(3);
+	std::vector<std::string> s;
+	s.push_back(std::to_string(1));
+	s.push_back(std::to_string(2));
+//	s.push_back(std::to_string(3));
 //	std::vector<int>::iterator its = ++s.begin();
 
-	s.clear();
+//	s.clear();
 	std::cout << s.size() << std::endl;
 	std::cout << s.capacity() << std::endl;
 //	s.push_front(3);

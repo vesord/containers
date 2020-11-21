@@ -445,7 +445,7 @@ TEST_F(VectorReserveTest, reserveEmpty) {
 	EXPECT_THROW(s1.reserve(s1.max_size() + 1), std::length_error);
 }
 
-class VectorInsertTest : public ::testing::Test {
+class VectorInsertIntTest : public ::testing::Test {
 protected:
 	virtual void SetUp() {
 		for (int i = 0; i < 10; ++i) {
@@ -461,7 +461,7 @@ protected:
 	std::vector<int>::iterator itsret;
 };
 
-TEST_F(VectorInsertTest, insertInPosition1) { // insert into begin with reallocation
+TEST_F(VectorInsertIntTest, insertIntInPosition1) { // insert into begin with reallocation
 	ft::vector<int> f(sample.begin(), sample.end());
 	std::vector<int> s(sample.begin(), sample.end());
 
@@ -472,7 +472,7 @@ TEST_F(VectorInsertTest, insertInPosition1) { // insert into begin with realloca
 	checkVectorsAreEqualIt(itfret, f.end(), itsret, s.end());
 }
 
-TEST_F(VectorInsertTest, insertInPosition2) { // insert into begin without reallocation
+TEST_F(VectorInsertIntTest, insertIntInPosition2) { // insert into begin without reallocation
 	ft::vector<int> f(sample.begin(), sample.end());
 	std::vector<int> s(sample.begin(), sample.end());
 
@@ -489,7 +489,7 @@ TEST_F(VectorInsertTest, insertInPosition2) { // insert into begin without reall
 	checkVectorsAreEqualIt(itf, f.end(), its, s.end());
 }
 
-TEST_F(VectorInsertTest, insertInPosition3) { // insert into mid with reallocation
+TEST_F(VectorInsertIntTest, insertIntInPosition3) { // insert into mid with reallocation
 	ft::vector<int> f(sample.begin(), sample.end());
 	std::vector<int> s(sample.begin(), sample.end());
 
@@ -502,7 +502,7 @@ TEST_F(VectorInsertTest, insertInPosition3) { // insert into mid with reallocati
 	checkVectorsAreEqualIt(itfret, f.end(), itsret, s.end());
 }
 
-TEST_F(VectorInsertTest, insertInPosition4) { // insert into mid without reallocation
+TEST_F(VectorInsertIntTest, insertIntInPosition4) { // insert into mid without reallocation
 	ft::vector<int> f(sample.begin(), sample.end());
 	std::vector<int> s(sample.begin(), sample.end());
 
@@ -519,7 +519,7 @@ TEST_F(VectorInsertTest, insertInPosition4) { // insert into mid without realloc
 	checkVectorsAreEqualIt(itf, f.end(), its, s.end()); // itf and its should remain valid
 }
 
-TEST_F(VectorInsertTest, insertInPosition5) { // insert into end with reallocation
+TEST_F(VectorInsertIntTest, insertIntInPosition5) { // insert into end with reallocation
 	ft::vector<int> f(sample.begin(), sample.end());
 	std::vector<int> s(sample.begin(), sample.end());
 
@@ -532,7 +532,7 @@ TEST_F(VectorInsertTest, insertInPosition5) { // insert into end with reallocati
 	checkVectorsAreEqualIt(itfret, f.end(), itsret, s.end());
 }
 
-TEST_F(VectorInsertTest, insertInPosition6) { // insert into end without reallocation
+TEST_F(VectorInsertIntTest, insertIntInPosition6) { // insert into end without reallocation
 	ft::vector<int> f(sample.begin(), sample.end());
 	std::vector<int> s(sample.begin(), sample.end());
 
@@ -549,7 +549,7 @@ TEST_F(VectorInsertTest, insertInPosition6) { // insert into end without realloc
 	checkVectorsAreEqualIt(itf, f.end(), its, s.end()); // itf and its should remain valid
 }
 
-TEST_F(VectorInsertTest, insertRangeN1) {	// insert into begin with reallocation, less then size
+TEST_F(VectorInsertIntTest, insertIntRangeN1) {	// insert into begin with reallocation, less then size
 	ft::vector<int> f(sample.begin(), sample.end());
 	std::vector<int> s(sample.begin(), sample.end());
 
@@ -559,7 +559,7 @@ TEST_F(VectorInsertTest, insertRangeN1) {	// insert into begin with reallocation
 	checkIfVectorsAreEqual(f, s);
 }
 
-TEST_F(VectorInsertTest, insertRangeN2) {	// insert into begin without reallocation, less then size
+TEST_F(VectorInsertIntTest, insertIntRangeN2) {	// insert into begin without reallocation, less then size
 	ft::vector<int> f(sample.begin(), sample.end());
 	std::vector<int> s(sample.begin(), sample.end());
 
@@ -572,7 +572,7 @@ TEST_F(VectorInsertTest, insertRangeN2) {	// insert into begin without reallocat
 	checkIfVectorsAreEqual(f, s);
 }
 
-TEST_F(VectorInsertTest, insertRangeN3) {	// insert into begin with reallocation, greater then size
+TEST_F(VectorInsertIntTest, insertIntRangeN3) {	// insert into begin with reallocation, greater then size
 	ft::vector<int> f(sample.begin(), sample.end());
 	std::vector<int> s(sample.begin(), sample.end());
 
@@ -582,7 +582,7 @@ TEST_F(VectorInsertTest, insertRangeN3) {	// insert into begin with reallocation
 	checkIfVectorsAreEqual(f, s);
 }
 
-TEST_F(VectorInsertTest, insertRangeN4) {	// insert into begin without reallocation, greater then size
+TEST_F(VectorInsertIntTest, insertIntRangeN4) {	// insert into begin without reallocation, greater then size
 	ft::vector<int> f(sample.begin(), sample.end());
 	std::vector<int> s(sample.begin(), sample.end());
 
@@ -595,7 +595,7 @@ TEST_F(VectorInsertTest, insertRangeN4) {	// insert into begin without reallocat
 	checkIfVectorsAreEqual(f, s);
 }
 
-TEST_F(VectorInsertTest, insertRangeN5) {	// insert into mid with reallocation, less then size
+TEST_F(VectorInsertIntTest, insertIntRangeN5) {	// insert into mid with reallocation, less then size
 	ft::vector<int> f(sample.begin(), sample.end());
 	std::vector<int> s(sample.begin(), sample.end());
 
@@ -605,7 +605,7 @@ TEST_F(VectorInsertTest, insertRangeN5) {	// insert into mid with reallocation, 
 	checkIfVectorsAreEqual(f, s);
 }
 
-TEST_F(VectorInsertTest, insertRangeN6) {	// insert into mid without reallocation, less then size
+TEST_F(VectorInsertIntTest, insertIntRangeN6) {	// insert into mid without reallocation, less then size
 	ft::vector<int> f(sample.begin(), sample.end());
 	std::vector<int> s(sample.begin(), sample.end());
 
@@ -618,7 +618,7 @@ TEST_F(VectorInsertTest, insertRangeN6) {	// insert into mid without reallocatio
 	checkIfVectorsAreEqual(f, s);
 }
 
-TEST_F(VectorInsertTest, insertRangeN7) {	// insert into mid n with reallocation, greater then size
+TEST_F(VectorInsertIntTest, insertIntRangeN7) {	// insert into mid n with reallocation, greater then size
 	ft::vector<int> f(sample.begin(), sample.end());
 	std::vector<int> s(sample.begin(), sample.end());
 
@@ -628,7 +628,7 @@ TEST_F(VectorInsertTest, insertRangeN7) {	// insert into mid n with reallocation
 	checkIfVectorsAreEqual(f, s);
 }
 
-TEST_F(VectorInsertTest, insertRangeN8) {	// insert into mid without reallocation, greater then size
+TEST_F(VectorInsertIntTest, insertIntRangeN8) {	// insert into mid without reallocation, greater then size
 	ft::vector<int> f(sample.begin(), sample.end());
 	std::vector<int> s(sample.begin(), sample.end());
 
@@ -641,7 +641,7 @@ TEST_F(VectorInsertTest, insertRangeN8) {	// insert into mid without reallocatio
 	checkIfVectorsAreEqual(f, s);
 }
 
-TEST_F(VectorInsertTest, insertRangeN9) {	// insert into end with reallocation, less then size
+TEST_F(VectorInsertIntTest, insertIntRangeN9) {	// insert into end with reallocation, less then size
 	ft::vector<int> f(sample.begin(), sample.end());
 	std::vector<int> s(sample.begin(), sample.end());
 
@@ -651,7 +651,7 @@ TEST_F(VectorInsertTest, insertRangeN9) {	// insert into end with reallocation, 
 	checkIfVectorsAreEqual(f, s);
 }
 
-TEST_F(VectorInsertTest, insertRangeN10) {	// insert into end without reallocation, less then size
+TEST_F(VectorInsertIntTest, insertIntRangeN10) {	// insert into end without reallocation, less then size
 	ft::vector<int> f(sample.begin(), sample.end());
 	std::vector<int> s(sample.begin(), sample.end());
 
@@ -664,7 +664,7 @@ TEST_F(VectorInsertTest, insertRangeN10) {	// insert into end without reallocati
 	checkIfVectorsAreEqual(f, s);
 }
 
-TEST_F(VectorInsertTest, insertRangeN11) {	// insert into end with reallocation, greater then size
+TEST_F(VectorInsertIntTest, insertIntRangeN11) {	// insert into end with reallocation, greater then size
 	ft::vector<int> f(sample.begin(), sample.end());
 	std::vector<int> s(sample.begin(), sample.end());
 
@@ -674,7 +674,7 @@ TEST_F(VectorInsertTest, insertRangeN11) {	// insert into end with reallocation,
 	checkIfVectorsAreEqual(f, s);
 }
 
-TEST_F(VectorInsertTest, insertRangeN12) {	// insert into end without reallocation, greater then size
+TEST_F(VectorInsertIntTest, insertIntRangeN12) {	// insert into end without reallocation, greater then size
 	ft::vector<int> f(sample.begin(), sample.end());
 	std::vector<int> s(sample.begin(), sample.end());
 
@@ -687,7 +687,7 @@ TEST_F(VectorInsertTest, insertRangeN12) {	// insert into end without reallocati
 	checkIfVectorsAreEqual(f, s);
 }
 
-TEST_F(VectorInsertTest, insertRangeNMultiReallocation) {
+TEST_F(VectorInsertIntTest, insertIntRangeNMultiReallocation) {
 	ft::vector<int> f(sample.begin(), sample.end());
 	std::vector<int> s(sample.begin(), sample.end());
 
@@ -697,7 +697,7 @@ TEST_F(VectorInsertTest, insertRangeNMultiReallocation) {
 	checkIfVectorsAreEqual(f, s);
 }
 
-TEST_F(VectorInsertTest, insertIterator1) {	// insert into begin with reallocation, less then size
+TEST_F(VectorInsertIntTest, insertIntIterator1) {	// insert into begin with reallocation, less then size
 	ft::vector<int> f(sample.begin(), sample.end());
 	std::vector<int> s(sample.begin(), sample.end());
 
@@ -707,7 +707,7 @@ TEST_F(VectorInsertTest, insertIterator1) {	// insert into begin with reallocati
 	checkIfVectorsAreEqual(f, s);
 }
 
-TEST_F(VectorInsertTest, insertIterator2) {	// insert into begin without reallocation, less then size
+TEST_F(VectorInsertIntTest, insertIntIterator2) {	// insert into begin without reallocation, less then size
 	ft::vector<int> f(sample.begin(), sample.end());
 	std::vector<int> s(sample.begin(), sample.end());
 
@@ -720,7 +720,7 @@ TEST_F(VectorInsertTest, insertIterator2) {	// insert into begin without realloc
 	checkIfVectorsAreEqual(f, s);
 }
 
-TEST_F(VectorInsertTest, insertIterator3) {	// insert into begin with reallocation, greater then size
+TEST_F(VectorInsertIntTest, insertIntIterator3) {	// insert into begin with reallocation, greater then size
 	ft::vector<int> f(sample.begin(), sample.end());
 	std::vector<int> s(sample.begin(), sample.end());
 
@@ -730,7 +730,7 @@ TEST_F(VectorInsertTest, insertIterator3) {	// insert into begin with reallocati
 	checkIfVectorsAreEqual(f, s);
 }
 
-TEST_F(VectorInsertTest, insertIterator4) {	// insert into begin without reallocation, greater then size
+TEST_F(VectorInsertIntTest, insertIntIterator4) {	// insert into begin without reallocation, greater then size
 	ft::vector<int> f(sample.begin(), sample.end());
 	std::vector<int> s(sample.begin(), sample.end());
 
@@ -743,7 +743,7 @@ TEST_F(VectorInsertTest, insertIterator4) {	// insert into begin without realloc
 	checkIfVectorsAreEqual(f, s);
 }
 
-TEST_F(VectorInsertTest, insertIterator5) {	// insert into mid with reallocation, less then size
+TEST_F(VectorInsertIntTest, insertIntIterator5) {	// insert into mid with reallocation, less then size
 	ft::vector<int> f(sample.begin(), sample.end());
 	std::vector<int> s(sample.begin(), sample.end());
 
@@ -753,30 +753,7 @@ TEST_F(VectorInsertTest, insertIterator5) {	// insert into mid with reallocation
 	checkIfVectorsAreEqual(f, s);
 }
 
-TEST_F(VectorInsertTest, insertIterator6) {	// insert into mid without reallocation, less then size
-	ft::vector<int> f(sample.begin(), sample.end());
-	std::vector<int> s(sample.begin(), sample.end());
-
-	f.reserve(30);
-	f.reserve(30);
-
-	f.insert(++++f.begin(), sample.begin(), ++++sample.begin());
-	s.insert(++++s.begin(), sample.begin(), ++++sample.begin());
-
-	checkIfVectorsAreEqual(f, s);
-}
-
-TEST_F(VectorInsertTest, insertIterator7) {	// insert into mid n with reallocation, greater then size
-	ft::vector<int> f(sample.begin(), sample.end());
-	std::vector<int> s(sample.begin(), sample.end());
-
-	f.insert(++++f.begin(), sample.begin(), ++++sample.begin());
-	s.insert(++++s.begin(), sample.begin(), ++++sample.begin());
-
-	checkIfVectorsAreEqual(f, s);
-}
-
-TEST_F(VectorInsertTest, insertIterator8) {	// insert into mid without reallocation, greater then size
+TEST_F(VectorInsertIntTest, insertIntIterator6) {	// insert into mid without reallocation, less then size
 	ft::vector<int> f(sample.begin(), sample.end());
 	std::vector<int> s(sample.begin(), sample.end());
 
@@ -789,7 +766,30 @@ TEST_F(VectorInsertTest, insertIterator8) {	// insert into mid without reallocat
 	checkIfVectorsAreEqual(f, s);
 }
 
-TEST_F(VectorInsertTest, insertIterator9) {	// insert into end with reallocation, less then size
+TEST_F(VectorInsertIntTest, insertIntIterator7) {	// insert into mid n with reallocation, greater then size
+	ft::vector<int> f(sample.begin(), sample.end());
+	std::vector<int> s(sample.begin(), sample.end());
+
+	f.insert(++++f.begin(), sample.begin(), ++++sample.begin());
+	s.insert(++++s.begin(), sample.begin(), ++++sample.begin());
+
+	checkIfVectorsAreEqual(f, s);
+}
+
+TEST_F(VectorInsertIntTest, insertIntIterator8) {	// insert into mid without reallocation, greater then size
+	ft::vector<int> f(sample.begin(), sample.end());
+	std::vector<int> s(sample.begin(), sample.end());
+
+	f.reserve(30);
+	f.reserve(30);
+
+	f.insert(++++f.begin(), sample.begin(), ++++sample.begin());
+	s.insert(++++s.begin(), sample.begin(), ++++sample.begin());
+
+	checkIfVectorsAreEqual(f, s);
+}
+
+TEST_F(VectorInsertIntTest, insertIntIterator9) {	// insert into end with reallocation, less then size
 	ft::vector<int> f(sample.begin(), sample.end());
 	std::vector<int> s(sample.begin(), sample.end());
 
@@ -799,7 +799,7 @@ TEST_F(VectorInsertTest, insertIterator9) {	// insert into end with reallocation
 	checkIfVectorsAreEqual(f, s);
 }
 
-TEST_F(VectorInsertTest, insertIterator10) {	// insert into end without reallocation, less then size
+TEST_F(VectorInsertIntTest, insertIntIterator10) {	// insert into end without reallocation, less then size
 	ft::vector<int> f(sample.begin(), sample.end());
 	std::vector<int> s(sample.begin(), sample.end());
 
@@ -812,7 +812,7 @@ TEST_F(VectorInsertTest, insertIterator10) {	// insert into end without realloca
 	checkIfVectorsAreEqual(f, s);
 }
 
-TEST_F(VectorInsertTest, insertIterator11) {	// insert into end with reallocation, greater then size
+TEST_F(VectorInsertIntTest, insertIntIterator11) {	// insert into end with reallocation, greater then size
 	ft::vector<int> f(sample.begin(), sample.end());
 	std::vector<int> s(sample.begin(), sample.end());
 
@@ -822,7 +822,7 @@ TEST_F(VectorInsertTest, insertIterator11) {	// insert into end with reallocatio
 	checkIfVectorsAreEqual(f, s);
 }
 
-TEST_F(VectorInsertTest, insertIterator12) {	// insert into end without reallocation, greater then size
+TEST_F(VectorInsertIntTest, insertIntIterator12) {	// insert into end without reallocation, greater then size
 	ft::vector<int> f(sample.begin(), sample.end());
 	std::vector<int> s(sample.begin(), sample.end());
 
@@ -835,11 +835,415 @@ TEST_F(VectorInsertTest, insertIterator12) {	// insert into end without realloca
 	checkIfVectorsAreEqual(f, s);
 }
 
-TEST_F(VectorInsertTest, insertIteratorMultiReallocation) {
+TEST_F(VectorInsertIntTest, insertIntIteratorMultiReallocation) {
 	ft::vector<int> f(sample.begin(), sample.end());
 	std::vector<int> s(sample.begin(), sample.end());
 	for (int i = 0; i < 15000; ++i) {
 		sample.push_back(i * rand());
+	}
+
+	f.insert(f.end(), sample.begin(), sample.end());
+	s.insert(s.end(), sample.begin(), sample.end());
+
+	checkIfVectorsAreEqual(f, s);
+}
+
+class VectorInsertStrTest : public ::testing::Test {
+protected:
+	virtual void SetUp() {
+		for (int i = 0; i < 10; ++i) {
+			sample.push_back(std::to_string(i));
+		}
+	}
+	std::vector<std::string> sample;
+	ft::vector<std::string>::iterator itf;
+	ft::vector<std::string>::iterator itfe;
+	ft::vector<std::string>::iterator itfret;
+	std::vector<std::string>::iterator its;
+	std::vector<std::string>::iterator itse;
+	std::vector<std::string>::iterator itsret;
+};
+
+TEST_F(VectorInsertStrTest, insertIntInPosition1) { // insert into begin with reallocation
+	ft::vector<std::string> f(sample.begin(), sample.end());
+	std::vector<std::string> s(sample.begin(), sample.end());
+
+	itfret = f.insert(f.begin(), std::to_string(42));
+	itsret = s.insert(s.begin(), std::to_string(42));
+
+	checkIfVectorsAreEqual(f, s);
+	checkVectorsAreEqualIt(itfret, f.end(), itsret, s.end());
+}
+
+TEST_F(VectorInsertStrTest, insertIntInPosition2) { // insert into begin without reallocation
+	ft::vector<std::string> f(sample.begin(), sample.end());
+	std::vector<std::string> s(sample.begin(), sample.end());
+
+	f.reserve(30);
+	s.reserve(30);
+
+	itf = f.begin(); itfe = f.end();
+	its = s.begin(); itse = s.end();
+
+	itfret = f.insert(itf, std::to_string(42));
+	itsret = s.insert(its, std::to_string(42));
+	checkIfVectorsAreEqual(f, s);
+	checkVectorsAreEqualIt(itfret, f.end(), itsret, s.end());
+	checkVectorsAreEqualIt(itf, f.end(), its, s.end());
+}
+
+TEST_F(VectorInsertStrTest, insertIntInPosition3) { // insert into mid with reallocation
+	ft::vector<std::string> f(sample.begin(), sample.end());
+	std::vector<std::string> s(sample.begin(), sample.end());
+
+//	itf = f.begin(); itfe = f.end();
+//	its = s.begin(); itse = s.end();
+
+	itfret = f.insert(++++f.begin(), std::to_string(42));
+	itsret = s.insert(++++s.begin(), std::to_string(42));
+	checkIfVectorsAreEqual(f, s);
+	checkVectorsAreEqualIt(itfret, f.end(), itsret, s.end());
+}
+
+TEST_F(VectorInsertStrTest, insertIntInPosition4) { // insert into mid without reallocation
+	ft::vector<std::string> f(sample.begin(), sample.end());
+	std::vector<std::string> s(sample.begin(), sample.end());
+
+	f.reserve(30);
+	s.reserve(30);
+
+	itf = ++f.begin(); itfe = f.end();
+	its = ++s.begin(); itse = s.end();
+
+	itfret = f.insert(++++f.begin(), std::to_string(42));
+	itsret = s.insert(++++s.begin(), std::to_string(42));
+	checkIfVectorsAreEqual(f, s);
+	checkVectorsAreEqualIt(itfret, f.end(), itsret, s.end());
+	checkVectorsAreEqualIt(itf, f.end(), its, s.end()); // itf and its should remain valid
+}
+
+TEST_F(VectorInsertStrTest, insertIntInPosition5) { // insert into end with reallocation
+	ft::vector<std::string> f(sample.begin(), sample.end());
+	std::vector<std::string> s(sample.begin(), sample.end());
+
+//	itf = --f.end(); itfe = f.end();
+//	its = --s.end(); itse = s.end();
+
+	itfret = f.insert(f.end(), std::to_string(42));
+	itsret = s.insert(s.end(), std::to_string(42));
+	checkIfVectorsAreEqual(f, s);
+	checkVectorsAreEqualIt(itfret, f.end(), itsret, s.end());
+}
+
+TEST_F(VectorInsertStrTest, insertIntInPosition6) { // insert into end without reallocation
+	ft::vector<std::string> f(sample.begin(), sample.end());
+	std::vector<std::string> s(sample.begin(), sample.end());
+
+	f.reserve(30);
+	s.reserve(30);
+
+	itf = --f.end(); itfe = f.end();
+	its = --s.end(); itse = s.end();
+
+	itfret = f.insert(f.end(), std::to_string(42));
+	itsret = s.insert(s.end(), std::to_string(42));
+	checkIfVectorsAreEqual(f, s);
+	checkVectorsAreEqualIt(itfret, f.end(), itsret, s.end());
+	checkVectorsAreEqualIt(itf, f.end(), its, s.end()); // itf and its should remain valid
+}
+
+TEST_F(VectorInsertStrTest, insertIntRangeN1) {	// insert into begin with reallocation, less then size
+	ft::vector<std::string> f(sample.begin(), sample.end());
+	std::vector<std::string> s(sample.begin(), sample.end());
+
+	f.insert(f.begin(), 5, std::to_string(42));
+	s.insert(s.begin(), 5,std::to_string(42));
+
+	checkIfVectorsAreEqual(f, s);
+}
+
+TEST_F(VectorInsertStrTest, insertIntRangeN2) {	// insert into begin without reallocation, less then size
+	ft::vector<std::string> f(sample.begin(), sample.end());
+	std::vector<std::string> s(sample.begin(), sample.end());
+
+	f.reserve(30);
+	f.reserve(30);
+
+	f.insert(f.begin(), 5, std::to_string(42));
+	s.insert(s.begin(), 5,std::to_string(42));
+
+	checkIfVectorsAreEqual(f, s);
+}
+
+TEST_F(VectorInsertStrTest, insertIntRangeN3) {	// insert into begin with reallocation, greater then size
+	ft::vector<std::string> f(sample.begin(), sample.end());
+	std::vector<std::string> s(sample.begin(), sample.end());
+
+//	printContainer(f);
+	f.insert(f.begin(), 15, std::to_string(42));
+	s.insert(s.begin(), 15,std::to_string(42));
+
+	checkIfVectorsAreEqual(f, s);
+}
+
+TEST_F(VectorInsertStrTest, insertIntRangeN4) {	// insert into begin without reallocation, greater then size
+	ft::vector<std::string> f(sample.begin(), sample.end());
+	std::vector<std::string> s(sample.begin(), sample.end());
+
+	f.reserve(30);
+	f.reserve(30);
+
+	f.insert(f.begin(), 15, std::to_string(42));
+	s.insert(s.begin(), 15,std::to_string(42));
+
+	checkIfVectorsAreEqual(f, s);
+}
+
+TEST_F(VectorInsertStrTest, insertIntRangeN5) {	// insert into mid with reallocation, less then size
+	ft::vector<std::string> f(sample.begin(), sample.end());
+	std::vector<std::string> s(sample.begin(), sample.end());
+
+	f.insert(++++f.begin(), 5, std::to_string(42));
+	s.insert(++++s.begin(), 5,std::to_string(42));
+
+	checkIfVectorsAreEqual(f, s);
+}
+
+TEST_F(VectorInsertStrTest, insertIntRangeN6) {	// insert into mid without reallocation, less then size
+	ft::vector<std::string> f(sample.begin(), sample.end());
+	std::vector<std::string> s(sample.begin(), sample.end());
+
+	f.reserve(30);
+	f.reserve(30);
+
+	f.insert(++++f.begin(), 5, std::to_string(42));
+	s.insert(++++s.begin(), 5,std::to_string(42));
+
+	checkIfVectorsAreEqual(f, s);
+}
+
+TEST_F(VectorInsertStrTest, insertIntRangeN7) {	// insert into mid n with reallocation, greater then size
+	ft::vector<std::string> f(sample.begin(), sample.end());
+	std::vector<std::string> s(sample.begin(), sample.end());
+
+	f.insert(++++f.begin(), 15, std::to_string(42));
+	s.insert(++++s.begin(), 15,std::to_string(42));
+
+	checkIfVectorsAreEqual(f, s);
+}
+
+TEST_F(VectorInsertStrTest, insertIntRangeN8) {	// insert into mid without reallocation, greater then size
+	ft::vector<std::string> f(sample.begin(), sample.end());
+	std::vector<std::string> s(sample.begin(), sample.end());
+
+	f.reserve(30);
+	f.reserve(30);
+
+	f.insert(++++f.begin(), 15, std::to_string(42));
+	s.insert(++++s.begin(), 15,std::to_string(42));
+
+	checkIfVectorsAreEqual(f, s);
+}
+
+TEST_F(VectorInsertStrTest, insertIntRangeN9) {	// insert into end with reallocation, less then size
+	ft::vector<std::string> f(sample.begin(), sample.end());
+	std::vector<std::string> s(sample.begin(), sample.end());
+
+	f.insert(f.end(), 5, std::to_string(42));
+	s.insert(s.end(), 5,std::to_string(42));
+
+	checkIfVectorsAreEqual(f, s);
+}
+
+TEST_F(VectorInsertStrTest, insertIntRangeN10) {	// insert into end without reallocation, less then size
+	ft::vector<std::string> f(sample.begin(), sample.end());
+	std::vector<std::string> s(sample.begin(), sample.end());
+
+	f.reserve(30);
+	f.reserve(30);
+
+	f.insert(f.end(), 5, std::to_string(42));
+	s.insert(s.end(), 5,std::to_string(42));
+
+	checkIfVectorsAreEqual(f, s);
+}
+
+TEST_F(VectorInsertStrTest, insertIntRangeN11) {	// insert into end with reallocation, greater then size
+	ft::vector<std::string> f(sample.begin(), sample.end());
+	std::vector<std::string> s(sample.begin(), sample.end());
+
+	f.insert(f.end(), 15, std::to_string(42));
+	s.insert(s.end(), 15,std::to_string(42));
+
+	checkIfVectorsAreEqual(f, s);
+}
+
+TEST_F(VectorInsertStrTest, insertIntRangeN12) {	// insert into end without reallocation, greater then size
+	ft::vector<std::string> f(sample.begin(), sample.end());
+	std::vector<std::string> s(sample.begin(), sample.end());
+
+	f.reserve(30);
+	f.reserve(30);
+
+	f.insert(f.end(), 15, std::to_string(42));
+	s.insert(s.end(), 15,std::to_string(42));
+
+	checkIfVectorsAreEqual(f, s);
+}
+
+TEST_F(VectorInsertStrTest, insertIntRangeNMultiReallocation) {
+	ft::vector<std::string> f(sample.begin(), sample.end());
+	std::vector<std::string> s(sample.begin(), sample.end());
+
+	f.insert(f.end(), 15000, std::to_string(42));
+	s.insert(s.end(), 15000,std::to_string(42));
+
+	checkIfVectorsAreEqual(f, s);
+}
+
+TEST_F(VectorInsertStrTest, insertIntIterator1) {	// insert into begin with reallocation, less then size
+	ft::vector<std::string> f(sample.begin(), sample.end());
+	std::vector<std::string> s(sample.begin(), sample.end());
+
+	f.insert(f.begin(), sample.begin(), ++++++sample.begin());
+	s.insert(s.begin(), sample.begin(), ++++++sample.begin());
+
+	checkIfVectorsAreEqual(f, s);
+}
+
+TEST_F(VectorInsertStrTest, insertIntIterator2) {	// insert into begin without reallocation, less then size
+	ft::vector<std::string> f(sample.begin(), sample.end());
+	std::vector<std::string> s(sample.begin(), sample.end());
+
+	f.reserve(30);
+	f.reserve(30);
+
+	f.insert(f.begin(), sample.begin(), ++++sample.begin());
+	s.insert(s.begin(), sample.begin(), ++++sample.begin());
+
+	checkIfVectorsAreEqual(f, s);
+}
+
+TEST_F(VectorInsertStrTest, insertIntIterator3) {	// insert into begin with reallocation, greater then size
+	ft::vector<std::string> f(sample.begin(), sample.end());
+	std::vector<std::string> s(sample.begin(), sample.end());
+
+	f.insert(f.begin(), sample.begin(), ++++sample.begin());
+	s.insert(s.begin(), sample.begin(), ++++sample.begin());
+
+	checkIfVectorsAreEqual(f, s);
+}
+
+TEST_F(VectorInsertStrTest, insertIntIterator4) {	// insert into begin without reallocation, greater then size
+	ft::vector<std::string> f(sample.begin(), sample.end());
+	std::vector<std::string> s(sample.begin(), sample.end());
+
+	f.reserve(30);
+	f.reserve(30);
+
+	f.insert(f.begin(), sample.begin(), ++++sample.begin());
+	s.insert(s.begin(), sample.begin(), ++++sample.begin());
+
+	checkIfVectorsAreEqual(f, s);
+}
+
+TEST_F(VectorInsertStrTest, insertIntIterator5) {	// insert into mid with reallocation, less then size
+	ft::vector<std::string> f(sample.begin(), sample.end());
+	std::vector<std::string> s(sample.begin(), sample.end());
+
+	f.insert(++++f.begin(), sample.begin(), ++++sample.begin());
+	s.insert(++++s.begin(), sample.begin(), ++++sample.begin());
+
+	checkIfVectorsAreEqual(f, s);
+}
+
+TEST_F(VectorInsertStrTest, insertIntIterator6) {	// insert into mid without reallocation, less then size
+	ft::vector<std::string> f(sample.begin(), sample.end());
+	std::vector<std::string> s(sample.begin(), sample.end());
+
+	f.reserve(30);
+	f.reserve(30);
+
+	f.insert(++++f.begin(), sample.begin(), ++++sample.begin());
+	s.insert(++++s.begin(), sample.begin(), ++++sample.begin());
+
+	checkIfVectorsAreEqual(f, s);
+}
+
+TEST_F(VectorInsertStrTest, insertIntIterator7) {	// insert into mid n with reallocation, greater then size
+	ft::vector<std::string> f(sample.begin(), sample.end());
+	std::vector<std::string> s(sample.begin(), sample.end());
+
+	f.insert(++++f.begin(), sample.begin(), ++++sample.begin());
+	s.insert(++++s.begin(), sample.begin(), ++++sample.begin());
+
+	checkIfVectorsAreEqual(f, s);
+}
+
+TEST_F(VectorInsertStrTest, insertIntIterator8) {	// insert into mid without reallocation, greater then size
+	ft::vector<std::string> f(sample.begin(), sample.end());
+	std::vector<std::string> s(sample.begin(), sample.end());
+
+	f.reserve(30);
+	f.reserve(30);
+
+	f.insert(++++f.begin(), sample.begin(), ++++sample.begin());
+	s.insert(++++s.begin(), sample.begin(), ++++sample.begin());
+
+	checkIfVectorsAreEqual(f, s);
+}
+
+TEST_F(VectorInsertStrTest, insertIntIterator9) {	// insert into end with reallocation, less then size
+	ft::vector<std::string> f(sample.begin(), sample.end());
+	std::vector<std::string> s(sample.begin(), sample.end());
+
+	f.insert(f.end(), sample.begin(), ++++sample.begin());
+	s.insert(s.end(), sample.begin(), ++++sample.begin());
+
+	checkIfVectorsAreEqual(f, s);
+}
+
+TEST_F(VectorInsertStrTest, insertIntIterator10) {	// insert into end without reallocation, less then size
+	ft::vector<std::string> f(sample.begin(), sample.end());
+	std::vector<std::string> s(sample.begin(), sample.end());
+
+	f.reserve(30);
+	f.reserve(30);
+
+	f.insert(f.end(), sample.begin(), ++++sample.begin());
+	s.insert(s.end(), sample.begin(), ++++sample.begin());
+
+	checkIfVectorsAreEqual(f, s);
+}
+
+TEST_F(VectorInsertStrTest, insertIntIterator11) {	// insert into end with reallocation, greater then size
+	ft::vector<std::string> f(sample.begin(), sample.end());
+	std::vector<std::string> s(sample.begin(), sample.end());
+
+	f.insert(f.end(), sample.begin(), ++++sample.begin());
+	s.insert(s.end(), sample.begin(), ++++sample.begin());
+
+	checkIfVectorsAreEqual(f, s);
+}
+
+TEST_F(VectorInsertStrTest, insertIntIterator12) {	// insert into end without reallocation, greater then size
+	ft::vector<std::string> f(sample.begin(), sample.end());
+	std::vector<std::string> s(sample.begin(), sample.end());
+
+	f.reserve(30);
+	f.reserve(30);
+
+	f.insert(f.end(), sample.begin(), ++++sample.begin());
+	s.insert(s.end(), sample.begin(), ++++sample.begin());
+
+	checkIfVectorsAreEqual(f, s);
+}
+
+TEST_F(VectorInsertStrTest, insertIntIteratorMultiReallocation) {
+	ft::vector<std::string> f(sample.begin(), sample.end());
+	std::vector<std::string> s(sample.begin(), sample.end());
+	for (int i = 0; i < 15000; ++i) {
+		sample.push_back(std::to_string(i * rand()));
 	}
 
 	f.insert(f.end(), sample.begin(), sample.end());
@@ -1237,8 +1641,6 @@ TEST_F(VectorAssignTest, capacityCheck) { // capacity check
 	checkIfVectorsAreEqual(f1, s1);
 }
 
-
-
 TEST_F(VectorAssignTest, toEmptyN) {
 	std::vector<int> s(sample.begin(), sample.end());
 	ft::vector<int> f(sample.begin(), sample.end());
@@ -1281,8 +1683,162 @@ TEST_F(VectorAssignTest, capacityCheckN) { // capacity check
 	checkIfVectorsAreEqual(f1, s1);
 }
 
+class VectorComprasionTest : public ::testing::Test {
+protected:
+	virtual void SetUp() {
 
+	}
+	std::vector<std::string> s1, s2;
+	ft::vector<std::string> f1, f2;
+};
 
+TEST_F(VectorComprasionTest, equalSimple) {
+	s1.push_back("a"); f1.push_back("a");
+	s1.push_back("b"); f1.push_back("b");
+	s1.push_back("c"); f1.push_back("c");
+	s1.push_back("d"); f1.push_back("d");
 
+	s2.push_back("a"); f2.push_back("a");
+	s2.push_back("b"); f2.push_back("b");
+	s2.push_back("c"); f2.push_back("c");
+	s2.push_back("d"); f2.push_back("d");
 
-//capacity check
+	EXPECT_EQ(true, s1 == s2);
+	EXPECT_EQ(true, f1 == f2);
+	EXPECT_EQ(false, s1 < s2);
+	EXPECT_EQ(false, f1 < f2);
+}
+
+TEST_F(VectorComprasionTest, equalSingleElem) {
+	s1.push_back("a"); f1.push_back("a");
+
+	s2.push_back("a"); f2.push_back("a");
+
+	EXPECT_EQ(true, s1 == s2);
+	EXPECT_EQ(true, f1 == f2);
+	EXPECT_EQ(false, s1 < s2);
+	EXPECT_EQ(false, f1 < f2);
+}
+
+TEST_F(VectorComprasionTest, equalEmpty) {
+	EXPECT_EQ(true, s1 == s2);
+	EXPECT_EQ(true, f1 == f2);
+	EXPECT_EQ(false, s1 < s2);
+	EXPECT_EQ(false, f1 < f2);
+}
+
+TEST_F(VectorComprasionTest, lessSizeLess) {
+	s1.push_back("a"); f1.push_back("a");
+	s1.push_back("b"); f1.push_back("b");
+	s1.push_back("c"); f1.push_back("c");
+
+	s2.push_back("a"); f2.push_back("a");
+	s2.push_back("b"); f2.push_back("b");
+	s2.push_back("c"); f2.push_back("c");
+	s2.push_back("d"); f2.push_back("d");
+
+	EXPECT_EQ(true, s1 < s2);
+	EXPECT_EQ(true, f1 < f2);
+	EXPECT_EQ(false, s1 == s2);
+	EXPECT_EQ(false, f1 == f2);
+}
+
+TEST_F(VectorComprasionTest, lessOneElem) {
+	s1.push_back("a"); f1.push_back("a");
+
+	s2.push_back("d"); f2.push_back("d");
+
+	EXPECT_EQ(true, s1 < s2);
+	EXPECT_EQ(true, f1 < f2);
+	EXPECT_EQ(false, s1 == s2);
+	EXPECT_EQ(false, f1 == f2);
+}
+
+TEST_F(VectorComprasionTest, lessCase1) {
+	s1.push_back("a"); f1.push_back("a");
+	s1.push_back("b"); f1.push_back("b");
+	s1.push_back("c"); f1.push_back("c");
+
+	s2.push_back("a"); f2.push_back("a");
+	s2.push_back("b"); f2.push_back("b");
+	s2.push_back("cc"); f2.push_back("cc");
+
+	EXPECT_EQ(true, s1 < s2);
+	EXPECT_EQ(true, f1 < f2);
+	EXPECT_EQ(false, s1 == s2);
+	EXPECT_EQ(false, f1 == f2);
+}
+
+TEST_F(VectorComprasionTest, lessCase2) {
+	s1.push_back("a1"); f1.push_back("a1");
+	s1.push_back("b"); f1.push_back("b");
+	s1.push_back("c"); f1.push_back("c");
+
+	s2.push_back("a9"); f2.push_back("a9");
+	s2.push_back("b"); f2.push_back("b");
+	s2.push_back("c"); f2.push_back("c");
+
+	EXPECT_EQ(true, s1 < s2);
+	EXPECT_EQ(true, f1 < f2);
+	EXPECT_EQ(false, s1 == s2);
+	EXPECT_EQ(false, f1 == f2);
+}
+
+TEST_F(VectorComprasionTest, justCase1) {
+	s1.push_back("a"); f1.push_back("a");
+	s1.push_back("a"); f1.push_back("a");
+	s1.push_back("a"); f1.push_back("a");
+
+	s2.push_back("a"); f2.push_back("a");
+	s2.push_back("a"); f2.push_back("a");
+	s2.push_back("a"); f2.push_back("a");
+	s2.push_back("a"); f2.push_back("a");
+
+	EXPECT_EQ(true, s1 < s2);
+	EXPECT_EQ(true, f1 < f2);
+	EXPECT_EQ(false, s1 == s2);
+	EXPECT_EQ(false, f1 == f2);
+}
+
+TEST_F(VectorComprasionTest, justCase2) {
+	s1.push_back("a"); f1.push_back("a");
+	s1.push_back("a"); f1.push_back("a");
+	s1.push_back("a"); f1.push_back("a");
+
+	s2.push_back("a"); f2.push_back("a");
+	s2.push_back("a"); f2.push_back("a");
+	s2.push_back("a"); f2.push_back("a");
+
+	EXPECT_EQ(true, s1 < s2);
+	EXPECT_EQ(true, f1 < f2);
+	EXPECT_EQ(false, s1 == s2);
+	EXPECT_EQ(false, f1 == f2);
+}
+
+TEST_F(VectorComprasionTest, justCase3) {
+	s1.push_back("a"); f1.push_back("a");
+	s1.push_back("a"); f1.push_back("a");
+	s1.push_back("a"); f1.push_back("a");
+
+	s2.push_back("z"); f2.push_back("z");
+
+	EXPECT_EQ(true, s1 < s2);
+	EXPECT_EQ(true, f1 < f2);
+	EXPECT_EQ(false, s1 == s2);
+	EXPECT_EQ(false, f1 == f2);
+}
+
+TEST_F(VectorComprasionTest, justCase4) {
+	s1.push_back("a"); f1.push_back("a");
+	s1.push_back("a"); f1.push_back("a");
+	s1.push_back("a"); f1.push_back("a");
+
+	s2.push_back("z"); f2.push_back("z");
+	s2.push_back("z"); f2.push_back("z");
+	s2.push_back("z"); f2.push_back("z");
+
+	EXPECT_EQ(true, s1 < s2);
+	EXPECT_EQ(true, f1 < f2);
+	EXPECT_EQ(false, s1 == s2);
+	EXPECT_EQ(false, f1 == f2);
+}
