@@ -13,7 +13,6 @@
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 
-#include "allocator.hpp"
 #include "iterator.hpp"
 #include <stdexcept>
 #include <iostream>
@@ -41,12 +40,11 @@ private:
 	size_type 	_capacity;
 	pointer 	_end_elem;
 
-public:
-
 	typedef typename allocator_type::template rebind<pointer>::other allocator_rebind;
 	allocator_rebind _alloc_rebind;
 	allocator_type	 _alloc;
 
+public:
 	/*** ITERATORS ***/
 
 	class iterator : public ft::iterator<std::random_access_iterator_tag, value_type> {

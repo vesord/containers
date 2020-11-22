@@ -3,11 +3,42 @@
 #include <list>
 #include "list.hpp"
 #include "vector.hpp"
+#include "map.hpp"
 
-int main()
+#include <iostream>
+#include <map>
+#include <string>
+
+// map::lower_bound/upper_bound
+#include <iostream>
+#include <map>
+
+int main ()
 {
+	std::map<char,int> mymap;
+	std::map<char,int>::iterator itlow,itup;
 
+	mymap['a']=20;
+	mymap['b']=40;
+	mymap['j']=60;
+	mymap['k']=80;
+	mymap['n']=100;
+	mymap['o']=120;
 
+	itlow=mymap.lower_bound ('c');
+	itup=mymap.upper_bound ('m');
+
+	mymap.erase(itlow,itup);        // erases [itlow,itup)
+
+	// print content:
+	for (std::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+		std::cout << it->first << " => " << it->second << '\n';
+
+	return 0;
+}
+
+/*int main()
+{
 //	ft::list<int> ftList;
 //	for (int i = 0; i < 10; ++i)
 //		ftList.push_front(i);
@@ -18,7 +49,7 @@ int main()
 //	ft::list<int>::const_iterator fIt = (ftList.*objFoo)();
 
 
-/*	LIST COMPILES	*/
+*//*	LIST COMPILES	*//*
 
 	ft::list<std::string> f;
 
@@ -36,7 +67,7 @@ int main()
 		std::cout << *it;
 	}
 
-/*	VECTOR COMPILES	*/
+*//*	VECTOR COMPILES	*//*
 	ft::vector<int> v;
 	std::vector<std::string> s;
 	s.push_back(std::to_string(1));
@@ -48,4 +79,4 @@ int main()
 	std::cout << s.size() << std::endl;
 	std::cout << s.capacity() << std::endl;
 //	s.push_front(3);
-}
+}*/

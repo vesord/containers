@@ -25,14 +25,20 @@ namespace ft {
 
 	template <class T> class allocator;
 
-	template < class T, class Alloc = std::allocator<T> > class list;
+	template <class T, class Alloc = std::allocator<T> >
+	class list;
 	template <class T, class Alloc>
 	void swap (ft::list<T,Alloc>& x, ft::list<T,Alloc>& y);
 	//list 10k and resize to 5
 
-	template < class T, class Alloc = std::allocator<T> > class vector;
+	template < class T, class Alloc = std::allocator<T> >
+	class vector;
 	template <class T, class Alloc>
 	void swap (vector<T,Alloc>& x, vector<T,Alloc>& y);
+
+	template < class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<std::pair<const Key,T> > >
+	class map;
+
 }
 
 #endif
