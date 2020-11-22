@@ -1808,10 +1808,10 @@ TEST_F(VectorComprasionTest, justCase2) {
 	s2.push_back("a"); f2.push_back("a");
 	s2.push_back("a"); f2.push_back("a");
 
-	EXPECT_EQ(true, s1 < s2);
-	EXPECT_EQ(true, f1 < f2);
-	EXPECT_EQ(false, s1 == s2);
-	EXPECT_EQ(false, f1 == f2);
+	EXPECT_EQ(false, s1 < s2);
+	EXPECT_EQ(false, f1 < f2);
+	EXPECT_EQ(true, s1 == s2);
+	EXPECT_EQ(true, f1 == f2);
 }
 
 TEST_F(VectorComprasionTest, justCase3) {

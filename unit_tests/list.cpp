@@ -1880,3 +1880,62 @@ TEST_F(ListComprasionTest, lessCase2) {
 	EXPECT_EQ(false, s1 == s2);
 	EXPECT_EQ(false, f1 == f2);
 }
+
+TEST_F(ListComprasionTest, justCase1) {
+	s1.push_back("a"); f1.push_back("a");
+	s1.push_back("a"); f1.push_back("a");
+	s1.push_back("a"); f1.push_back("a");
+
+	s2.push_back("a"); f2.push_back("a");
+	s2.push_back("a"); f2.push_back("a");
+	s2.push_back("a"); f2.push_back("a");
+	s2.push_back("a"); f2.push_back("a");
+
+	EXPECT_EQ(true, s1 < s2);
+	EXPECT_EQ(true, f1 < f2);
+	EXPECT_EQ(false, s1 == s2);
+	EXPECT_EQ(false, f1 == f2);
+}
+
+TEST_F(ListComprasionTest, justCase2) {
+	s1.push_back("a"); f1.push_back("a");
+	s1.push_back("a"); f1.push_back("a");
+	s1.push_back("a"); f1.push_back("a");
+
+	s2.push_back("a"); f2.push_back("a");
+	s2.push_back("a"); f2.push_back("a");
+	s2.push_back("a"); f2.push_back("a");
+
+	EXPECT_EQ(false, s1 < s2);
+	EXPECT_EQ(false, f1 < f2);
+	EXPECT_EQ(true, s1 == s2);
+	EXPECT_EQ(true, f1 == f2);
+}
+
+TEST_F(ListComprasionTest, justCase3) {
+	s1.push_back("a"); f1.push_back("a");
+	s1.push_back("a"); f1.push_back("a");
+	s1.push_back("a"); f1.push_back("a");
+
+	s2.push_back("z"); f2.push_back("z");
+
+	EXPECT_EQ(true, s1 < s2);
+	EXPECT_EQ(true, f1 < f2);
+	EXPECT_EQ(false, s1 == s2);
+	EXPECT_EQ(false, f1 == f2);
+}
+
+TEST_F(ListComprasionTest, justCase4) {
+	s1.push_back("a"); f1.push_back("a");
+	s1.push_back("a"); f1.push_back("a");
+	s1.push_back("a"); f1.push_back("a");
+
+	s2.push_back("z"); f2.push_back("z");
+	s2.push_back("z"); f2.push_back("z");
+	s2.push_back("z"); f2.push_back("z");
+
+	EXPECT_EQ(true, s1 < s2);
+	EXPECT_EQ(true, f1 < f2);
+	EXPECT_EQ(false, s1 == s2);
+	EXPECT_EQ(false, f1 == f2);
+}

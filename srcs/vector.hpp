@@ -525,9 +525,8 @@ bool operator<  (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
 			return false;
 		if (*itl < *itr)
 			return true;
-//		++itr;
 	}
-	if (itr != itle/* && itl == itle*/)
+	if (itr != itre)
 		return true;
 	return false;
 }
