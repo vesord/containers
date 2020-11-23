@@ -33,6 +33,7 @@ namespace ft {
 
 	template < class T, class Alloc = std::allocator<T> >
 	class vector;
+	// change exception str in at()
 	template <class T, class Alloc>
 	void swap (vector<T,Alloc>& x, vector<T,Alloc>& y);
 

@@ -55,15 +55,95 @@ public:
 
 private:
 
-	typedef typename allocator_type::template rebind<pointer>::other allocator_rebind;
-	allocator_rebind _alloc_rebind;
-	allocator_type	 _alloc;
+public: // DELETE THIS PUBLIC!!!
+	typedef struct	_s_tree_node {
+		value_type			*data;
+		struct _s_tree_node	*left;
+		struct _s_tree_node	*right;
+		struct _s_tree_node	*parent;
+		bool				color;
+	}				_t_node;
+
+private:
+
+	typedef typename allocator_type::template rebind<_t_node>::other allocator_rebind;
+	allocator_rebind	_alloc_rebind;
+	allocator_type		_alloc;
+	Compare				_comp;
+
+	_t_node		*_root;
+	_t_node		*_begin_node;
+	_t_node		*_end_node;
+	size_type	_size;
+
+	static const bool	_color_black = false;
+	static const bool	_color_red = true;
 
 public:
 
+	class iterator : public ft::iterator<std::random_access_iterator_tag, value_type> {
+
+	public:
+		iterator() : _ptr( nullptr ) { }
+		~iterator() { }
+
+		iterator( iterator const & it ) { *this = it; }
+		iterator( pointer ptr ) { this->_ptr = ptr; }
+
+		iterator & operator=( iterator const & rhs ) {
+			if (this != &rhs)
+				_ptr = rhs._ptr;
+			return *this;
+		}
+
+		iterator & operator++() { this->_ptr += 1; return *this; }
+		iterator & operator--() { this->_ptr -= 1; return *this; }
+
+		iterator operator++(int) { iterator tmp = *this; this->operator++(); return tmp; }
+		iterator operator--(int) { iterator tmp = *this; this->operator--(); return tmp; }
+
+		iterator operator+( difference_type const & rhs ) const { return iterator(_ptr + rhs); }
+		iterator operator-( difference_type const & rhs ) const { return iterator(_ptr - rhs); }
+		iterator operator+=( difference_type const & rhs ) { _ptr += rhs; return *this; };
+		iterator operator-=( difference_type const & rhs ) { _ptr -= rhs; return *this; };
+
+		bool operator==( iterator const & rhs ) const { return this->_ptr == rhs._ptr; }
+		bool operator!=( iterator const & rhs ) const { return this->_ptr != rhs._ptr; }
+		bool operator<=( iterator const & rhs ) const { return this->_ptr <= rhs._ptr; }
+		bool operator>=( iterator const & rhs ) const { return this->_ptr >= rhs._ptr; }
+		bool  operator<( iterator const & rhs ) const { return this->_ptr  < rhs._ptr; }
+		bool  operator>( iterator const & rhs ) const { return this->_ptr  > rhs._ptr; }
+
+		bool operator==( const_iterator const & rhs ) const { return this->_ptr == rhs.getPtr(); }
+		bool operator!=( const_iterator const & rhs ) const { return this->_ptr != rhs.getPtr(); }
+		bool operator<=( const_iterator const & rhs ) const { return this->_ptr <= rhs.getPtr(); }
+		bool operator>=( const_iterator const & rhs ) const { return this->_ptr >= rhs.getPtr(); }
+		bool  operator<( const_iterator const & rhs ) const { return this->_ptr  < rhs.getPtr(); }
+		bool  operator>( const_iterator const & rhs ) const { return this->_ptr  > rhs.getPtr(); }
+
+		value_type & operator[]( difference_type const & i ) const { return *(this->_ptr + i); }
+		value_type & operator*() const { return *this->_ptr; }
+		value_type * operator->() const { return this->_ptr; }
+
+		_t_node* getPtr() const { return _ptr; }
+
+	private:
+		_t_node* _ptr;
+	};
+
+	/*** DEBUG ***/
+
+	_t_node* _returnRoot() {
+		return _root;
+	}
+
+
 	/*** CONSTRUCTION ***/ // we should init comp and alloc
 	explicit map (const key_compare& comp = key_compare(),
-				  const allocator_type& alloc = allocator_type());
+				  const allocator_type& alloc = allocator_type()) : _alloc(alloc), _comp(comp), _root(nullptr), _size(0) {
+		_begin_node = _createEmptyNode();
+		_end_node = _createEmptyNode();
+	}
 
 	template <class InputIterator>
 	map (InputIterator first, InputIterator last,
@@ -73,14 +153,18 @@ public:
 	map (const map& x);
 
 	/*** DESTRUCTION ***/
-
-	 ~map();
+	// DONT FORGET ABOUT DESTRUCTION
+	 ~map() {};
 
 	 /*** ASSIGNATION ***/
 
 	 map& operator= (const map& x);
 
 	 /*** ITERATORS ***/
+
+	 /*
+	  * if map is empty() begin and end should point on the same node
+	  */
 
 	iterator begin();
 	iterator end();
@@ -104,7 +188,20 @@ public:
 
 	/*** MODIFIERS ***/
 
-	std::pair<iterator,bool> insert (const value_type& val);
+	void	insert_test(const value_type& val) {
+		_treeInsert(_root, val);
+	}
+
+	std::pair<iterator,bool> insert (const value_type& val) {
+		std::pair<_t_node*, bool> ret;
+
+		ret = std::make_pair(_root, false);
+		ret = _tree_insert(ret, val);
+		_root = ret.first;
+		if (ret.second)
+			_size += 1;
+		return ret;
+	}
 	iterator insert (iterator position, const value_type& val);
 	template <class InputIterator>
 	void insert (InputIterator first, InputIterator last);
@@ -138,6 +235,127 @@ public:
 	std::pair<iterator,iterator>             equal_range (const key_type& k);
 
 private:
+
+	_t_node *_createEmptyNode() {
+		_t_node *newNode = _alloc_rebind.allocate(1);
+		newNode->color = _color_black;
+		newNode->right = nullptr;
+		newNode->left = nullptr;
+		newNode->parent = nullptr;
+		newNode->data = nullptr;
+		return newNode;
+	}
+
+	_t_node *_createNode(_t_node *parent, const value_type & val, bool color) {
+		_t_node *newNode = _alloc_rebind.allocate(1);
+		newNode->color = color;
+		newNode->right = nullptr;
+		newNode->left = nullptr;
+		newNode->parent = parent;
+		newNode->data = _alloc.allocate(1);
+		_alloc.construct(newNode->data, val);
+		return newNode;
+	}
+
+	bool	_isRed(_t_node* h) {
+		if (h == nullptr)
+			return _color_black;
+		return h->color == _color_red;
+	}
+
+	_t_node*	_rotateLeft(_t_node* h) {
+		h->right->parent = h->parent;
+		h->parent = h->right;
+		if (h->right->left) h->right->left->parent = h;
+		_t_node *tmp = h->right->left;
+		h->right->left = h;
+		h->right = tmp;
+		h->parent->color = h->color;
+		h->color = _color_red;
+		if (h == _root)
+			_root = h->parent;
+		return h->parent;
+	}
+
+	_t_node*	_rotateRight(_t_node* h) {
+		h->left->parent = h->parent;
+		h->parent = h->left;
+		if (h->left->right) h->left->right->parent = h;
+		_t_node *tmp = h->left->right;
+		h->left->right = h;
+		h->left = tmp;
+		h->parent->color = h->color;
+		h->color = _color_red;
+		if (h == _root)
+			_root = h->parent;
+		return h->parent;
+	}
+
+	void	_invertColors(_t_node* h) {
+		h->right->color = !h->right->color;
+		h->left->color = !h->left->color;
+		h->color = !h->color;
+	}
+
+	_t_node	*_fixUp(_t_node* h) {
+		if (h->right && _isRed(h->right))
+			h = _rotateLeft(h);
+		if (h->left && h->left->left && _isRed(h->left) && _isRed(h->left->left))
+			h = _rotateRight(h);
+		if (h->left && h->right && _isRed(h->left) && _isRed(h->right))
+			_invertColors(h);
+		return h;
+	}
+
+	void _treeInsert(_t_node *h, const value_type & val) {
+//		std::pair<_t_node*, bool> ret;
+		_t_node *tmp;
+
+		if (_root == nullptr) {
+			_root = _createNode(nullptr, val, _color_black);
+			_root->left = _begin_node;
+			_root->right = _end_node;
+			_begin_node->parent = _root;
+			_end_node->parent = _root;
+			return ;
+		}
+
+		bool less = _comp(val.first, h->data->first);
+		bool greater = _comp(h->data->first, val.first);
+
+		if (!less && !greater) {
+			return ; // do not make node, just return this (h.first, false)
+		}
+
+		if (less && (h->left == nullptr || h->left == _begin_node)) {
+			tmp = _createNode(h, val, _color_red);
+			if (h->left == _begin_node) {
+				tmp->left = _begin_node;
+				_begin_node->parent = tmp;
+			}
+			h->left = tmp;
+			h = _fixUp(h);
+			return ;
+		}
+		else if (greater && (h->right == nullptr || h->right == _end_node)) {
+			tmp = _createNode(h, val, _color_red);
+			if (h->right == _end_node) {
+				tmp->right = _end_node;
+				_end_node->parent = tmp;
+			}
+			h->right = tmp;
+			h = _fixUp(h);
+			return ;
+		}
+		else if (less) {
+			_treeInsert(h->left, val);
+		}
+		else {
+			_treeInsert(h->right, val);
+		}
+		h = _fixUp(h);
+//		return // here we should return h and true or false
+	}
 
 };
 
