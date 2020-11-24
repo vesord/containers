@@ -176,21 +176,17 @@ TEST_F(MapIteratorTest, IteratorConstInputConstInputTest) {
 	mapIteratorTest(itf, itfe, tmpf, its, itse, tmps);
 }
 
-/* THIS TEST NORMALLY SHOULD NOT COMPILE */
-/*
-TEST_F(VectorIteratorTest, IteratorConstInputInputTest) {
-	std::vector<int> s(sample.begin(), sample.end());
-	ft::vector<int> f(sample.begin(), sample.end());
+/*// THIS TEST NORMALLY SHOULD NOT COMPILE
+TEST_F(MapIteratorTest, IteratorConstInputInputTest) {
+	ft::map<std::string, int>::const_iterator itf =		f.begin();
+	ft::map<std::string, int>::const_iterator itfe =	f.end();
+	ft::map<std::string, int>::iterator tmpf;
 
-	ft::vector<int>::const_iterator itf =		f.begin();
-	ft::vector<int>::const_iterator itfe =	f.end();
-	ft::vector<int>::iterator tmpf;
+	std::map<std::string,int>::const_iterator its =	s.begin();
+	std::map<std::string,int>::const_iterator itse =	s.end();
+	std::map<std::string,int>::iterator tmps;
 
-	std::vector<int>::const_iterator its =	s.begin();
-	std::vector<int>::const_iterator itse =	s.end();
-	std::vector<int>::iterator tmps;
-
-	vectorIteratorTest(itf, itfe, tmpf, its, itse, tmps);
+	mapIteratorTest(itf, itfe, tmpf, its, itse, tmps);
 }*/
 
 TEST_F(MapIteratorTest, IteratorReverseReverseTest) {
@@ -229,20 +225,17 @@ TEST_F(MapIteratorTest, IteratorConstReverseConstReverseTest) {
 	mapIteratorTest(itf, itfe, tmpf, its, itse, tmps);
 }
 
-/* THIS TEST NORMALLY SHOULD NOT COMPILE */
-/*TEST_F(VectorIteratorTest, IteratorConstReverseReverseTest) {
-	std::vector<int> s(sample.begin(), sample.end());
-	ft::vector<int> f(sample.begin(), sample.end());
+/*// THIS TEST NORMALLY SHOULD NOT COMPILE
+TEST_F(MapIteratorTest, IteratorConstReverseReverseTest) {
+	ft::map<std::string, int>::const_reverse_iterator itf =		f.rbegin();
+	ft::map<std::string, int>::const_reverse_iterator itfe =	f.rend();
+	ft::map<std::string, int>::reverse_iterator tmpf;
 
-	ft::vector<int>::const_reverse_iterator itf =		f.rbegin();
-	ft::vector<int>::const_reverse_iterator itfe =	f.rend();
-	ft::vector<int>::reverse_iterator tmpf;
+	std::map<std::string,int>::const_reverse_iterator its =	s.rbegin();
+	std::map<std::string,int>::const_reverse_iterator itse =	s.rend();
+	std::map<std::string,int>::reverse_iterator tmps;
 
-	std::vector<int>::const_reverse_iterator its =	s.rbegin();
-	std::vector<int>::const_reverse_iterator itse =	s.rend();
-	std::vector<int>::reverse_iterator tmps;
-
-	vectorIteratorTest(itf, itfe, tmpf, its, itse, tmps);
+	mapIteratorTest(itf, itfe, tmpf, its, itse, tmps);
 }*/
 
 
