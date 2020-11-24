@@ -457,8 +457,8 @@ public:
 	std::pair<iterator,bool> insert (const value_type& val) {
 		std::pair<_t_node*, bool> ret;
 
-		ret = _treeInsert(_root, val);
-		_root = ret.first;
+		ret = _treeInsert(&_root, val);
+//		_root = ret.first;
 		if (ret.second)
 			_size += 1;
 		return std::make_pair(iterator(ret.first), ret.second);
@@ -660,7 +660,7 @@ private:
 		return h;
 	}*/
 
-	std::pair<_t_node*, bool> _treeInsert(_t_node *h, const value_type & val) {
+	std::pair<_t_node*, bool> _treeInsert(_t_node **h, const value_type & val) {
 		_t_node *tmp;
 		std::pair<_t_node*, bool> ret;
 
@@ -673,42 +673,39 @@ private:
 			return std::make_pair(_root, true);
 		}
 
-		bool less = _comp(val.first, h->data->first);
-		bool greater = _comp(h->data->first, val.first);
+		bool less = _comp(val.first, (*h)->data->first);
+		bool greater = _comp((*h)->data->first, val.first);
 
 		if (!less && !greater) {
-//			_alloc.construct(h->data, val);
-			return std::make_pair(h, false); // do not make node, just return this (h.first, false)
+			return std::make_pair((*h), false); // do not make node, just return this (h.first, false)
 		}
 
-		if (less && (h->left == nullptr || h->left == _begin_node)) {
-			tmp = _createNode(h, val, _color_red);
-			if (h->left == _begin_node) {
+		if (less && ((*h)->left == nullptr || (*h)->left == _begin_node)) {
+			tmp = _createNode((*h), val, _color_red);
+			if ((*h)->left == _begin_node) {
 				tmp->left = _begin_node;
 				_begin_node->parent = tmp;
 			}
-			h->left = tmp;
+			(*h)->left = tmp;
 			ret = std::make_pair(tmp, true);
 		}
-		else if (greater && (h->right == nullptr || h->right == _end_node)) {
-			tmp = _createNode(h, val, _color_red);
-			if (h->right == _end_node) {
+		else if (greater && ((*h)->right == nullptr || (*h)->right == _end_node)) {
+			tmp = _createNode((*h), val, _color_red);
+			if ((*h)->right == _end_node) {
 				tmp->right = _end_node;
 				_end_node->parent = tmp;
 			}
-			h->right = tmp;
+			(*h)->right = tmp;
 			ret = std::make_pair(tmp, true);
 		}
 		else if (less) {
-			ret = _treeInsert(h->left, val);
-			h->left = ret.first;
+			ret = _treeInsert( &((*h)->left), val);
 		}
 		else {
-			ret = _treeInsert(h->right, val);
-			h->right = ret.first;
+			ret = _treeInsert( &((*h)->right), val);
 		}
-		h = _fixUp(h);
-		return std::make_pair(h, ret.second);// here we should return h and true or false
+		*h = _fixUp(*h);
+		return ret;// here we should return h and true or false
 	}
 
 };
