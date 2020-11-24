@@ -424,6 +424,24 @@ TEST_F(MapInsertTest, insertValCaseTriple2) {
 	checkIfMapsAreEqual(f, s);
 }
 
+TEST_F(MapInsertTest, ultimative) {
+	srand(1);
+	int gen_key, gen_val;
+	const int keys_limit = 5000;
+
+	for (int i = 0; i < keys_limit * 2; ++i) {
+		gen_key = rand() % keys_limit;
+		gen_val = rand();
+		ps = s.insert(std::make_pair(std::to_string(gen_key), gen_val));
+		pf = f.insert(std::make_pair(std::to_string(gen_key), gen_val));
+
+		EXPECT_EQ(pf.second, ps.second);
+
+		checkMapsAreEqualIt(pf.first, f.end(), ps.first, s.end());
+		checkIfMapsAreEqual(f, s);
+	}
+}
+
 //class MapConstructorTest : public ::testing::Test {
 //protected:
 //	virtual void SetUp() { }
