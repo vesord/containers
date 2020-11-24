@@ -144,7 +144,7 @@ public:
 		bool  operator<( iterator const & rhs ) const { return this->_ptr  < rhs.getPtr(); }
 		bool  operator>( iterator const & rhs ) const { return this->_ptr  > rhs.getPtr(); }
 
-		value_type & operator[]( difference_type const & i ) const { return *(this->_ptr + i); }
+		value_type const & operator[]( difference_type const & i ) const { return *(this->_ptr + i); }
 		value_type const & operator*() const { return *this->_ptr; }
 		value_type const * operator->() const { return this->_ptr; }
 
@@ -253,9 +253,9 @@ public:
 		bool  operator<( reverse_iterator const & rhs ) const { return this->_ptr >  rhs.getPtr(); }
 		bool  operator>( reverse_iterator const & rhs ) const { return this->_ptr <  rhs.getPtr(); }
 
-		value_type & operator[]( difference_type const & i ) const { return *(this->_ptr - i); }
-		value_type & operator*() const { return *this->_ptr; }
-		value_type * operator->() const { return this->_ptr; }
+		value_type const & operator[]( difference_type const & i ) const { return *(this->_ptr - i); }
+		value_type const & operator*() const { return *this->_ptr; }
+		value_type const * operator->() const { return this->_ptr; }
 
 		pointer getPtr() const { return _ptr; }
 
