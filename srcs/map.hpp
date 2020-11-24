@@ -17,6 +17,8 @@
 #include <stdexcept>
 #include <iostream>
 
+// DELETE THIS DEBUG
+
 #define RED_NODE_OUTPUT(x)  "\x1b[31;1m" + (x) + "\x1b[0m"
 #include <queue>
 #include <iomanip>
@@ -32,6 +34,7 @@ template <class Key, class T, class Compare, class Alloc>
 class ft::map {
 
 public:
+
 	class iterator;
 	class const_iterator;
 	class reverse_iterator;
@@ -89,7 +92,7 @@ private:
 
 public:
 
-	class iterator : public ft::iterator<std::random_access_iterator_tag, value_type> {
+	class iterator : public ft::iterator<std::bidirectional_iterator_tag, value_type> {
 
 	public:
 		iterator() : _ptr( nullptr ) { }
@@ -111,42 +114,68 @@ public:
 		iterator & operator--() { this->_ptr = _mapIteratorPrev(this->_ptr); return *this; }
 		iterator operator++(int) { iterator tmp = *this; this->operator++(); return tmp; }
 		iterator operator--(int) { iterator tmp = *this; this->operator--(); return tmp; }
-
-		iterator operator+( difference_type const & rhs ) const { return iterator(_mapAdvance(_ptr, rhs)); }
-		iterator operator-( difference_type const & rhs ) const { return iterator(_mapAdvance(_ptr, -rhs)); }
-
-		iterator operator+=( difference_type const & rhs ) { this->operator+(rhs); return *this; };
-		iterator operator-=( difference_type const & rhs ) { this->operator-(rhs); return *this; };
 		
-		bool operator==( iterator const & rhs ) const { return _mapIteratorEqual(this->_ptr, rhs._ptr); }
-		bool operator!=( iterator const & rhs ) const { return !(this->operator==(rhs)); }
-		bool  operator<( iterator const & rhs ) const { return _mapIteratorLess(this->_ptr, rhs._ptr); }
-		bool  operator>( iterator const & rhs ) const { return _mapIteratorGreater(this->_ptr, rhs._ptr); }
-		bool operator<=( iterator const & rhs ) const { return !(this->operator>(this->_ptr, rhs._ptr)); }
-		bool operator>=( iterator const & rhs ) const { return !(this->operator<(this->_ptr, rhs._ptr)); }
+		bool operator==( iterator const & rhs ) const { return this->_ptr == rhs._ptr; }
+		bool operator!=( iterator const & rhs ) const { return this->_ptr != rhs._ptr; }
 
-		bool operator==( const_iterator const & rhs ) const { return _mapIteratorEqual(this->_ptr, rhs.getPtr); }
-		bool operator!=( const_iterator const & rhs ) const { return !(this->operator==(rhs)); }
-		bool  operator<( const_iterator const & rhs ) const { return _mapIteratorLess(this->_ptr, rhs.getPtr); }
-		bool  operator>( const_iterator const & rhs ) const { return _mapIteratorGreater(this->_ptr, rhs.getPtr); }
-		bool operator<=( const_iterator const & rhs ) const { return !(this->operator>(this->_ptr, rhs.getPtr)); }
-		bool operator>=( const_iterator const & rhs ) const { return !(this->operator<(this->_ptr, rhs.getPtr)); }
-		
-		value_type & operator[]( difference_type const & i ) const { return *(_mapAdvance(this->_ptr, i)->data); }
+		bool operator==( const_iterator const & rhs ) const { return this->_ptr == rhs.getPtr(); }
+		bool operator!=( const_iterator const & rhs ) const { return this->_ptr != rhs.getPtr(); }
 
 		_t_node* getPtr() const { return _ptr; }
 
 	private:
 		_t_node* _ptr;
+
+		_t_node *_getMinNode(_t_node *h)  {
+			if (h->left == nullptr)
+				return h;
+			return _getMinNode(h->left);
+		}
+
+		_t_node *_getMaxNode(_t_node *h)  {
+			if (h->right == nullptr)
+				return h;
+			return _getMaxNode(h->right);
+		}
+
+		_t_node *_mapIteratorNext(_t_node *h)  {
+			if (h->right)
+				return _getMinNode(h->right);
+			if (h->parent && h->parent->left == h)
+				return h->parent;
+			_t_node *tmp = h;
+			do {
+				tmp = tmp->parent;
+				if (tmp == nullptr)
+					return h->right;
+			} while (tmp->parent->right == tmp);
+			return tmp->parent;
+		}
+
+		_t_node *_mapIteratorPrev(_t_node *h) {
+			if (h->left)
+				return _getMaxNode(h->left);
+			if (h->parent && h->parent->right == h)
+				return h->parent;
+			_t_node *tmp = h;
+			do {
+				tmp = tmp->parent;
+				if (tmp == nullptr)
+					return h->left;
+			} while (tmp->parent->left == tmp);
+			return tmp->parent;
+		}
+
 	};
 
-	class const_iterator : public ft::iterator<std::random_access_iterator_tag, value_type> {
+	class const_iterator : public ft::iterator<std::bidirectional_iterator_tag, value_type> {
 
 	public:
 		const_iterator() : _ptr( nullptr ) {}
 		~const_iterator() {}
 
 		const_iterator( const_iterator const & it ) { *this = it; }
+		const_iterator( iterator const & it ) { *this = it; }
 		const_iterator( _t_node *ptr ) { this->_ptr = ptr; }
 
 		const_iterator & operator=( const_iterator const & rhs ) {
@@ -168,35 +197,58 @@ public:
 		const_iterator operator++(int) { const_iterator tmp = *this; this->operator++(); return tmp; }
 		const_iterator operator--(int) { const_iterator tmp = *this; this->operator--(); return tmp; }
 
-		const_iterator operator+( difference_type const & rhs ) const { return const_iterator(_mapAdvance(_ptr, rhs)); }
-		const_iterator operator-( difference_type const & rhs ) const { return const_iterator(_mapAdvance(_ptr, -rhs)); }
+		bool operator==( iterator const & rhs ) const { return this->_ptr == rhs.getPtr(); }
+		bool operator!=( iterator const & rhs ) const { return this->_ptr != rhs.getPtr(); }
 
-		const_iterator operator+=( difference_type const & rhs ) { this->operator+(rhs); return *this; };
-		const_iterator operator-=( difference_type const & rhs ) { this->operator-(rhs); return *this; };
-
-		bool operator==( iterator const & rhs ) const { return _mapIteratorEqual(this->_ptr, rhs._ptr); }
-		bool operator!=( iterator const & rhs ) const { return !(this->operator==(rhs)); }
-		bool  operator<( iterator const & rhs ) const { return _mapIteratorLess(this->_ptr, rhs._ptr); }
-		bool  operator>( iterator const & rhs ) const { return _mapIteratorGreater(this->_ptr, rhs._ptr); }
-		bool operator<=( iterator const & rhs ) const { return !(this->operator>(this->_ptr, rhs._ptr)); }
-		bool operator>=( iterator const & rhs ) const { return !(this->operator<(this->_ptr, rhs._ptr)); }
-
-		bool operator==( const_iterator const & rhs ) const { return _mapIteratorEqual(this->_ptr, rhs.getPtr); }
-		bool operator!=( const_iterator const & rhs ) const { return !(this->operator==(rhs)); }
-		bool  operator<( const_iterator const & rhs ) const { return _mapIteratorLess(this->_ptr, rhs.getPtr); }
-		bool  operator>( const_iterator const & rhs ) const { return _mapIteratorGreater(this->_ptr, rhs.getPtr); }
-		bool operator<=( const_iterator const & rhs ) const { return !(this->operator>(this->_ptr, rhs.getPtr)); }
-		bool operator>=( const_iterator const & rhs ) const { return !(this->operator<(this->_ptr, rhs.getPtr)); }
-
-		value_type const & operator[]( difference_type const & i ) const { return *(_mapAdvance(this->_ptr, i)->data); }
+		bool operator==( const_iterator const & rhs ) const { return this->_ptr == rhs._ptr; }
+		bool operator!=( const_iterator const & rhs ) const { return this->_ptr != rhs._ptr; }
 
 		_t_node* getPtr() const { return _ptr; }
 
 	private:
 		_t_node* _ptr;
+
+		_t_node *_getMinNode(_t_node *h) const {
+			if (h->left == nullptr)
+				return h;
+			return _getMinNode(h->left);
+		}
+
+		_t_node *_getMaxNode(_t_node *h) const {
+			if (h->right == nullptr)
+				return h;
+			return _getMaxNode(h->right);
+		}
+
+		_t_node *_mapIteratorNext(_t_node *h)  {
+			if (h->right)
+				return _getMinNode(h->right);
+			if (h->parent && h->parent->left == h)
+				return h->parent;
+			_t_node *tmp = h;
+			do {
+				tmp = tmp->parent;
+				if (tmp == nullptr)
+					return h->right;
+			} while (tmp->parent->right == tmp);
+			return tmp->parent;
+		}
+
+		_t_node *_mapIteratorPrev(_t_node *h) {
+			if (h->left)
+				return _getMaxNode(h->left);
+			if (h->parent && h->parent->right == h)
+				return h->parent;
+			_t_node *tmp = h;
+			do {
+				tmp = tmp->parent;
+				if (tmp == nullptr)
+					return h->left;
+			} while (tmp->parent->left == tmp);
+			return tmp->parent;
+		}
+
 	};
-	
-	///
 
 	class reverse_iterator : public ft::reverse_iterator<map::iterator> {
 
@@ -221,32 +273,57 @@ public:
 		reverse_iterator operator++(int) { reverse_iterator tmp = *this; this->operator++(); return tmp; }
 		reverse_iterator operator--(int) { reverse_iterator tmp = *this; this->operator--(); return tmp; }
 
-		reverse_iterator operator+( difference_type const & rhs ) const { return reverse_iterator(_mapAdvance(_ptr, -rhs)); }
-		reverse_iterator operator-( difference_type const & rhs ) const { return reverse_iterator(_mapAdvance(_ptr, rhs)); }
+		bool operator==( reverse_iterator const & rhs ) const { return this->_ptr == rhs._ptr; }
+		bool operator!=( reverse_iterator const & rhs ) const { return this->_ptr != rhs._ptr; }
 
-		reverse_iterator operator+=( difference_type const & rhs ) { this->operator+(rhs); return *this; };
-		reverse_iterator operator-=( difference_type const & rhs ) { this->operator-(rhs); return *this; };
-
-		bool operator==( reverse_iterator const & rhs ) const { return _mapIteratorEqual(this->_ptr, rhs._ptr); }
-		bool operator!=( reverse_iterator const & rhs ) const { return !(this->operator==(rhs)); }
-		bool  operator<( reverse_iterator const & rhs ) const { return _mapIteratorGreater(this->_ptr, rhs._ptr); }
-		bool  operator>( reverse_iterator const & rhs ) const { return _mapIteratorLess(this->_ptr, rhs._ptr); }
-		bool operator<=( reverse_iterator const & rhs ) const { return !(this->operator>(this->_ptr, rhs._ptr)); }
-		bool operator>=( reverse_iterator const & rhs ) const { return !(this->operator<(this->_ptr, rhs._ptr)); }
-
-		bool operator==( const_reverse_iterator const & rhs ) const { return _mapIteratorEqual(this->_ptr, rhs.getPtr); }
-		bool operator!=( const_reverse_iterator const & rhs ) const { return !(this->operator==(rhs)); }
-		bool  operator<( const_reverse_iterator const & rhs ) const { return _mapIteratorGreater(this->_ptr, rhs.getPtr); }
-		bool  operator>( const_reverse_iterator const & rhs ) const { return _mapIteratorLess(this->_ptr, rhs.getPtr); }
-		bool operator<=( const_reverse_iterator const & rhs ) const { return !(this->operator>(this->_ptr, rhs.getPtr)); }
-		bool operator>=( const_reverse_iterator const & rhs ) const { return !(this->operator<(this->_ptr, rhs.getPtr)); }
-
-		value_type & operator[]( difference_type const & i ) const { return *(_mapAdvance(this->_ptr, -i)->data); }
+		bool operator==( const_reverse_iterator const & rhs ) const { return this->_ptr == rhs.getPtr(); }
+		bool operator!=( const_reverse_iterator const & rhs ) const { return this->_ptr != rhs.getPtr(); }
 
 		_t_node* getPtr() const { return _ptr; }
 
 	private:
 		_t_node* _ptr;
+
+		_t_node *_getMinNode(_t_node *h) const {
+			if (h->left == nullptr)
+				return h;
+			return _getMinNode(h->left);
+		}
+
+		_t_node *_getMaxNode(_t_node *h) const {
+			if (h->right == nullptr)
+				return h;
+			return _getMaxNode(h->right);
+		}
+
+		_t_node *_mapIteratorNext(_t_node *h)  {
+			if (h->right)
+				return _getMinNode(h->right);
+			if (h->parent && h->parent->left == h)
+				return h->parent;
+			_t_node *tmp = h;
+			do {
+				tmp = tmp->parent;
+				if (tmp == nullptr)
+					return h->right;
+			} while (tmp->parent->right == tmp);
+			return tmp->parent;
+		}
+
+		_t_node *_mapIteratorPrev(_t_node *h) {
+			if (h->left)
+				return _getMaxNode(h->left);
+			if (h->parent && h->parent->right == h)
+				return h->parent;
+			_t_node *tmp = h;
+			do {
+				tmp = tmp->parent;
+				if (tmp == nullptr)
+					return h->left;
+			} while (tmp->parent->left == tmp);
+			return tmp->parent;
+		}
+
 	};
 
 	class const_reverse_iterator : public ft::reverse_iterator<map::iterator> {
@@ -256,6 +333,7 @@ public:
 		~const_reverse_iterator() {}
 
 		const_reverse_iterator( const_reverse_iterator const & it ) { *this = it; }
+		const_reverse_iterator( reverse_iterator const & it ) { *this = it; }
 		const_reverse_iterator( _t_node *ptr ) { this->_ptr = ptr; }
 
 		const_reverse_iterator & operator=( const_reverse_iterator const & rhs ) {
@@ -277,40 +355,58 @@ public:
 		const_reverse_iterator operator++(int) { const_reverse_iterator tmp = *this; this->operator++(); return tmp; }
 		const_reverse_iterator operator--(int) { const_reverse_iterator tmp = *this; this->operator--(); return tmp; }
 
-		const_reverse_iterator operator+( difference_type const & rhs ) const { return const_reverse_iterator(_mapAdvance(_ptr, -rhs)); }
-		const_reverse_iterator operator-( difference_type const & rhs ) const { return const_reverse_iterator(_mapAdvance(_ptr, rhs)); }
+		bool operator==( reverse_iterator const & rhs ) const { return this->_ptr == rhs.getPtr(); }
+		bool operator!=( reverse_iterator const & rhs ) const { return this->_ptr != rhs.getPtr(); }
 
-		const_reverse_iterator operator+=( difference_type const & rhs ) { this->operator+(rhs); return *this; };
-		const_reverse_iterator operator-=( difference_type const & rhs ) { this->operator-(rhs); return *this; };
-
-		bool operator==( reverse_iterator const & rhs ) const { return _mapIteratorEqual(this->_ptr, rhs._ptr); }
-		bool operator!=( reverse_iterator const & rhs ) const { return !(this->operator==(rhs)); }
-		bool  operator<( reverse_iterator const & rhs ) const { return _mapIteratorGreater(this->_ptr, rhs._ptr); }
-		bool  operator>( reverse_iterator const & rhs ) const { return _mapIteratorLess(this->_ptr, rhs._ptr); }
-		bool operator<=( reverse_iterator const & rhs ) const { return !(this->operator>(this->_ptr, rhs._ptr)); }
-		bool operator>=( reverse_iterator const & rhs ) const { return !(this->operator<(this->_ptr, rhs._ptr)); }
-
-		bool operator==( const_reverse_iterator const & rhs ) const { return _mapIteratorEqual(this->_ptr, rhs.getPtr); }
-		bool operator!=( const_reverse_iterator const & rhs ) const { return !(this->operator==(rhs)); }
-		bool  operator<( const_reverse_iterator const & rhs ) const { return _mapIteratorGreater(this->_ptr, rhs.getPtr); }
-		bool  operator>( const_reverse_iterator const & rhs ) const { return _mapIteratorLess(this->_ptr, rhs.getPtr); }
-		bool operator<=( const_reverse_iterator const & rhs ) const { return !(this->operator>(this->_ptr, rhs.getPtr)); }
-		bool operator>=( const_reverse_iterator const & rhs ) const { return !(this->operator<(this->_ptr, rhs.getPtr)); }
-
-		value_type const & operator[]( difference_type const & i ) const { return *(_mapAdvance(this->_ptr, -i)->data); }
+		bool operator==( const_reverse_iterator const & rhs ) const { return this->_ptr == rhs._ptr; }
+		bool operator!=( const_reverse_iterator const & rhs ) const { return this->_ptr != rhs._ptr; }
 
 		_t_node* getPtr() const { return _ptr; }
 
 	private:
 		_t_node* _ptr;
+
+		_t_node *_getMinNode(_t_node *h) const {
+			if (h->left == nullptr)
+				return h;
+			return _getMinNode(h->left);
+		}
+
+		_t_node *_getMaxNode(_t_node *h) const {
+			if (h->right == nullptr)
+				return h;
+			return _getMaxNode(h->right);
+		}
+
+		_t_node *_mapIteratorNext(_t_node *h)  {
+			if (h->right)
+				return _getMinNode(h->right);
+			if (h->parent && h->parent->left == h)
+				return h->parent;
+			_t_node *tmp = h;
+			do {
+				tmp = tmp->parent;
+				if (tmp == nullptr)
+					return h->right;
+			} while (tmp->parent->right == tmp);
+			return tmp->parent;
+		}
+
+		_t_node *_mapIteratorPrev(_t_node *h) {
+			if (h->left)
+				return _getMaxNode(h->left);
+			if (h->parent && h->parent->right == h)
+				return h->parent;
+			_t_node *tmp = h;
+			do {
+				tmp = tmp->parent;
+				if (tmp == nullptr)
+					return h->left;
+			} while (tmp->parent->left == tmp);
+			return tmp->parent;
+		}
+
 	};
-
-	/*** DEBUG ***/
-
-	_t_node* _returnRoot() {
-		return _root;
-	}
-
 
 	/*** CONSTRUCTION ***/ // we should init comp and alloc
 	explicit map (const key_compare& comp = key_compare(),
@@ -340,15 +436,15 @@ public:
 	  * if map is empty() begin and end should point on the same node
 	  */
 
-	iterator begin();
-	iterator end();
-	const_iterator begin() const;
-	const_iterator end() const;
+	iterator begin() { return ++iterator(_begin_node); }
+	iterator end() { return iterator(_end_node); }
+	const_iterator begin() const { return ++const_iterator(_begin_node); }
+	const_iterator end() const { return const_iterator(_end_node); };
 
-	reverse_iterator rbegin();
-	reverse_iterator rend();
-	const_reverse_iterator rbegin() const;
-	const_reverse_iterator rend() const;
+	reverse_iterator rbegin() { return ++reverse_iterator(_end_node); };
+	reverse_iterator rend() { return reverse_iterator(_begin_node); };
+	const_reverse_iterator rbegin() const { return ++const_reverse_iterator(_end_node); }
+	const_reverse_iterator rend() const { return const_reverse_iterator(_begin_node); }
 
 	/*** CAPACITY ***/
 
@@ -386,7 +482,7 @@ public:
 	/*** OBSERVERS ***/
 
 	key_compare key_comp() const;
-	value_compare value_comp() const;
+	value_compare value_comp() const { return value_compare(_comp); };
 
 	/*** OPERATIONS ***/
 
@@ -426,10 +522,11 @@ public:
 			std::cout << "__null__";
 	}
 
-	void	_dPrintStrangeTree(_t_node* const root)
+	void	_dPrintStrangeTree()
 	{
-		std::queue<ft::map<char, int>::_t_node *> q;
-		ft::map<char, int>::_t_node * curNode;
+		_t_node *root = _root;
+		typename std::queue<typename ft::map<Key, T>::_t_node*> q;
+		typename ft::map<Key, T>::_t_node * curNode;
 		bool printTime;
 		int onLine = 1;
 		int needToPrint = 1;
@@ -491,7 +588,7 @@ private:
 		return newNode;
 	}
 
-	_t_node *_getMinNode(_t_node *h) {
+/*	_t_node *_getMinNode(_t_node *h) {
 		if (h->left == nullptr)
 			return h;
 		return _getMinNode(h->left);
@@ -501,7 +598,7 @@ private:
 		if (h->right == nullptr)
 			return h;
 		return _getMaxNode(h->right);
-	}
+	}*/
 
 	bool	_isRed(_t_node* h) {
 		if (h == nullptr)
@@ -632,7 +729,7 @@ private:
 
 	/*** ITERATOR INTERNALS ***/
 
-	_t_node *_mapIteratorNext(_t_node *h) const {
+/*	_t_node *_mapIteratorNext(_t_node *h) const {
 		if (h->right)
 			return _getMinNode(h->right);
 		if (h->parent && h->parent->left == h)
@@ -644,9 +741,9 @@ private:
 				return _end_node;
 		} while (_comp(h->data->first, tmp->data->first));
 		return tmp;
-	}
+	}*/
 
-	_t_node *_mapIteratorPrev(_t_node *h) const {
+/*	_t_node *_mapIteratorPrev(_t_node *h) const {
 		if (h->left)
 			return _getMaxNode(h->left);
 		if (h->parent && h->parent->right == h)
@@ -685,7 +782,7 @@ private:
 
 	bool _mapIteratorGreater(_t_node *lhs, _t_node *rhs) const {
 		return _comp(rhs->data->first, lhs->data->first);
-	}
+	}*/
 };
 
 #endif

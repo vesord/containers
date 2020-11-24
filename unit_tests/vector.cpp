@@ -8,15 +8,6 @@
 #include <string>
 #include <stdexcept>
 
-
-template< class T >
-void printContainer(T & l) {
-	for (typename T::iterator it = l.begin(); it != l.end(); ++it) {
-		std::cout << *it << ' ';
-	}
-	std::cout << std::endl;
-}
-
 template <class T>
 void	checkIfVectorsAreEqual(ft::vector<T> & f, std::vector<T> & s) {
 	EXPECT_EQ(f.size(), s.size());
