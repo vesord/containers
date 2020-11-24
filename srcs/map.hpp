@@ -17,6 +17,17 @@
 #include <stdexcept>
 #include <iostream>
 
+#define RED_NODE_OUTPUT(x)  "\x1b[31;1m" + (x) + "\x1b[0m"
+#include <queue>
+#include <iomanip>
+#include <sstream>
+
+template < class G, class U >
+std::ostream & operator<<(std::ostream & o, std::pair<G, U> p) {
+	o << p.first << " => " << p.second;
+	return o;
+}
+
 template <class Key, class T, class Compare, class Alloc>
 class ft::map {
 
@@ -189,7 +200,7 @@ public:
 	/*** MODIFIERS ***/
 
 	void	insert_test(const value_type& val) {
-		_treeInsert(_root, val);
+		_root = _treeInsert(_root, val);
 	}
 
 	std::pair<iterator,bool> insert (const value_type& val) {
@@ -234,7 +245,73 @@ public:
 	std::pair<const_iterator,const_iterator> equal_range (const key_type& k) const;
 	std::pair<iterator,iterator>             equal_range (const key_type& k);
 
+
+
+	/*** DEBUG ***/
+
+	void	_dPrintStrangeTreeLine(int width, _t_node* curNode) {
+		std::stringstream ss;
+		std::string str;
+
+		std::cout.width(width);
+		if (curNode && curNode->data) {
+			ss << *(curNode->data);
+			str = ss.str();
+			if (curNode->color) {
+				str = RED_NODE_OUTPUT(ss.str());
+				width += 11;
+			}
+			std::cout << std::setw(width) << str ;
+		}
+		else if (curNode)
+			std::cout << "__edge__";
+		else
+			std::cout << "__null__";
+	}
+
+	void	_dPrintStrangeTree(_t_node* const root)
+	{
+		std::queue<ft::map<char, int>::_t_node *> q;
+		ft::map<char, int>::_t_node * curNode;
+		bool printTime;
+		int onLine = 1;
+		int needToPrint = 1;
+		int widthSt = 128;
+		int width;
+
+		q.push(root);
+		while (!q.empty()) {
+			curNode = q.front();
+			q.pop();
+			printTime = onLine == needToPrint;
+			width = printTime ? (widthSt / onLine / 2) : (widthSt / onLine);
+			_dPrintStrangeTreeLine(width, curNode);
+			--needToPrint;
+			if (curNode) {
+				q.push(curNode->left);
+				q.push(curNode->right);
+			}
+			else {
+				q.push(nullptr);
+				q.push(nullptr);
+			}
+			if (needToPrint == 0) {
+				onLine *= 2;
+				needToPrint = onLine;
+				std::cout << std::endl;
+			}
+			if (onLine == 16)
+				break;
+		}
+		std::cout << std::endl;
+		std::cout << std::setfill('.') << std::setw(120) << " " << std::endl;
+		std::cout.fill(' ');
+		std::cout << std::endl;
+	}
+
 private:
+
+	/*** TREE ***/
 
 	_t_node *_createEmptyNode() {
 		_t_node *newNode = _alloc_rebind.allocate(1);
@@ -304,10 +381,36 @@ private:
 			h = _rotateRight(h);
 		if (h->left && h->right && _isRed(h->left) && _isRed(h->right))
 			_invertColors(h);
+		if (h == _root && _root->color == _color_red)
+			_root->color = _color_black;
 		return h;
 	}
 
-	void _treeInsert(_t_node *h, const value_type & val) {
+//	_t_node	*_fixUp(_t_node* h) {
+//		std::cout << "fixUP" << std::endl;
+//		_dPrintStrangeTree(h);
+//		if (h->right && _isRed(h->right))
+//			h = _rotateLeft(h);
+//		std::cout << "fixUP" << std::endl;
+//		_dPrintStrangeTree(h);
+//		std::cout << "root" << std::endl;
+//		_dPrintStrangeTree(_root);
+//		if (h->left && h->left->left && _isRed(h->left) && _isRed(h->left->left))
+//			h = _rotateRight(h);
+//		std::cout << "fixUP" << std::endl;
+//		_dPrintStrangeTree(h);
+//		if (h->left && h->right && _isRed(h->left) && _isRed(h->right))
+//			_invertColors(h);
+//		std::cout << "fixUP" << std::endl;
+//		_dPrintStrangeTree(h);
+//		if (h == _root && _root->color == _color_red)
+//			_root->color = _color_black;
+//		std::cout << "fixUP" << std::endl;
+//		_dPrintStrangeTree(h);
+//		return h;
+//	}
+
+	_t_node *_treeInsert(_t_node *h, const value_type & val) {
 //		std::pair<_t_node*, bool> ret;
 		_t_node *tmp;
 
@@ -317,14 +420,14 @@ private:
 			_root->right = _end_node;
 			_begin_node->parent = _root;
 			_end_node->parent = _root;
-			return ;
+			return _root;
 		}
 
 		bool less = _comp(val.first, h->data->first);
 		bool greater = _comp(h->data->first, val.first);
 
 		if (!less && !greater) {
-			return ; // do not make node, just return this (h.first, false)
+			return h; // do not make node, just return this (h.first, false)
 		}
 
 		if (less && (h->left == nullptr || h->left == _begin_node)) {
@@ -334,8 +437,6 @@ private:
 				_begin_node->parent = tmp;
 			}
 			h->left = tmp;
-			h = _fixUp(h);
-			return ;
 		}
 		else if (greater && (h->right == nullptr || h->right == _end_node)) {
 			tmp = _createNode(h, val, _color_red);
@@ -344,17 +445,15 @@ private:
 				_end_node->parent = tmp;
 			}
 			h->right = tmp;
-			h = _fixUp(h);
-			return ;
 		}
 		else if (less) {
-			_treeInsert(h->left, val);
+			h->left = _treeInsert(h->left, val);
 		}
 		else {
-			_treeInsert(h->right, val);
+			h->right = _treeInsert(h->right, val);
 		}
 		h = _fixUp(h);
-//		return // here we should return h and true or false
+		return h;// here we should return h and true or false
 	}
 
 };
