@@ -21,6 +21,60 @@ bool operator==(std::pair<T, U> p1, std::pair<T, U> p2) {
 	return (p1.first == p2.first && p1.second == p2.second);
 }
 
+template <class T, class U>
+void	checkIfMapsAreEqual(ft::map<T, U> & f, std::map<T, U> & s) {
+	EXPECT_EQ(f.size(), s.size());
+	EXPECT_EQ(f.empty(), s.empty());
+
+	typename  ft::map<T, U>::iterator itf = f.begin();
+	typename  ft::map<T, U>::iterator itfe = f.end();
+	typename std::map<T, U>::iterator its = s.begin();
+	typename std::map<T, U>::iterator itse = s.end();
+
+	for (; its != itse; ) {
+		EXPECT_EQ(*its++, *itf++);
+	}
+	EXPECT_EQ(itf, itfe);
+}
+
+template <typename itFt, typename itFtEnd, typename itStd, typename itStdEnd>
+void checkMapsAreEqualIt(itFt itF, itFtEnd itFe, itStd itS, itStdEnd itSe) {
+	for (; itS != itSe; ) {
+		EXPECT_EQ(*itS++, *itF++);
+	}
+	EXPECT_EQ(itF, itFe);
+}
+
+template <typename ftIter, typename stdIter, typename ftIterTmp, typename stdIterTmp>
+void	mapIteratorTest(ftIter & fIt, ftIter & fIte, ftIterTmp & ftmpIt,
+						stdIter & sIt, stdIter & sIte, stdIterTmp & stmpIt)
+{
+	ftmpIt = fIt;
+	stmpIt = sIt;
+	EXPECT_EQ(ftmpIt, fIt) << "Assignation or operator== fails.";
+	EXPECT_EQ(stmpIt, sIt);
+
+	ASSERT_EQ(*fIt, *sIt) << "Dereference fails.";
+
+	++fIt;
+	++sIt;
+	EXPECT_EQ(*fIt, *sIt) << "++operator fails.";
+
+	EXPECT_NE(fIt, ftmpIt) << "operator!= fails.";
+	EXPECT_NE(sIt, stmpIt);
+
+	--fIt;
+	--sIt;
+	EXPECT_EQ(*fIt, *sIt) << "--operator fails.";
+
+	ftmpIt = fIt++;
+	stmpIt = sIt++;
+	EXPECT_EQ(*fIt, *sIt) << "operator++ fails.";
+	EXPECT_EQ(*stmpIt, *ftmpIt) << "operator++ fails.";
+
+	checkMapsAreEqualIt(fIt, fIte, sIt, sIte);
+}
+
 class MapInsertSimpleTest : public testing::Test {
 protected:
 	virtual void SetUp() {
@@ -67,60 +121,6 @@ TEST_F(MapInsertSimpleTest, case4) {
 	std::map<std::string, int> f1;
 	EXPECT_EQ(s1.size(), f1.size());
 	EXPECT_EQ(s1.empty(), f1.empty());
-}
-
-template <class T, class U>
-void	checkIfMapsAreEqual(ft::map<T, U> & f, std::map<T, U> & s) {
-	EXPECT_EQ(f.size(), s.size());
-	EXPECT_EQ(f.empty(), s.empty());
-
-	typename  ft::map<T, U>::iterator itf = f.begin();
-	typename  ft::map<T, U>::iterator itfe = f.end();
-	typename std::map<T, U>::iterator its = s.begin();
-	typename std::map<T, U>::iterator itse = s.end();
-
-	for (; its != itse; ) {
-		EXPECT_EQ(*its++, *itf++);
-	}
-	EXPECT_EQ(itf, itfe);
-}
-
-template <typename itFt, typename itFtEnd, typename itStd, typename itStdEnd>
-void checkMapsAreEqualIt(itFt itF, itFtEnd itFe, itStd itS, itStdEnd itSe) {
-	for (; itS != itSe; ) {
-		EXPECT_EQ(*itS++, *itF++);
-	}
-	EXPECT_EQ(itF, itFe);
-}
-
-template <typename ftIter, typename stdIter, typename ftIterTmp, typename stdIterTmp>
-void	mapIteratorTest(ftIter & fIt, ftIter & fIte, ftIterTmp & ftmpIt,
-						   stdIter & sIt, stdIter & sIte, stdIterTmp & stmpIt)
-{
-	ftmpIt = fIt;
-	stmpIt = sIt;
-	EXPECT_EQ(ftmpIt, fIt) << "Assignation or operator== fails.";
-	EXPECT_EQ(stmpIt, sIt);
-
-	ASSERT_EQ(*fIt, *sIt) << "Dereference fails.";
-
-	++fIt;
-	++sIt;
-	EXPECT_EQ(*fIt, *sIt) << "++operator fails.";
-
-	EXPECT_NE(fIt, ftmpIt) << "operator!= fails.";
-	EXPECT_NE(sIt, stmpIt);
-
-	--fIt;
-	--sIt;
-	EXPECT_EQ(*fIt, *sIt) << "--operator fails.";
-
-	ftmpIt = fIt++;
-	stmpIt = sIt++;
-	EXPECT_EQ(*fIt, *sIt) << "operator++ fails.";
-	EXPECT_EQ(*stmpIt, *ftmpIt) << "operator++ fails.";
-
-	checkMapsAreEqualIt(fIt, fIte, sIt, sIte);
 }
 
 class MapIteratorTest : public ::testing::Test {
@@ -237,6 +237,80 @@ TEST_F(MapIteratorTest, IteratorConstReverseReverseTest) {
 
 	mapIteratorTest(itf, itfe, tmpf, its, itse, tmps);
 }*/
+
+class MapBoundAccessTest : public testing::Test {
+protected:
+	virtual void SetUp() {
+
+	}
+};
+
+TEST_F(MapBoundAccessTest, beginsEmpty) {
+	ft::map<std::string, int> f;
+	std::map<std::string, int> s;
+
+	ft::map<std::string, int>::iterator itf =	f.begin();
+	ft::map<std::string, int>::iterator itfe =	f.end();
+
+	std::map<std::string,int>::iterator its =	s.begin();
+	std::map<std::string,int>::iterator itse =	s.end();
+
+	EXPECT_EQ(its, itse);
+	EXPECT_EQ(itf, itfe);
+
+	ft::map<std::string, int>::reverse_iterator ritf =	f.rbegin();
+	ft::map<std::string, int>::reverse_iterator ritfe =	f.rend();
+
+	std::map<std::string,int>::reverse_iterator rits =	s.rbegin();
+	std::map<std::string,int>::reverse_iterator ritse =	s.rend();
+
+	EXPECT_EQ(rits, ritse);
+	EXPECT_EQ(ritf, ritfe);
+}
+
+TEST_F(MapBoundAccessTest, beginsOneForvard) {
+	ft::map<std::string, int> f;
+	std::map<std::string, int> s;
+	ft::map<std::string, int>::iterator itf;
+	ft::map<std::string, int>::iterator itfe;
+	std::map<std::string,int>::iterator its;
+	std::map<std::string,int>::iterator itse;
+
+	f.insert(std::make_pair("a", 123));
+	s.insert(std::make_pair("a", 123));
+
+	itf =	f.begin();	its =	s.begin();
+	itfe =	f.end();	itse =	s.end();
+	EXPECT_EQ(++its, itse);
+	EXPECT_EQ(++itf, itfe);
+
+	itf =	f.begin();	its =	s.begin();
+	itfe =	f.end();	itse =	s.end();
+	EXPECT_EQ(its, --itse);
+	EXPECT_EQ(itf, --itfe);
+}
+
+TEST_F(MapBoundAccessTest, beginsOneReverse) {
+	ft::map<std::string, int> f;
+	std::map<std::string, int> s;
+	ft::map<std::string, int>::reverse_iterator itf;
+	ft::map<std::string, int>::reverse_iterator itfe;
+	std::map<std::string,int>::reverse_iterator its;
+	std::map<std::string,int>::reverse_iterator itse;
+
+	f.insert(std::make_pair("a", 123));
+	s.insert(std::make_pair("a", 123));
+
+	itf =	f.rbegin();	its =	s.rbegin();
+	itfe =	f.rend();	itse =	s.rend();
+	EXPECT_EQ(++its, itse);
+	EXPECT_EQ(++itf, itfe);
+
+	itf =	f.rbegin();	its =	s.rbegin();
+	itfe =	f.rend();	itse =	s.rend();
+	EXPECT_EQ(its, --itse);
+	EXPECT_EQ(itf, --itfe);
+}
 
 
 

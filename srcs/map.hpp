@@ -432,18 +432,14 @@ public:
 
 	 /*** ITERATORS ***/
 
-	 /*
-	  * if map is empty() begin and end should point on the same node
-	  */
-
-	iterator begin() { return ++iterator(_begin_node); }
+	iterator begin() { return _size != 0 ? ++iterator(_begin_node) : iterator(_end_node); }
 	iterator end() { return iterator(_end_node); }
-	const_iterator begin() const { return ++const_iterator(_begin_node); }
+	const_iterator begin() const { return _size != 0 ? ++const_iterator(_begin_node) : const_iterator(_end_node); }
 	const_iterator end() const { return const_iterator(_end_node); };
 
-	reverse_iterator rbegin() { return ++reverse_iterator(_end_node); };
+	reverse_iterator rbegin() { return _size != 0 ? ++reverse_iterator(_end_node) : reverse_iterator(_begin_node); };
 	reverse_iterator rend() { return reverse_iterator(_begin_node); };
-	const_reverse_iterator rbegin() const { return ++const_reverse_iterator(_end_node); }
+	const_reverse_iterator rbegin() const { return _size != 0 ? ++reverse_iterator(_end_node) : reverse_iterator(_begin_node); }
 	const_reverse_iterator rend() const { return const_reverse_iterator(_begin_node); }
 
 	/*** CAPACITY ***/
