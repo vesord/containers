@@ -458,14 +458,21 @@ public:
 		std::pair<_t_node*, bool> ret;
 
 		ret = _treeInsert(&_root, val);
-//		_root = ret.first;
 		if (ret.second)
 			_size += 1;
 		return std::make_pair(iterator(ret.first), ret.second);
 	}
-	iterator insert (iterator position, const value_type& val);
+	iterator insert (iterator position, const value_type& val) {
+		static_cast<void>(position);
+		return insert(val);
+	}
 	template <class InputIterator>
-	void insert (InputIterator first, InputIterator last);
+	void insert (InputIterator first, InputIterator last,
+				 typename ft::enable_if<std::__is_input_iterator<InputIterator>::value>::type* = 0) {
+		for ( ; first != last; ++first) {
+			insert(*first);
+		}
+	}
 
 	void erase (iterator position);
 	size_type erase (const key_type& k);

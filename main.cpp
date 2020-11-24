@@ -84,18 +84,19 @@
 
 int main ()
 {
-//	std::map<char,int> mymap;
-//	std::map<char,int>::iterator it;
-//	std::map<char,int>::iterator ite;
-//	std::map<char,int>::reverse_iterator rit;
-//	std::map<char,int>::reverse_iterator rite;
-//
-//	mymap['a']=20;
-//	mymap['b']=40;
-//	mymap['j']=60;
-//	mymap['k']=80;
-//	mymap['n']=100;
+	std::map<char,int> mymap;
+	std::map<char,int>::iterator it = ++++mymap.begin();
+	std::map<char,int>::iterator ite = mymap.end();
+	std::map<char,int>::reverse_iterator rit;
+	std::map<char,int>::reverse_iterator rite;
 
+	mymap['a']=20;
+	mymap['b']=40;
+	mymap['j']=60;
+	mymap['k']=80;
+	mymap['n']=100;
+
+	mymap.insert(it, ite);
 
 	ft::map<char, int> ftmap;
 	ft::map<std::string, int> ftmapstr;
