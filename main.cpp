@@ -99,28 +99,28 @@ int main ()
 
 	ft::map<char, int> ftmap;
 
-	ftmap.insert_test(std::make_pair('b', 123));
+	ftmap.insert(std::make_pair('b', 123));
 	ftmap._dPrintStrangeTree(ftmap._returnRoot());
 
-	ftmap.insert_test(std::make_pair('a', 123));
+	ftmap.insert(std::make_pair('a', 123));
 	ftmap._dPrintStrangeTree(ftmap._returnRoot());
 
-	ftmap.insert_test(std::make_pair('c', 123));
+	ftmap.insert(std::make_pair('c', 123));
 	ftmap._dPrintStrangeTree(ftmap._returnRoot());
 
-	ftmap.insert_test(std::make_pair('e', 123));
+	ftmap.insert(std::make_pair('e', 123));
 	ftmap._dPrintStrangeTree(ftmap._returnRoot());
 
-	ftmap.insert_test(std::make_pair('g', 123));
+	ftmap.insert(std::make_pair('g', 123));
 	ftmap._dPrintStrangeTree(ftmap._returnRoot());
 
-	ftmap.insert_test(std::make_pair('d', 123));
+	ftmap.insert(std::make_pair('d', 123));
 	ftmap._dPrintStrangeTree(ftmap._returnRoot());
 
-	ftmap.insert_test(std::make_pair('f', 123));
+	ftmap.insert(std::make_pair('f', 123));
 	ftmap._dPrintStrangeTree(ftmap._returnRoot());
 
-	ftmap.insert_test(std::make_pair('f', 123));
+	ftmap.insert(std::make_pair('f', 123));
 	ftmap._dPrintStrangeTree(ftmap._returnRoot());
 
 //	ft::map<char, int>::_t_node *root;
