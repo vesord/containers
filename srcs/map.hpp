@@ -584,18 +584,6 @@ private:
 		return newNode;
 	}
 
-/*	_t_node *_getMinNode(_t_node *h) {
-		if (h->left == nullptr)
-			return h;
-		return _getMinNode(h->left);
-	}
-
-	_t_node *_getMaxNode(_t_node *h) {
-		if (h->right == nullptr)
-			return h;
-		return _getMaxNode(h->right);
-	}*/
-
 	bool	_isRed(_t_node* h) {
 		if (h == nullptr)
 			return _color_black;
@@ -689,7 +677,7 @@ private:
 		bool greater = _comp(h->data->first, val.first);
 
 		if (!less && !greater) {
-			_alloc.construct(h->data, val);
+//			_alloc.construct(h->data, val);
 			return std::make_pair(h, false); // do not make node, just return this (h.first, false)
 		}
 
@@ -723,62 +711,6 @@ private:
 		return std::make_pair(h, ret.second);// here we should return h and true or false
 	}
 
-	/*** ITERATOR INTERNALS ***/
-
-/*	_t_node *_mapIteratorNext(_t_node *h) const {
-		if (h->right)
-			return _getMinNode(h->right);
-		if (h->parent && h->parent->left == h)
-			return h->parent;
-		_t_node *tmp = h;
-		do {
-			tmp = tmp->parent;
-			if (tmp == nullptr)
-				return _end_node;
-		} while (_comp(h->data->first, tmp->data->first));
-		return tmp;
-	}*/
-
-/*	_t_node *_mapIteratorPrev(_t_node *h) const {
-		if (h->left)
-			return _getMaxNode(h->left);
-		if (h->parent && h->parent->right == h)
-			return h->parent;
-		_t_node *tmp = h;
-		do {
-			tmp = tmp->parent;
-			if (tmp == nullptr)
-				return _begin_node;
-		} while (_comp(tmp->data->first, h->data->first));
-		return tmp;
-	}
-
-	_t_node *_mapAdvance(_t_node *h, difference_type times) const {
-		while (times > 0) {
-			h = _mapIteratorNext(h);
-			--times;
-		}
-		while (times < 0) {
-			h = _mapIteratorPrev(h);
-			++times;
-		}
-		return h;
-	}
-
-	bool _mapIteratorEqual(_t_node *lhs, _t_node *rhs) const {
-		bool less = _comp(lhs->data->first, rhs->data->first);
-		bool greater = _comp(rhs->data->first, lhs->data->first);
-
-		return (!less && !greater);
-	}
-
-	bool _mapIteratorLess(_t_node *lhs, _t_node *rhs) const {
-		return _comp(lhs->data->first, rhs->data->first);
-	}
-
-	bool _mapIteratorGreater(_t_node *lhs, _t_node *rhs) const {
-		return _comp(rhs->data->first, lhs->data->first);
-	}*/
 };
 
 #endif

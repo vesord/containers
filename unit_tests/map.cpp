@@ -312,7 +312,117 @@ TEST_F(MapBoundAccessTest, beginsOneReverse) {
 	EXPECT_EQ(itf, --itfe);
 }
 
+class MapInsertTest : public testing::Test {
+protected:
+	virtual void SetUp() {
+		ft::map<std::string, int>::iterator itf =	f.begin();
+		ft::map<std::string, int>::iterator itfe =	f.end();
+		ft::map<std::string, int>::iterator tmpf;
 
+		std::map<std::string,int>::iterator its =	s.begin();
+		std::map<std::string,int>::iterator itse =	s.end();
+		std::map<std::string,int>::iterator tmps;
+	}
+	std::pair<ft::map<std::string,int>::iterator, bool> pf;
+	std::pair<std::map<std::string,int>::iterator, bool> ps;
+
+	ft::map<std::string, int> f;
+	std::map<std::string,int> s;
+};
+
+TEST_F(MapInsertTest, insertValCaseSingle) {
+	pf = f.insert(std::make_pair("a", 1));
+	ps = s.insert(std::make_pair("a", 1));
+
+	EXPECT_EQ(pf.second, ps.second);
+
+	checkMapsAreEqualIt(pf.first, f.end(), ps.first, s.end());
+	checkIfMapsAreEqual(f, s);
+}
+
+TEST_F(MapInsertTest, insertValCaseOverride) {
+	pf = f.insert(std::make_pair("a", 1));
+	pf = f.insert(std::make_pair("a", 42));
+	ps = s.insert(std::make_pair("a", 1));
+	ps = s.insert(std::make_pair("a", 42));
+
+	EXPECT_EQ(pf.second, ps.second);
+	EXPECT_EQ(pf.first, f.begin());
+	EXPECT_EQ(ps.first, s.begin());
+	EXPECT_EQ(ps.first->second, 1);
+	EXPECT_EQ(pf.first->second, 1);
+
+	checkMapsAreEqualIt(pf.first, f.end(), ps.first, s.end());
+	checkIfMapsAreEqual(f, s);
+}
+
+TEST_F(MapInsertTest, insertValCaseDouble1) {
+	pf = f.insert(std::make_pair("a", 1));
+	ps = s.insert(std::make_pair("a", 1));
+
+	pf = f.insert(std::make_pair("b", 1));
+	ps = s.insert(std::make_pair("b", 1));
+
+	EXPECT_EQ(pf.second, ps.second);
+	EXPECT_EQ(pf.first, --f.end());
+	EXPECT_EQ(ps.first, --s.end());
+
+	checkMapsAreEqualIt(pf.first, f.end(), ps.first, s.end());
+	checkIfMapsAreEqual(f, s);
+}
+
+TEST_F(MapInsertTest, insertValCaseDouble2) {
+	pf = f.insert(std::make_pair("b", 1));
+	ps = s.insert(std::make_pair("b", 1));
+
+	pf = f.insert(std::make_pair("a", 1));
+	ps = s.insert(std::make_pair("a", 1));
+
+	printContainer(f);
+
+	EXPECT_EQ(pf.second, ps.second);
+	EXPECT_EQ(pf.first, f.begin());
+	EXPECT_EQ(ps.first, s.begin());
+
+	checkMapsAreEqualIt(pf.first, f.end(), ps.first, s.end());
+	checkIfMapsAreEqual(f, s);
+}
+
+TEST_F(MapInsertTest, insertValCaseTriple1) {
+	pf = f.insert(std::make_pair("b", 1));
+	ps = s.insert(std::make_pair("b", 1));
+
+	pf = f.insert(std::make_pair("a", 1));
+	ps = s.insert(std::make_pair("a", 1));
+
+	pf = f.insert(std::make_pair("c", 1));
+	ps = s.insert(std::make_pair("c", 1));
+
+	EXPECT_EQ(pf.second, ps.second);
+	EXPECT_EQ(pf.first, --f.end());
+	EXPECT_EQ(ps.first, --s.end());
+
+	checkMapsAreEqualIt(pf.first, f.end(), ps.first, s.end());
+	checkIfMapsAreEqual(f, s);
+}
+
+TEST_F(MapInsertTest, insertValCaseTriple2) {
+	pf = f.insert(std::make_pair("b", 1));
+	ps = s.insert(std::make_pair("b", 1));
+
+	pf = f.insert(std::make_pair("c", 1));
+	ps = s.insert(std::make_pair("c", 1));
+
+	pf = f.insert(std::make_pair("a", 1));
+	ps = s.insert(std::make_pair("a", 1));
+
+	EXPECT_EQ(pf.second, ps.second);
+	EXPECT_EQ(pf.first, f.begin());
+	EXPECT_EQ(ps.first, s.begin());
+
+	checkMapsAreEqualIt(pf.first, f.end(), ps.first, s.end());
+	checkIfMapsAreEqual(f, s);
+}
 
 //class MapConstructorTest : public ::testing::Test {
 //protected:
