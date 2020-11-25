@@ -90,43 +90,31 @@ int main ()
 	std::map<char,int>::reverse_iterator rit;
 	std::map<char,int>::reverse_iterator rite;
 
-	mymap.insert(std::make_pair('b', 123));
-	mymap.insert(std::make_pair('c', 123));
-	mymap.insert(std::make_pair('d', 123));
-	mymap.insert(std::make_pair('e', 123));
-	mymap.insert(std::make_pair('f', 123));
-
-	it = mymap.lower_bound('a');
-	std::cout << it->first << std::endl;
-
-	mymap.insert(it, ite);
+//	mymap.insert(std::make_pair('b', 123));
+//	mymap.insert(std::make_pair('d', 123));
+//	mymap.insert(std::make_pair('e', 123));
+//
+//	std::cout << mymap.size() << std::endl;
+//	size_t ret = mymap.erase('u');
+//	std::cout << mymap.size() << std::endl;
+//	std::cout << ret << std::endl;
 
 	ft::map<char, int> ftmap;
 	ft::map<std::string, int> ftmapstr;
 
-	ftmap.insert(std::make_pair('b', 123));
-//	ftmap._dPrintStrangeTree();
-
 	ftmap.insert(std::make_pair('a', 123));
-//	ftmap._dPrintStrangeTree();
-
-	ftmap.insert(std::make_pair('c', 123));
-//	ftmap._dPrintStrangeTree();
-
 	ftmap.insert(std::make_pair('e', 123));
-//	ftmap._dPrintStrangeTree();
-
-	ftmap.insert(std::make_pair('g', 123));
-//	ftmap._dPrintStrangeTree();
-
-	ftmap.insert(std::make_pair('d', 123));
-//	ftmap._dPrintStrangeTree();
-
+	ftmap.insert(std::make_pair('j', 123));
 	ftmap.insert(std::make_pair('f', 123));
-//	ftmap._dPrintStrangeTree();
+//	ftmap.insert(std::make_pair('e', 123));
+//	ftmap.insert(std::make_pair('g', 123));
+//	ftmap.insert(std::make_pair('f', 123));
+//	ftmap.insert(std::make_pair('f', 123));
+	ftmap._dPrintStrangeTree();
 
-	ftmap.insert(std::make_pair('f', 123));
-//	ftmap._dPrintStrangeTree();
+	ftmap.erase('j');
+	ftmap._dPrintStrangeTree();
+
 
 //	for (int i = 0; i < 11; ++i) {
 //		ftmapstr.insert(std::make_pair(std::to_string(i), i));

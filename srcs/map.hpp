@@ -479,7 +479,9 @@ public:
 	}
 
 	void erase (iterator position);
-	size_type erase (const key_type& k);
+	size_type erase (const key_type& k) {
+		return _treeErase(&_root, k);
+	}
 	void erase (iterator first, iterator last);
 
 	void swap (map& x);
@@ -621,13 +623,19 @@ private:
 		return newNode;
 	}
 
+	void	_destroyNode(_t_node *ptr) {
+		_alloc.destroy(ptr->data);
+		_alloc.deallocate(ptr->data, 1);
+		_alloc_rebind.deallocate(ptr, 1);
+	}
+
 	bool	_isRed(_t_node* h) {
 		if (h == nullptr)
 			return _color_black;
 		return h->color == _color_red;
 	}
 
-	_t_node*	_rotateLeft(_t_node* h) {
+	_t_node	*_rotateLeft(_t_node* h) {
 		h->right->parent = h->parent;
 		h->parent = h->right;
 		if (h->right->left) h->right->left->parent = h;
@@ -641,7 +649,7 @@ private:
 		return h->parent;
 	}
 
-	_t_node*	_rotateRight(_t_node* h) {
+	_t_node	*_rotateRight(_t_node* h) {
 		h->left->parent = h->parent;
 		h->parent = h->left;
 		if (h->left->right) h->left->right->parent = h;
@@ -655,10 +663,51 @@ private:
 		return h->parent;
 	}
 
+//	void _leanRight(_t_node **h) {
+//		(*h)->left->parent = (*h)->parent;
+//		(*h)->parent = (*h)->left;
+//		if ((*h)->left->right) (*h)->left->right->parent = (*h);
+//		_t_node *tmp = (*h)->left->right;
+//		(*h)->left->right = (*h);
+//		(*h)->left = tmp;
+//		(*h)->parent->color = (*h)->color;
+//		(*h)->color = _color_red;
+//		if ((*h) == _root)
+//			_root = (*h)->parent;
+//		(*h) = (*h)->parent;
+//	}
+
 	void	_invertColors(_t_node* h) {
-		h->right->color = !h->right->color;
-		h->left->color = !h->left->color;
+		if (h->right)
+			h->right->color = !h->right->color;
+		if (h->left)
+			h->left->color = !h->left->color;
 		h->color = !h->color;
+	}
+
+	_t_node	*_moveRedLeft(_t_node *h) {
+		_invertColors(h);
+		if (h->right && _isRed(h->right->left)) {
+			h->right = _rotateRight(h->right);
+			h = _rotateLeft(h);
+			_invertColors(h);
+		}
+		return h;
+	}
+
+	_t_node	*_moveRedRight(_t_node *h) {
+		_invertColors(h);
+		if (_isRed(h->left->left)) {
+			h = _rotateRight(h);
+			_invertColors(h);
+		}
+		return h;
+	}
+
+	_t_node *_getMinNode(_t_node *h) const {
+		if (h->left == nullptr)
+			return h;
+		return _getMinNode(h->left);
 	}
 
 	_t_node	*_fixUp(_t_node* h) {
@@ -673,29 +722,7 @@ private:
 		return h;
 	}
 
-/*	_t_node	*_fixUp(_t_node* h) {
-		std::cout << "fixUP" << std::endl;
-		_dPrintStrangeTree(h);
-		if (h->right && _isRed(h->right))
-			h = _rotateLeft(h);
-		std::cout << "fixUP" << std::endl;
-		_dPrintStrangeTree(h);
-		std::cout << "root" << std::endl;
-		_dPrintStrangeTree(_root);
-		if (h->left && h->left->left && _isRed(h->left) && _isRed(h->left->left))
-			h = _rotateRight(h);
-		std::cout << "fixUP" << std::endl;
-		_dPrintStrangeTree(h);
-		if (h->left && h->right && _isRed(h->left) && _isRed(h->right))
-			_invertColors(h);
-		std::cout << "fixUP" << std::endl;
-		_dPrintStrangeTree(h);
-		if (h == _root && _root->color == _color_red)
-			_root->color = _color_black;
-		std::cout << "fixUP" << std::endl;
-		_dPrintStrangeTree(h);
-		return h;
-	}*/
+
 
 	std::pair<_t_node*, bool> _treeInsert(_t_node **h, const value_type & val) {
 		_t_node *tmp;
@@ -761,6 +788,74 @@ private:
 			return _treeSearch(h->right, k);
 	}
 
+	void _treeEraseMin(_t_node **h) {
+		if ((*h)->left == nullptr || (*h)->left == _begin_node) {
+//			if ((*h)->right == _end_node) {
+//
+//			}
+			_destroyNode(*h);
+			*h = nullptr;
+			return;
+		}
+
+		if (!_isRed((*h)->left) && !_isRed((*h)->left->left))
+			*h = _moveRedLeft(*h);
+
+		_treeEraseMin(&(*h)->left);
+
+		*h = _fixUp(*h);
+	}
+
+	size_type _treeErase(_t_node** h, const key_type& k) {
+		_dPrintStrangeTree();
+		if (*h == nullptr)
+			return 0;
+
+		size_type count = 0;
+		bool less = _comp(k, (*h)->data->first);
+		bool greater = _comp((*h)->data->first, k);
+
+		if (less) {
+			if ((*h)->left && !_isRed((*h)->left) && !_isRed((*h)->left->left))
+				*h = _moveRedLeft(*h);
+			count = _treeErase(&(*h)->left, k);
+		}
+		else {
+			if (_isRed((*h)->left)) {
+				*h = _rotateRight(*h);
+				count = _treeErase(&(*h)->right, k);
+				*h = _fixUp(*h);
+				return count;
+			}
+
+			if (!greater && ( (*h)->right == nullptr || (*h)->right == _end_node )) {
+				bool ifEndNode = (*h)->right == _end_node;
+
+				if (ifEndNode)
+					_end_node->parent = (*h)->parent;
+				_destroyNode(*h);
+				if (ifEndNode)
+					*h = _end_node;
+				else
+					*h = nullptr;
+				return 1;
+			}
+
+			if ((*h)->right && !_isRed((*h)->right) && !_isRed((*h)->right->left))
+				*h = _moveRedRight(*h);
+
+			if (!greater) {
+				(*h)->data = _getMinNode((*h)->right)->data;
+				_treeEraseMin(&(*h)->right);
+				count = 1;
+			}
+			else
+				count = _treeErase(&(*h)->right, k);
+		}
+		*h = _fixUp(*h);
+		return count;
+	}
+
 	iterator _treeBound(_t_node *h, const key_type& k, bool isLower) const {
 		if (h == nullptr || h == _end_node || h == _begin_node)
 				return iterator(_end_node);
@@ -792,5 +887,30 @@ private:
 	}
 
 };
+
+
+/*	_t_node	*_fixUp(_t_node* h) {
+		std::cout << "fixUP" << std::endl;
+		_dPrintStrangeTree(h);
+		if (h->right && _isRed(h->right))
+			h = _rotateLeft(h);
+		std::cout << "fixUP" << std::endl;
+		_dPrintStrangeTree(h);
+		std::cout << "root" << std::endl;
+		_dPrintStrangeTree(_root);
+		if (h->left && h->left->left && _isRed(h->left) && _isRed(h->left->left))
+			h = _rotateRight(h);
+		std::cout << "fixUP" << std::endl;
+		_dPrintStrangeTree(h);
+		if (h->left && h->right && _isRed(h->left) && _isRed(h->right))
+			_invertColors(h);
+		std::cout << "fixUP" << std::endl;
+		_dPrintStrangeTree(h);
+		if (h == _root && _root->color == _color_red)
+			_root->color = _color_black;
+		std::cout << "fixUP" << std::endl;
+		_dPrintStrangeTree(h);
+		return h;
+	}*/
 
 #endif
