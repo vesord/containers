@@ -526,8 +526,12 @@ public:
 		return _treeBound(_root, k, false);
 	}
 
-	std::pair<const_iterator,const_iterator> equal_range (const key_type& k) const;
-	std::pair<iterator,iterator>             equal_range (const key_type& k);
+	std::pair<const_iterator,const_iterator> equal_range (const key_type& k) const {
+		return std::make_pair(lower_bound(k), upper_bound(k));
+	}
+	std::pair<iterator,iterator>             equal_range (const key_type& k) {
+		return std::make_pair(lower_bound(k), upper_bound(k));
+	}
 
 	/*** DEBUG ***/
 
@@ -758,11 +762,8 @@ private:
 	}
 
 	iterator _treeBound(_t_node *h, const key_type& k, bool isLower) const {
-		if (h == nullptr || h == _end_node || h == _begin_node) {
-//			if (isLower)
+		if (h == nullptr || h == _end_node || h == _begin_node)
 				return iterator(_end_node);
-//			return ++iterator(_begin_node);
-		}
 
 		bool less = _comp(k, h->data->first);
 		bool greater = _comp(h->data->first, k);
