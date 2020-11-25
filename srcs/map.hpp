@@ -493,8 +493,18 @@ public:
 
 	/*** OPERATIONS ***/
 
-	iterator find (const key_type& k);
-	const_iterator find (const key_type& k) const;
+	iterator find (const key_type& k) {
+		_t_node *toFind = _treeSearch(_root, k);
+		if (toFind == nullptr)
+			return iterator(_end_node);
+		return iterator(toFind);
+	}
+	const_iterator find (const key_type& k) const {
+		_t_node *toFind = _treeSearch(_root, k);
+		if (toFind == nullptr)
+			return const_iterator(_end_node);
+		return const_iterator(toFind);
+	}
 
 	size_type count (const key_type& k) const;
 
@@ -505,7 +515,6 @@ public:
 
 	std::pair<const_iterator,const_iterator> equal_range (const key_type& k) const;
 	std::pair<iterator,iterator>             equal_range (const key_type& k);
-
 
 	/*** DEBUG ***/
 
@@ -717,6 +726,22 @@ private:
 		}
 		*h = _fixUp(*h);
 		return ret;// here we should return h and true or false
+	}
+
+	_t_node *_treeSearch(_t_node *h, const key_type& k) const {
+		if (h == nullptr || h == _end_node || h == _begin_node)
+			return nullptr;
+
+		bool less = _comp(k, h->data->first);
+		bool greater = _comp(h->data->first, k);
+
+		if (!less && !greater)
+			return h;
+
+		if (less)
+			return _treeSearch(h->left, k);
+		else
+			return _treeSearch(h->right, k);
 	}
 
 };

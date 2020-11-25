@@ -589,6 +589,67 @@ TEST_F(MapObserversTest, keyComp) {
 	checkIfMapsAreEqual(ffill, sfill);
 }
 
+class MapFindTest : public testing::Test {
+protected:
+	virtual void SetUp() {
+		for (int i = 0; i < 100; ++i) {
+			s.insert(std::make_pair(std::to_string(i - 50), i + 50));
+			f.insert(std::make_pair(std::to_string(i - 50), i + 50));
+		}
+	}
+	
+	std::map<std::string, int> s;
+	ft::map<std::string, int> f;
+
+	std::map<std::string,int>::iterator its;
+	ft::map<std::string, int>::iterator itf;
+	std::map<std::string,int>::iterator itse;
+	ft::map<std::string, int>::iterator itfe;
+
+	std::map<std::string,int>::const_iterator cits;
+	ft::map<std::string, int>::const_iterator citf;
+	std::map<std::string,int>::const_iterator citse;
+	ft::map<std::string, int>::const_iterator citfe;
+};
+
+TEST_F(MapFindTest, notContain) {
+	its = s.find("a");
+	itf = f.find("a");
+
+	EXPECT_EQ(its, s.end());
+	EXPECT_EQ(itf, f.end());
+}
+
+TEST_F(MapFindTest, notContainEmpty) {
+	std::map<std::string, int> sEmpty;
+	ft::map<std::string, int> fEmpty;
+
+	its = sEmpty.find("a");
+	itf = fEmpty.find("a");
+
+	EXPECT_EQ(its, sEmpty.end());
+	EXPECT_EQ(itf, fEmpty.end());
+	EXPECT_EQ(its, sEmpty.begin());
+	EXPECT_EQ(itf, fEmpty.begin());
+}
+
+TEST_F(MapFindTest, findEach) {
+	for (int i = -5; i < 105; ++i) {
+		its = s.find(std::to_string(i - 50));
+		itf = f.find(std::to_string(i - 50));
+
+		checkMapsAreEqualIt(itf, f.end(), its, s.end());
+	}
+}
+
+TEST_F(MapFindTest, findEachConst) {
+	for (int i = -5; i < 105; ++i) {
+		cits = s.find(std::to_string(i - 50));
+		citf = f.find(std::to_string(i - 50));
+
+		checkMapsAreEqualIt(citf, f.end(), cits, s.end());
+	}
+}
 
 //class MapConstructorTest : public ::testing::Test {
 //protected:
