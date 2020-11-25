@@ -315,19 +315,22 @@ TEST_F(MapBoundAccessTest, beginsOneReverse) {
 class MapInsertTest : public testing::Test {
 protected:
 	virtual void SetUp() {
-		ft::map<std::string, int>::iterator itf =	f.begin();
-		ft::map<std::string, int>::iterator itfe =	f.end();
-		ft::map<std::string, int>::iterator tmpf;
+		itf =	f.begin();
+		itfe =	f.end();
 
-		std::map<std::string,int>::iterator its =	s.begin();
-		std::map<std::string,int>::iterator itse =	s.end();
-		std::map<std::string,int>::iterator tmps;
+		its =	s.begin();
+		itse =	s.end();
 	}
 	std::pair<ft::map<std::string,int>::iterator, bool> pf;
 	std::pair<std::map<std::string,int>::iterator, bool> ps;
 
 	ft::map<std::string, int> f;
 	std::map<std::string,int> s;
+
+	ft::map<std::string, int>::iterator itf;
+	std::map<std::string,int>::iterator its;
+	ft::map<std::string, int>::iterator itfe;
+	std::map<std::string,int>::iterator itse;
 };
 
 TEST_F(MapInsertTest, insertValCaseSingle) {
@@ -378,8 +381,6 @@ TEST_F(MapInsertTest, insertValCaseDouble2) {
 	pf = f.insert(std::make_pair("a", 1));
 	ps = s.insert(std::make_pair("a", 1));
 
-	printContainer(f);
-
 	EXPECT_EQ(pf.second, ps.second);
 	EXPECT_EQ(pf.first, f.begin());
 	EXPECT_EQ(ps.first, s.begin());
@@ -427,7 +428,7 @@ TEST_F(MapInsertTest, insertValCaseTriple2) {
 TEST_F(MapInsertTest, ultimative) {
 	srand(1);
 	int gen_key, gen_val;
-	const int keys_limit = 5000;
+	const int keys_limit = 500;
 
 	for (int i = 0; i < keys_limit * 2; ++i) {
 		gen_key = rand() % keys_limit;
@@ -441,6 +442,153 @@ TEST_F(MapInsertTest, ultimative) {
 		checkIfMapsAreEqual(f, s);
 	}
 }
+
+TEST_F(MapInsertTest, insertPosVal1) {
+	itf = f.insert(f.begin(), std::make_pair("123", 123));
+	its = s.insert(s.begin(), std::make_pair("123", 123));
+
+	checkMapsAreEqualIt(itf, f.end(), its, s.end());
+	checkIfMapsAreEqual(f, s);
+}
+
+TEST_F(MapInsertTest, insertPosVal2) {
+	const int times = 100;
+
+	for (int i = 0; i < times; ++i) {
+		its = s.insert(s.begin(), std::make_pair(std::to_string(i + 10), i));
+		itf = f.insert(f.begin(), std::make_pair(std::to_string(i + 10), i));
+
+		checkMapsAreEqualIt(itf, f.end(), its, s.end());
+		checkIfMapsAreEqual(f, s);
+	}
+}
+
+TEST_F(MapInsertTest, insertRangeSameMap) {
+	const int times = 100;
+
+	for (int i = 0; i < times; ++i) {
+		its = s.insert(s.begin(), std::make_pair(std::to_string(i + 10), i));
+		itf = f.insert(f.begin(), std::make_pair(std::to_string(i + 10), i));
+	}
+
+	s.insert(s.begin(), s.end());
+	f.insert(f.begin(), f.end());
+
+	checkIfMapsAreEqual(f, s);
+}
+
+TEST_F(MapInsertTest, insertAnotherRange) {
+	const int times = 100;
+	std::map<std::string, int> sample;
+
+	for (int i = 0; i < times; ++i) {
+		sample.insert(std::make_pair(std::to_string(i + 10), i));
+	}
+
+	its = sample.begin();
+	std::advance(its, 30);
+
+	s.insert(its, sample.end());
+	f.insert(its, sample.end());
+
+	checkIfMapsAreEqual(f, s);
+}
+
+class MapConstructionRange : public testing::Test {
+protected:
+	virtual void SetUp() {
+		for (int i = 0; i < 100; ++i) {
+			sample.insert(std::make_pair(std::to_string(i + 142), i - 121));
+		}
+	}
+	std::pair<ft::map<std::string,int>::iterator, bool> pf;
+	std::pair<std::map<std::string,int>::iterator, bool> ps;
+
+	ft::map<std::string, int>::iterator itf;
+	std::map<std::string,int>::iterator its;
+	ft::map<std::string, int>::iterator itfe;
+	std::map<std::string,int>::iterator itse;
+
+	std::map<std::string, int> sample;
+};
+
+TEST_F(MapConstructionRange, emptyRange) {
+	ft::map<std::string, int> f(sample.begin(), sample.begin());
+	std::map<std::string,int> s(sample.begin(), sample.begin());
+
+	checkIfMapsAreEqual(f, s);
+}
+
+TEST_F(MapConstructionRange, oneRange) {
+	ft::map<std::string, int> f(sample.begin(), ++sample.begin());
+	std::map<std::string,int> s(sample.begin(), ++sample.begin());
+
+	checkIfMapsAreEqual(f, s);
+}
+
+TEST_F(MapConstructionRange, oneHundredRange) {
+	ft::map<std::string, int> f(sample.begin(), sample.end());
+	std::map<std::string,int> s(sample.begin(), sample.end());
+
+	checkIfMapsAreEqual(f, s);
+}
+
+class MapObserversTest : public testing::Test {
+protected:
+	virtual void SetUp() {
+		s.insert(std::make_pair('x', 1001));
+		s.insert(std::make_pair('y', 2002));
+		s.insert(std::make_pair('z', 3003));
+		f.insert(std::make_pair('x', 1001));
+		f.insert(std::make_pair('y', 2002));
+		f.insert(std::make_pair('z', 3003));
+
+		its = s.begin();
+		itf = f.begin();
+
+	}
+
+	std::map<char,int>::iterator its;
+	ft::map<char, int>::iterator itf;
+	std::map<char,int> s;
+	ft::map<char, int> f;
+	std::map<char,int> sfill;
+	ft::map<char, int> ffill;
+};
+
+TEST_F(MapObserversTest, valueComp) {
+	std::pair<char, int> shighest = *s.rbegin();
+	std::pair<char, int> fhighest = *f.rbegin();
+
+	do {
+		sfill.insert(*its);
+	} while ( s.value_comp()(*its++, shighest) );
+
+	do {
+		ffill.insert(*itf);
+	} while ( f.value_comp()(*itf++, fhighest) );
+
+	checkIfMapsAreEqual(ffill, sfill);
+}
+
+TEST_F(MapObserversTest, keyComp) {
+	char shighest = s.rbegin()->first;
+	char fhighest = f.rbegin()->first;
+
+	std::map<char,int>::key_compare scomp = s.key_comp();
+	ft::map<char,int>::key_compare fcomp = f.key_comp();
+
+	do {
+		sfill.insert(*its);
+	} while ( scomp((*its++).first, shighest) );
+
+	do {
+		ffill.insert(*itf);
+	} while ( scomp((*itf++).first, fhighest) );
+
+	checkIfMapsAreEqual(ffill, sfill);
+}
+
 
 //class MapConstructorTest : public ::testing::Test {
 //protected:

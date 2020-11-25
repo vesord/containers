@@ -54,7 +54,7 @@ public:
 
 class value_compare : public std::binary_function<value_type, value_type, bool>
 {
-protected:
+public:
 	Compare comp;
 	value_compare (Compare c) : comp(c) {}  // constructed with map's comparison object
 public:
@@ -418,7 +418,11 @@ public:
 	template <class InputIterator>
 	map (InputIterator first, InputIterator last,
 		 const key_compare& comp = key_compare(),
-		 const allocator_type& alloc = allocator_type());
+		 const allocator_type& alloc = allocator_type()) : _alloc(alloc), _comp(comp), _root(nullptr), _size(0) {
+		_begin_node = _createEmptyNode();
+		_end_node = _createEmptyNode();
+		insert(first, last);
+	}
 
 	map (const map& x);
 
@@ -446,7 +450,7 @@ public:
 
 	bool empty() const { return this->_size == 0; };
 	size_type size() const { return this->_size; }
-	size_type max_size() const;
+	size_type max_size() const { return std::numeric_limits<size_type>::max() / sizeof(ft::map<key_type, mapped_type, Compare, Alloc>); }
 
 	/*** ELEMENT ACCEESS ***/
 
@@ -464,7 +468,7 @@ public:
 	}
 	iterator insert (iterator position, const value_type& val) {
 		static_cast<void>(position);
-		return insert(val);
+		return insert(val).first;
 	}
 	template <class InputIterator>
 	void insert (InputIterator first, InputIterator last,
@@ -484,7 +488,7 @@ public:
 
 	/*** OBSERVERS ***/
 
-	key_compare key_comp() const;
+	key_compare key_comp() const { return _comp; }
 	value_compare value_comp() const { return value_compare(_comp); };
 
 	/*** OPERATIONS ***/
