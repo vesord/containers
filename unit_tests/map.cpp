@@ -651,6 +651,141 @@ TEST_F(MapFindTest, findEachConst) {
 	}
 }
 
+TEST_F(MapFindTest, count) {
+	size_t cf;
+	size_t cs;
+
+	cf = f.count("1");
+	cs = s.count("1");
+
+	EXPECT_EQ(cs, cf);
+	EXPECT_EQ(cs, 1);
+	EXPECT_EQ(cf, 1);
+
+	cf = f.count("a");
+	cs = s.count("a");
+
+	EXPECT_EQ(cs, cf);
+	EXPECT_EQ(cs, 0);
+	EXPECT_EQ(cf, 0);
+}
+
+class MapBoundTest : public testing::Test {
+protected:
+	virtual void SetUp() {
+		step_iter = 0;
+		for (int i = 0; i < 10; ++i) {
+			s.insert(std::make_pair(std::to_string(step_iter), step_iter));
+			f.insert(std::make_pair(std::to_string(step_iter), step_iter));
+			step_iter += step / 2;
+		}
+	}
+
+	const double step = 1.;
+	double		 step_iter;
+
+	std::map<std::string, double> s;
+	ft::map<std::string, double> f;
+
+	std::map<std::string, double>::iterator its;
+	ft::map<std::string, double>::iterator itf;
+	std::map<std::string, double>::iterator itse;
+	ft::map<std::string, double>::iterator itfe;
+
+	std::map<std::string, double>::const_iterator cits;
+	ft::map<std::string, double>::const_iterator citf;
+	std::map<std::string, double>::const_iterator citse;
+	ft::map<std::string, double>::const_iterator citfe;
+};
+
+TEST_F(MapBoundTest, emptyLower) {
+	std::map<std::string, double> sEmpty;
+	ft::map<std::string, double> fEmpty;
+
+	its = sEmpty.lower_bound("a");
+	itf = fEmpty.lower_bound("a");
+
+	EXPECT_EQ(its, sEmpty.end());
+	EXPECT_EQ(itf, fEmpty.end());
+	EXPECT_EQ(its, sEmpty.begin());
+	EXPECT_EQ(itf, fEmpty.begin());
+}
+
+TEST_F(MapBoundTest, emptyUpper) {
+	std::map<std::string, double> sEmpty;
+	ft::map<std::string, double> fEmpty;
+
+	its = sEmpty.upper_bound("a");
+	itf = fEmpty.upper_bound("a");
+
+	EXPECT_EQ(its, sEmpty.end());
+	EXPECT_EQ(itf, fEmpty.end());
+	EXPECT_EQ(its, sEmpty.begin());
+	EXPECT_EQ(itf, fEmpty.begin());
+}
+
+TEST_F(MapBoundTest, singleUpper) {
+	std::map<std::string, double> s1;
+	ft::map<std::string, double> f1;
+
+	s1.insert(std::make_pair("c", 123));
+	f1.insert(std::make_pair("c", 123));
+
+	its = s1.upper_bound("c");
+	itf = f1.upper_bound("c");
+	EXPECT_EQ(its, s1.end());
+	EXPECT_EQ(itf, f1.end());
+
+	its = s1.upper_bound("a");
+	itf = f1.upper_bound("a");
+	EXPECT_EQ(its, s1.begin());
+	EXPECT_EQ(itf, f1.begin());
+
+	its = s1.upper_bound("d");
+	itf = f1.upper_bound("d");
+	EXPECT_EQ(its, s1.end());
+	EXPECT_EQ(itf, f1.end());
+}
+
+TEST_F(MapBoundTest, singleLower) {
+	std::map<std::string, double> s1;
+	ft::map<std::string, double> f1;
+
+	s1.insert(std::make_pair("c", 123));
+	f1.insert(std::make_pair("c", 123));
+
+	its = s1.lower_bound("c");
+	itf = f1.lower_bound("c");
+	EXPECT_EQ(its, s1.begin());
+	EXPECT_EQ(itf, f1.begin());
+
+	its = s1.lower_bound("a");
+	itf = f1.lower_bound("a");
+	EXPECT_EQ(its, s1.begin());
+	EXPECT_EQ(itf, f1.begin());
+
+	its = s1.lower_bound("d");
+	itf = f1.lower_bound("d");
+	EXPECT_EQ(its, s1.end());
+	EXPECT_EQ(itf, f1.end());
+}
+
+TEST_F(MapBoundTest, multitest) {
+	step_iter = 0;
+	for (double i = -step / 2; i < 10.5; i += step) {
+
+//		std::cout << std::to_string(i) << std::endl;
+
+		its = s.lower_bound(std::to_string(i));
+		itf = f.lower_bound(std::to_string(i));
+		checkMapsAreEqualIt(itf, f.end(), its, s.end());
+
+		its = s.upper_bound(std::to_string(i));
+		itf = f.upper_bound(std::to_string(i));
+		checkMapsAreEqualIt(itf, f.end(), its, s.end());
+	}
+}
+
 //class MapConstructorTest : public ::testing::Test {
 //protected:
 //	virtual void SetUp() { }

@@ -506,12 +506,25 @@ public:
 		return const_iterator(toFind);
 	}
 
-	size_type count (const key_type& k) const;
+	size_type count (const key_type& k) const {
+		_t_node *toFind = _treeSearch(_root, k);
+		if (toFind == nullptr)
+			return 0;
+		return 1;
+	}
 
-	iterator lower_bound (const key_type& k);
-	const_iterator lower_bound (const key_type& k) const;
-	iterator upper_bound (const key_type& k);
-	const_iterator upper_bound (const key_type& k) const;
+	iterator lower_bound (const key_type& k) {
+		return _treeBound(_root, k, true);
+	}
+	const_iterator lower_bound (const key_type& k) const {
+		return _treeBound(_root, k, true);
+	}
+	iterator upper_bound (const key_type& k) {
+		return _treeBound(_root, k, false);
+	}
+	const_iterator upper_bound (const key_type& k) const {
+		return _treeBound(_root, k, false);
+	}
 
 	std::pair<const_iterator,const_iterator> equal_range (const key_type& k) const;
 	std::pair<iterator,iterator>             equal_range (const key_type& k);
@@ -742,6 +755,39 @@ private:
 			return _treeSearch(h->left, k);
 		else
 			return _treeSearch(h->right, k);
+	}
+
+	iterator _treeBound(_t_node *h, const key_type& k, bool isLower) const {
+		if (h == nullptr || h == _end_node || h == _begin_node) {
+//			if (isLower)
+				return iterator(_end_node);
+//			return ++iterator(_begin_node);
+		}
+
+		bool less = _comp(k, h->data->first);
+		bool greater = _comp(h->data->first, k);
+
+		if (!less && !greater) {
+			if (isLower)
+				return iterator(h);
+			return ++iterator(h);
+		}
+
+		if (less) {
+			if (h->left == nullptr || h->left == _begin_node) {
+				if (isLower)
+					return (h->left != _begin_node) ? --iterator(h) : iterator(h);
+				return iterator(h);
+			}
+			return _treeBound(h->left, k, isLower);
+		} else {
+			if (h->right == nullptr || h->right == _end_node) {
+				if (isLower)
+					return (h->right != _end_node) ? iterator(h) : iterator(_end_node);
+				return ++iterator(h);
+			}
+			return _treeBound(h->right, k, isLower);
+		}
 	}
 
 };

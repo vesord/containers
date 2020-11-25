@@ -85,16 +85,19 @@
 int main ()
 {
 	std::map<char,int> mymap;
-	std::map<char,int>::iterator it = ++++mymap.begin();
+	std::map<char,int>::iterator it = mymap.begin();
 	std::map<char,int>::iterator ite = mymap.end();
 	std::map<char,int>::reverse_iterator rit;
 	std::map<char,int>::reverse_iterator rite;
 
-	mymap['a']=20;
-	mymap['b']=40;
-	mymap['j']=60;
-	mymap['k']=80;
-	mymap['n']=100;
+	mymap.insert(std::make_pair('b', 123));
+	mymap.insert(std::make_pair('c', 123));
+	mymap.insert(std::make_pair('d', 123));
+	mymap.insert(std::make_pair('e', 123));
+	mymap.insert(std::make_pair('f', 123));
+
+	it = mymap.lower_bound('a');
+	std::cout << it->first << std::endl;
 
 	mymap.insert(it, ite);
 
@@ -123,7 +126,7 @@ int main ()
 //	ftmap._dPrintStrangeTree();
 
 	ftmap.insert(std::make_pair('f', 123));
-	ftmap._dPrintStrangeTree();
+//	ftmap._dPrintStrangeTree();
 
 //	for (int i = 0; i < 11; ++i) {
 //		ftmapstr.insert(std::make_pair(std::to_string(i), i));
