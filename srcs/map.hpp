@@ -503,8 +503,14 @@ public:
 		return ret;
 	}
 	void erase (iterator first, iterator last) {
+		iterator next;
 		while (first != last)
-			erase(first++);
+		{
+			next = first;
+			++next;
+			erase(first);
+			first = next;
+		}
 	}
 
 	void swap (map& x) {

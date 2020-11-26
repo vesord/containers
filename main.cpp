@@ -84,35 +84,44 @@
 
 int main ()
 {
-	std::map<char,int> mymap;
-	std::map<char,int>::iterator it = mymap.begin();
-	std::map<char,int>::iterator ite = mymap.end();
-	std::map<char,int>::reverse_iterator rit;
-	std::map<char,int>::reverse_iterator rite;
-
-	mymap.insert(std::make_pair('b', 123));
-	mymap.insert(std::make_pair('d', 123));
-	mymap.insert(std::make_pair('e', 123));
-	mymap.insert(std::make_pair('f', 123));
-	mymap.insert(std::make_pair('g', 123));
-
-	mymap.erase(mymap.begin(), mymap.end());
+//	std::map<char,int> mymap;
+//	std::map<char,int>::iterator it = mymap.begin();
+//	std::map<char,int>::iterator ite = mymap.end();
+//
+//	mymap.insert(std::make_pair('b', 123));
+//	mymap.insert(std::make_pair('d', 123));
+//	mymap.insert(std::make_pair('e', 123));
+//	mymap.insert(std::make_pair('f', 123));
+//	mymap.insert(std::make_pair('g', 123));
+//
+//	mymap.erase(mymap.begin(), mymap.end());
 
 
 
 	ft::map<char, int> ftmap;
 	ft::map<std::string, int> ftmapstr;
+	ft::map<char,int>::iterator it;
 
-//	ftmap.insert(std::make_pair('a', 123));
-//	ftmap.insert(std::make_pair('b', 123));
-//	ftmap.insert(std::make_pair('c', 123));
-//	ftmap.insert(std::make_pair('f', 123));
-//	ftmap.insert(std::make_pair('g', 123));
-//	ftmap.insert(std::make_pair('e', 123));
-//	ftmap.insert(std::make_pair('f', 123));
-//	ftmap.insert(std::make_pair('f', 123));
-//	ftmap._dPrintStrangeTree();
-//
+	ftmap.insert(std::make_pair('a', 123));
+	ftmap.insert(std::make_pair('b', 123));
+	ftmap.insert(std::make_pair('c', 123));
+	ftmap.insert(std::make_pair('d', 123));
+	ftmap.insert(std::make_pair('e', 123));
+	ftmap.insert(std::make_pair('f', 123));
+	ftmap.insert(std::make_pair('g', 123));
+	ftmap.insert(std::make_pair('h', 123));
+	ftmap.insert(std::make_pair('j', 123));
+	ftmap.insert(std::make_pair('k', 123));
+
+	ftmap._dPrintStrangeTree();
+
+	ftmap.erase(ftmap.find('b'), ftmap.find('e'));
+
+	ftmap._dPrintStrangeTree();
+
+//	std::cout << it->first << std::endl;
+//	ftmap.insert(std::make_pair('h', 123));
+
 //	ftmap.erase('c');
 //	ftmap._dPrintStrangeTree();
 
