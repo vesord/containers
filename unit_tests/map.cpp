@@ -22,9 +22,9 @@ bool operator==(std::pair<T, U> p1, std::pair<T, U> p2) {
 }
 
 template <class T, class U>
-void	checkIfMapsAreEqual(ft::map<T, U> & f, std::map<T, U> & s) {
-	EXPECT_EQ(f.size(), s.size());
-	EXPECT_EQ(f.empty(), s.empty());
+void	checkIfMapsAreEqual(ft::map<T, U> & f, std::map<T, U> & s, int i = 0) {
+	EXPECT_EQ(f.size(), s.size()) << "i = " << i;
+	EXPECT_EQ(f.empty(), s.empty()) << "i = " << i;
 
 	typename  ft::map<T, U>::iterator itf = f.begin();
 	typename  ft::map<T, U>::iterator itfe = f.end();
@@ -32,9 +32,9 @@ void	checkIfMapsAreEqual(ft::map<T, U> & f, std::map<T, U> & s) {
 	typename std::map<T, U>::iterator itse = s.end();
 
 	for (; its != itse; ) {
-		EXPECT_EQ(*its++, *itf++);
+		EXPECT_EQ(*its++, *itf++)  << "i = " << i;
 	}
-	EXPECT_EQ(itf, itfe);
+	EXPECT_EQ(itf, itfe)  << "i = " << i;
 }
 
 template <typename itFt, typename itFtEnd, typename itStd, typename itStdEnd>
@@ -820,16 +820,6 @@ protected:
 	std::map<std::string, double> s;
 	 ft::map<std::string, double> f;
 
-/*	std::map<std::string, double>::iterator its;
-	 ft::map<std::string, double>::iterator itf;
-	std::map<std::string, double>::iterator itse;
-	 ft::map<std::string, double>::iterator itfe;
-
-	std::map<std::string, double>::const_iterator cits;
-	 ft::map<std::string, double>::const_iterator citf;
-	std::map<std::string, double>::const_iterator citse;
-	 ft::map<std::string, double>::const_iterator citfe;*/
-
 	std::pair<const_iterator_s,const_iterator_s> cps;
 				std::pair<iterator_s,iterator_s> ps;
 
@@ -941,3 +931,161 @@ TEST_F(MapEqualRangeTest, multitestConst) {
 	}
 }
 
+class MapEraseSimpleTest : public testing::Test {
+protected:
+	virtual void SetUp() {
+			s.insert(std::make_pair("a", 1));
+			s.insert(std::make_pair("b", 1));
+			s.insert(std::make_pair("c", 1));
+			f.insert(std::make_pair("a", 1));
+			f.insert(std::make_pair("b", 1));
+			f.insert(std::make_pair("c", 1));
+	}
+
+	std::map<std::string, int> s;
+	ft::map<std::string, int>  f;
+
+};
+
+void	MapEraseSimpleTestFunc(ft::map<std::string, int> & f, std::map<std::string, int> & s,
+							   std::string s1, std::string s2, std::string s3) {
+	size_t retf;
+	size_t rets;
+
+	rets = s.erase(s1 + s2 + s3);
+	retf = f.erase(s1 + s2 + s3);
+	EXPECT_EQ(retf, rets);
+	EXPECT_EQ(*s.begin(), *f.begin());
+	EXPECT_EQ(*--s.end(), *--f.end());
+	checkIfMapsAreEqual(f, s);
+
+	rets = s.erase(s1);
+	retf = f.erase(s1);
+	EXPECT_EQ(retf, rets);
+	EXPECT_EQ(*s.begin(), *f.begin());
+	EXPECT_EQ(*--s.end(), *--f.end());
+	checkIfMapsAreEqual(f, s);
+
+	rets = s.erase(s2);
+	retf = f.erase(s2);
+	EXPECT_EQ(retf, rets);
+	EXPECT_EQ(*s.begin(), *f.begin());
+	EXPECT_EQ(*--s.end(), *--f.end());
+	checkIfMapsAreEqual(f, s);
+
+	rets = s.erase(s3);
+	retf = f.erase(s3);
+	EXPECT_EQ(retf, rets);
+	EXPECT_EQ(s.begin(), s.end());
+	EXPECT_EQ(f.begin(), f.end());
+	checkIfMapsAreEqual(f, s);
+
+	rets = s.erase(s1);
+	retf = f.erase(s1);
+	EXPECT_EQ(retf, rets);
+	EXPECT_EQ(s.begin(), s.end());
+	EXPECT_EQ(f.begin(), f.end());
+	checkIfMapsAreEqual(f, s);
+}
+
+TEST_F(MapEraseSimpleTest, abc) {
+	MapEraseSimpleTestFunc(f, s, "a", "b", "c");
+}
+
+TEST_F(MapEraseSimpleTest, acb) {
+	MapEraseSimpleTestFunc(f, s, "a", "c", "b");
+}
+
+TEST_F(MapEraseSimpleTest, bac) {
+	MapEraseSimpleTestFunc(f, s, "b", "a", "c");
+}
+
+TEST_F(MapEraseSimpleTest, bca) {
+	MapEraseSimpleTestFunc(f, s, "b", "c", "a");
+}
+
+TEST_F(MapEraseSimpleTest, cab) {
+	MapEraseSimpleTestFunc(f, s, "c", "a", "b");
+}
+
+TEST_F(MapEraseSimpleTest, cba) {
+	MapEraseSimpleTestFunc(f, s, "c", "b", "a");
+}
+
+class MapEraseNoContainTest : public testing::Test {
+protected:
+	virtual void SetUp() {
+		for (char i = 'b'; i < 'z' ; ++i) {
+			ss << i << i;
+			s.insert(std::make_pair(ss.str(), i));
+			f.insert(std::make_pair(ss.str(), i));
+			ss.str("");
+		}
+	}
+
+	std::stringstream ss;
+
+	std::map<std::string, int> s;
+	ft::map<std::string, int>  f;
+
+	size_t retf;
+	size_t rets;
+};
+
+TEST_F(MapEraseNoContainTest, eraseSimpleTest) {
+	for (char i = 'a'; i <= 'z' ; ++i) {
+		ss << i << i << i;
+		rets = s.erase(ss.str());
+		retf = f.erase(ss.str());
+		EXPECT_EQ(retf, rets);
+		EXPECT_EQ(*s.begin(), *f.begin());
+		EXPECT_EQ(*--s.end(), *--f.end());
+		checkIfMapsAreEqual(f, s);
+		ss.str("");
+	}
+
+	for (char i = 'a'; i <= 'z' ; ++i) {
+		ss << i;
+		rets = s.erase(ss.str());
+		retf = f.erase(ss.str());
+		EXPECT_EQ(retf, rets);
+		EXPECT_EQ(*s.begin(), *f.begin());
+		EXPECT_EQ(*--s.end(), *--f.end());
+		checkIfMapsAreEqual(f, s);
+		ss.str("");
+	}
+}
+
+
+
+class MapEraseTest : public testing::Test {
+protected:
+	virtual void SetUp() {
+		for (int i = -50; i < 50; ++i) {
+			s.insert(std::make_pair(std::to_string(i), i));
+			f.insert(std::make_pair(std::to_string(i), i));
+		}
+	}
+
+	std::map<std::string, int> s;
+	ft::map<std::string, int>  f;
+
+	std::map<std::string, double>::iterator its;
+	ft::map<std::string, double>::iterator itf;
+	std::map<std::string, double>::iterator itse;
+	ft::map<std::string, double>::iterator itfe;
+
+	size_t retf;
+	size_t rets;
+};
+
+TEST_F(MapEraseTest, eraseSimpleTest) {
+	for (int i = -60; i < 60; ++i) {
+		rets = s.erase(std::to_string(i));
+		retf = f.erase(std::to_string(i));
+		EXPECT_EQ(rets, retf);
+		checkIfMapsAreEqual(f, s, i);
+	}
+}
+
+// Test Each order of erasing

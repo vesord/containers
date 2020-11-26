@@ -103,18 +103,17 @@ int main ()
 	ft::map<std::string, int> ftmapstr;
 
 	ftmap.insert(std::make_pair('a', 123));
-	ftmap.insert(std::make_pair('e', 123));
-	ftmap.insert(std::make_pair('j', 123));
-	ftmap.insert(std::make_pair('f', 123));
-//	ftmap.insert(std::make_pair('e', 123));
+	ftmap.insert(std::make_pair('b', 123));
+	ftmap.insert(std::make_pair('c', 123));
+//	ftmap.insert(std::make_pair('f', 123));
 //	ftmap.insert(std::make_pair('g', 123));
+//	ftmap.insert(std::make_pair('e', 123));
 //	ftmap.insert(std::make_pair('f', 123));
 //	ftmap.insert(std::make_pair('f', 123));
 	ftmap._dPrintStrangeTree();
 
-	ftmap.erase('j');
+	ftmap.erase('c');
 	ftmap._dPrintStrangeTree();
-
 
 //	for (int i = 0; i < 11; ++i) {
 //		ftmapstr.insert(std::make_pair(std::to_string(i), i));
