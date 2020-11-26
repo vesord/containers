@@ -478,7 +478,9 @@ public:
 		}
 	}
 
-	void erase (iterator position);
+	void erase (iterator position) {
+		erase(position->first);
+	}
 	size_type erase (const key_type& k) {
 		size_type ret = _treeErase(&_root, k);
 		if (ret != 0)
