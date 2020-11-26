@@ -1294,33 +1294,43 @@ TEST_F(MapSwapTest, iteratorValidity) {
 }
 
 
-class MapEraseTest : public testing::Test {
+class MapEraseRangeTest : public testing::Test {
 protected:
 	virtual void SetUp() {
 		for (int i = -50; i < 50; ++i) {
-			s.insert(std::make_pair(std::to_string(i), i));
-			f.insert(std::make_pair(std::to_string(i), i));
+			sRef.insert(std::make_pair(std::to_string(i), i));
+			fRef.insert(std::make_pair(std::to_string(i), i));
 		}
 	}
 
-	std::map<std::string, int> s;
-	ft::map<std::string, int>  f;
+	std::map<std::string, int> sRef, s;
+	ft::map<std::string, int>  fRef, f;
 
-	std::map<std::string, double>::iterator its;
-	ft::map<std::string, double>::iterator itf;
-	std::map<std::string, double>::iterator itse;
-	ft::map<std::string, double>::iterator itfe;
+	std::map<std::string, int>::iterator its, jts, itse, itsdel1, itsdel2;
+	ft::map<std::string, int>::iterator itf, jtf, itfe, itfdel1, itfdel2;
 
 	size_t retf;
 	size_t rets;
 };
 
-TEST_F(MapEraseTest, eraseSimpleTest) {
-	for (int i = -60; i < 60; ++i) {
-		rets = s.erase(std::to_string(i));
-		retf = f.erase(std::to_string(i));
-		EXPECT_EQ(rets, retf);
-		checkIfMapsAreEqual(f, s, i);
+TEST_F(MapEraseRangeTest, eraseSimpleTest) {
+	itse = sRef.end();
+	itfe = fRef.end();
+
+	for (its = sRef.begin(); its != itse; ++its) {
+		for (jts = sRef.begin(); true; ++jts) {
+			f = fRef;
+			s = sRef;
+			itsdel1 = s.find(its->first);
+			itfdel1 = f.find(its->first);
+			itsdel2 = s.find(jts->first);
+			itfdel2 = f.find(jts->first);
+			s.erase(itsdel1, itsdel2);
+			f.erase(itfdel1, itfdel2);
+			checkIfMapsAreEqual(f, s);
+			if (jts == itse)
+				break;
+		}
 	}
 }
 

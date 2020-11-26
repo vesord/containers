@@ -502,7 +502,10 @@ public:
 			_root = nullptr;
 		return ret;
 	}
-	void erase (iterator first, iterator last);
+	void erase (iterator first, iterator last) {
+		while (first != last)
+			erase(first++);
+	}
 
 	void swap (map& x) {
 		_t_node *tmp = _root;
