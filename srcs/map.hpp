@@ -424,15 +424,28 @@ public:
 		insert(first, last);
 	}
 
-	map (const map& x);
+	map (const map& x) : _alloc(x._alloc), _comp(x._comp), _root(nullptr), _size(0) {
+		_begin_node = _createEmptyNode();
+		_end_node = _createEmptyNode();
+		*this = x;
+	}
 
 	/*** DESTRUCTION ***/
-	// DONT FORGET ABOUT DESTRUCTION
-	 ~map() {};
+	 ~map() {
+	 	clear();
+	 	_alloc_rebind.deallocate(_end_node, 1);
+	 	_alloc_rebind.deallocate(_begin_node, 1);
+	 }
 
 	 /*** ASSIGNATION ***/
 
-	 map& operator= (const map& x);
+	 map& operator= (const map& x) {
+		if (this == &x)
+			return *this;
+		clear();
+		this->insert(x.begin(), x.end());
+		return *this;
+	 }
 
 	 /*** ITERATORS ***/
 
@@ -491,9 +504,28 @@ public:
 	}
 	void erase (iterator first, iterator last);
 
-	void swap (map& x);
+	void swap (map& x) {
+		_t_node *tmp = _root;
+		_root = x._root;
+		x._root = tmp;
 
-	void clear();
+		tmp = _end_node;
+		_end_node = x._end_node;
+		x._end_node = tmp;
+
+		tmp = _begin_node;
+		_begin_node = x._begin_node;
+		x._begin_node = tmp;
+
+		size_type tmpSize = _size;
+		_size = x._size;
+		x._size = tmpSize;
+	}
+
+	void clear() {
+		while (_size != 0)
+			erase(begin());
+	}
 
 	/*** OBSERVERS ***/
 
