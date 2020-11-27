@@ -11,14 +11,11 @@
 /* ************************************************************************** */
 
 #ifndef LIST_HPP
-#define LIST_HPP
+# define LIST_HPP
 
-#include "allocator.hpp"
+#include <memory>
+#include <stdexcept>
 #include "iterator.hpp"
-#include <iostream>
-
-//TODO
-// make const iterators const
 
 namespace ft {
 

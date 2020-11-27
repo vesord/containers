@@ -13,9 +13,9 @@
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 
-#include "iterator.hpp"
+#include <memory>
 #include <stdexcept>
-#include <iostream>
+#include "iterator.hpp"
 
 namespace ft {
 

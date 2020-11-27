@@ -13,8 +13,9 @@
 #ifndef MAP_HPP
 # define MAP_HPP
 
-# include "iterator.hpp"
-# include <stdexcept>
+#include <memory>
+#include <stdexcept>
+#include "iterator.hpp"
 
 //TODO
 // mem leak
