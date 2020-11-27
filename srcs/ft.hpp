@@ -31,10 +31,8 @@ namespace ft {
 //	void swap (vector<T,Alloc>& x, vector<T,Alloc>& y);
 
 
-	template < class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<std::pair<const Key,T> > >
-	class map;
-	// hide debug
-	// make const iterators const
+//	template < class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<std::pair<const Key,T> > >
+//	class map;
 
 }
 

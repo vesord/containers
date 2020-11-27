@@ -13,29 +13,34 @@
 #ifndef MAP_HPP
 # define MAP_HPP
 
-#include "iterator.hpp"
-#include <stdexcept>
-#include <iostream>
+# include "iterator.hpp"
+# include <stdexcept>
 
 //TODO
 // mem leak
 
-// DELETE THIS DEBUG
-#define RED_NODE_OUTPUT(x)  "\x1b[31;1m" + (x) + "\x1b[0m"
-#include <queue>
-#include <iomanip>
-#include <sstream>
+
+# ifdef FT_CONTAINERS_DEBUG
+#  define RED_NODE_OUTPUT(x)  "\x1b[31;1m" + (x) + "\x1b[0m"
+#  include <queue>
+#  include <iomanip>
+#  include <sstream>
 
 template < class G, class U >
 std::ostream & operator<<(std::ostream & o, std::pair<G, U> p) {
 	o << "_" << p.first;
 	return o;
 }
+# endif
 
-template <class Key, class T, class Compare, class Alloc>
-class ft::map {
+namespace ft {
+
+template < class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<std::pair<const Key,T> > >
+class map {
 
 public:
+
+	/*** TYPES ***/
 
 	class iterator;
 	class const_iterator;
@@ -71,6 +76,8 @@ public:
 
 private:
 
+	/*** INTERNAL OBJECTS ***/
+
 	typedef struct	_s_tree_node {
 		value_type			*data;
 		struct _s_tree_node	*left;
@@ -94,6 +101,8 @@ private:
 
 public:
 
+	/*** ITERATORS ***/
+
 	class iterator : public ft::iterator<std::bidirectional_iterator_tag, value_type> {
 
 	public:
@@ -116,7 +125,7 @@ public:
 		iterator & operator--() { this->_ptr = _mapIteratorPrev(this->_ptr); return *this; }
 		iterator operator++(int) { iterator tmp = *this; this->operator++(); return tmp; }
 		iterator operator--(int) { iterator tmp = *this; this->operator--(); return tmp; }
-		
+
 		bool operator==( iterator const & rhs ) const { return this->_ptr == rhs._ptr; }
 		bool operator!=( iterator const & rhs ) const { return this->_ptr != rhs._ptr; }
 
@@ -170,7 +179,7 @@ public:
 
 	};
 
-	class const_iterator : public ft::iterator<std::bidirectional_iterator_tag, value_type> {
+	class const_iterator : public ft::iterator<std::bidirectional_iterator_tag, value_type const> {
 
 	public:
 		const_iterator() : _ptr( nullptr ) {}
@@ -328,7 +337,7 @@ public:
 
 	};
 
-	class const_reverse_iterator : public ft::reverse_iterator<map::iterator> {
+	class const_reverse_iterator : public ft::reverse_iterator<map::const_iterator> {
 
 	public:
 		const_reverse_iterator() : _ptr( nullptr ) {}
@@ -410,13 +419,13 @@ public:
 
 	};
 
-	/*** CONSTRUCTION ***/ // we should init comp and alloc
+	/*** CONSTRUCTION ***/
+
 	explicit map (const key_compare& comp = key_compare(),
 				  const allocator_type& alloc = allocator_type()) : _alloc(alloc), _comp(comp), _root(nullptr), _size(0) {
 		_begin_node = _createEmptyNode();
 		_end_node = _createEmptyNode();
 	}
-
 	template <class InputIterator>
 	map (InputIterator first, InputIterator last,
 		 const key_compare& comp = key_compare(),
@@ -425,7 +434,6 @@ public:
 		_end_node = _createEmptyNode();
 		insert(first, last);
 	}
-
 	map (const map& x) : _alloc(x._alloc), _comp(x._comp), _root(nullptr), _size(0) {
 		_begin_node = _createEmptyNode();
 		_end_node = _createEmptyNode();
@@ -433,6 +441,7 @@ public:
 	}
 
 	/*** DESTRUCTION ***/
+
 	 ~map() {
 	 	clear();
 	 	_alloc_rebind.deallocate(_end_node, 1);
@@ -441,7 +450,7 @@ public:
 
 	 /*** ASSIGNATION ***/
 
-	 map& operator= (const map& x) {
+	 map& operator=(const map& x) {
 		if (this == &x)
 			return *this;
 		clear();
@@ -465,9 +474,9 @@ public:
 
 	bool empty() const { return this->_size == 0; };
 	size_type size() const { return this->_size; }
-	size_type max_size() const { return std::numeric_limits<size_type>::max() / sizeof(ft::map<Key, T, Compare, Alloc>); }
+	size_type max_size() const { return std::numeric_limits<size_type>::max() / sizeof(map<Key, T, Compare, Alloc>); }
 
-	/*** ELEMENT ACCEESS ***/
+	/*** ELEMENT ACCESS ***/
 
 	mapped_type& operator[] (const key_type& k) {
 		return (*((this->insert(make_pair(k,mapped_type()))).first)).second;
@@ -535,7 +544,6 @@ public:
 		_size = x._size;
 		x._size = tmpSize;
 	}
-
 	void clear() {
 		while (_size != 0)
 			erase(begin());
@@ -590,6 +598,11 @@ public:
 
 	/*** DEBUG ***/
 
+#ifdef FT_CONTAINERS_DEBUG
+	/*
+	 * _dPrintStrangeTree() can print representation of a tree into stdout
+	 */
+
 	void	_dPrintStrangeTreeLine(int width, _t_node* curNode) {
 		std::stringstream ss;
 		std::string str;
@@ -613,12 +626,12 @@ public:
 	void	_dPrintStrangeTree()
 	{
 		_t_node *root = _root;
-		typename std::queue<typename ft::map<Key, T>::_t_node*> q;
-		typename ft::map<Key, T>::_t_node * curNode;
+		typename std::queue<typename map<Key, T>::_t_node*> q;
+		typename map<Key, T>::_t_node * curNode;
 		bool printTime;
 		int onLine = 1;
 		int needToPrint = 1;
-		int widthSt = 64;
+		int widthSt = 64; // CHANGE HERE 32 / 64 / 128 / 256 etc
 		int width;
 
 		q.push(root);
@@ -650,6 +663,7 @@ public:
 		std::cout.fill(' ');
 		std::cout << std::endl;
 	}
+#endif
 
 private:
 
@@ -987,5 +1001,7 @@ private:
 	}
 
 };
+
+} // namespace ft
 
 #endif

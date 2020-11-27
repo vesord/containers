@@ -1673,6 +1673,61 @@ TEST_F(VectorAssignTest, capacityCheckN) { // capacity check
 	checkIfVectorsAreEqual(f1, s1);
 }
 
+class VectorSwapTest : public testing::Test {
+protected:
+	virtual void SetUp() {
+		for (int i = 0; i < 100; ++i) {
+			s1.push_back(std::to_string(i));
+			f1.push_back(std::to_string(i));
+		}
+	}
+
+	std::vector<std::string> s2, s1;
+	ft::vector<std::string>  f2, f1;
+};
+
+TEST_F(VectorSwapTest, integrityFullEmpty) {
+	s1.swap(s2);
+	f1.swap(f2);
+
+	checkIfVectorsAreEqual(f1, s1);
+	checkIfVectorsAreEqual(f2, s2);
+}
+
+TEST_F(VectorSwapTest, integrityEmptyFull) {
+	s2.swap(s1);
+	f2.swap(f1);
+
+	checkIfVectorsAreEqual(f1, s1);
+	checkIfVectorsAreEqual(f2, s2);
+}
+
+TEST_F(VectorSwapTest, integrityFullFull) {
+	s2.push_back("std::to_string(i)");
+	f2.push_back("std::to_string(i)");
+
+	s2.swap(s1);
+	f2.swap(f1);
+
+	checkIfVectorsAreEqual(f1, s1);
+	checkIfVectorsAreEqual(f2, s2);
+}
+
+TEST_F(VectorSwapTest, iteratorValidity) {
+	std::vector<std::string>::iterator its = ++s1.begin();
+	ft::vector<std::string>::iterator itf = ++f1.begin();
+
+	s2.push_back("std::to_string(i)");
+	f2.push_back("std::to_string(i)");
+
+	s2.swap(s1);
+	f2.swap(f1);
+
+	checkIfVectorsAreEqual(f1, s1);
+	checkIfVectorsAreEqual(f2, s2);
+	checkVectorsAreEqualIt(itf, f2.end(), its, s2.end());
+}
+
 class VectorComprasionTest : public ::testing::Test {
 protected:
 	virtual void SetUp() {
@@ -1832,3 +1887,27 @@ TEST_F(VectorComprasionTest, justCase4) {
 	EXPECT_EQ(false, s1 == s2);
 	EXPECT_EQ(false, f1 == f2);
 }
+
+TEST_F(VectorComprasionTest, justCase5) {
+	s1.push_back("a"); f1.push_back("a");
+	s1.push_back("a"); f1.push_back("a");
+	s1.push_back("a"); f1.push_back("a");
+
+	s2.push_back("z"); f2.push_back("z");
+	s2.push_back("z"); f2.push_back("z");
+	s2.push_back("z"); f2.push_back("z");
+
+	EXPECT_EQ(true, s1 < s2);
+	EXPECT_EQ(true, f1 < f2);
+	EXPECT_EQ(false, s1 == s2);
+	EXPECT_EQ(false, f1 == f2);
+	EXPECT_EQ(false, s1 > s2);
+	EXPECT_EQ(false, f1 > f2);
+	EXPECT_EQ(false, s1 >= s2);
+	EXPECT_EQ(false, f1 >= f2);
+	EXPECT_EQ(true, s1 < s2);
+	EXPECT_EQ(true, f1 < f2);
+	EXPECT_EQ(true, s1 <= s2);
+	EXPECT_EQ(true, f1 <= f2);
+}
+

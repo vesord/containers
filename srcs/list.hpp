@@ -18,7 +18,6 @@
 #include <iostream>
 
 //TODO
-// list 10k and resize to 5
 // make const iterators const
 
 namespace ft {
@@ -28,19 +27,24 @@ class list {
 
 public:
 
-	/*** INTERNAL TYPES ***/
+	/*** TYPES ***/
+
 	class iterator;
 	class const_iterator;
 	class reverse_iterator;
 	class const_reverse_iterator;
 	typedef T value_type;
 	typedef Alloc allocator_type;
+	typedef ptrdiff_t difference_type;
+	typedef size_t size_type;
 	typedef typename allocator_type::reference reference;
 	typedef typename allocator_type::const_reference const_reference;
 	typedef typename allocator_type::pointer pointer;
 	typedef typename allocator_type::const_pointer const_pointer;
 
 private:
+
+	/*** INTERNAL OBJECTS ***/
 
 	typedef struct	_s_node
 	{
@@ -50,8 +54,6 @@ private:
 	}				_t_node;
 	_t_node *		_begin_node;
 	_t_node *		_end_node;
-
-public:
 
 	typedef typename allocator_type::template rebind<_t_node>::other allocator_rebind;
 	allocator_rebind _alloc_rebind;
@@ -96,7 +98,7 @@ class iterator : public ft::iterator<std::bidirectional_iterator_tag, value_type
 		_t_node* _ptr;
 	};
 
-class const_iterator : public ft::iterator<std::bidirectional_iterator_tag, value_type>
+class const_iterator : public ft::iterator<std::bidirectional_iterator_tag, value_type const>
 	{
 
 	public:
@@ -176,7 +178,7 @@ class reverse_iterator : public ft::reverse_iterator<list::iterator>
 		_t_node *_ptr;
 	};
 
-class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
+class const_reverse_iterator : public ft::reverse_iterator<list::const_iterator>
 	{
 		template<class U, class A> friend class list;
 
@@ -219,10 +221,8 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 		_t_node *_ptr;
 	};
 
-	typedef ptrdiff_t difference_type;
-	typedef size_t size_type;
-
 	/*** CONSTRUCTION ***/
+
 	explicit list (const allocator_type& alloc = allocator_type()) : _alloc(alloc), _size( 0 ) {
 		_createEndNode();
 		_begin_node = _end_node;
@@ -252,6 +252,7 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 	}
 
 	/*** DESTRUCTION ***/
+
 	~list() {
 		this->clear();
 		_alloc.deallocate(this->_end_node->_data, 1);
@@ -259,6 +260,7 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 	};
 
 	/*** ASSIGNATION ***/
+
 	list& operator= (const list& x) {
 		if ( this == &x )
 			return *this;
@@ -270,6 +272,7 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 	};
 
 	/*** ITERATORS ***/
+
 	iterator begin() { return iterator(_begin_node); }
 	const_iterator begin() const { return const_iterator(_begin_node); }
 	iterator end() { return iterator(_end_node); }
@@ -280,17 +283,20 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 	const_reverse_iterator rend() const { return const_reverse_iterator(_begin_node->_prev); }
 
 	/*** CAPACITY ***/
+
 	bool empty() const { return this->_begin_node == this->_end_node; };
 	size_type size() const { return this->_size; }
 	size_type max_size() const { return std::numeric_limits<size_type>::max() / sizeof(list<T, Alloc>); }
 
 	/*** ELEMENT ACCESS ***/
+
 	reference front() { return *this->_begin_node->_data; };
 	const_reference front() const { return *this->_begin_node->_data; };
 	reference back() { return *this->_end_node->_prev->_data; };
 	const_reference back() const { return *this->_end_node->_prev->_data; };;
 
 	/*** MODIFIERS ***/
+
 	template <class InputIterator>
 	void assign (InputIterator first, InputIterator last,
 			  typename ft::enable_if<std::__is_input_iterator<InputIterator>::value>::type* = 0)
@@ -428,6 +434,7 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 	}
 
 	/*** OPERATIONS ***/
+
 	void splice (iterator position, list& x) {
 		position.getPtr()->_prev->_next = x.begin().getPtr();
 		x.begin().getPtr()->_prev = position.getPtr()->_prev;
@@ -637,10 +644,6 @@ private:
 		_end_node->_next = newBegin;
 		_end_node->_prev = endPrev;
 	}
-
-	/*
-	 * Swap nodes. Changes link to _begin_node accordingly. Swaps iterators.
-	 */
 
 	void	_swapNodes(iterator & it1, iterator & it2) {
 		_t_node *n1 = it1.getPtr();

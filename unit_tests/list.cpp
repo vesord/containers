@@ -897,6 +897,13 @@ TEST_F(ListTest, resize) {
 	EXPECT_EQ(ftList.size(), stdList.size());
 	EXPECT_EQ(ftList.size(), 0);
 	checkListEqual(ftList.begin(), ftList.end(), stdList.begin(), stdList.end());
+
+	std::list<int> extrimes(10000);
+	ft::list<int> extrimef(10000);
+
+	extrimes.resize(5);
+	extrimef.resize(5);
+	EXPECT_EQ(extrimef.size(), extrimes.size());
 }
 
 TEST_F(ListTest, spliceAll_1) {
@@ -1932,4 +1939,27 @@ TEST_F(ListComprasionTest, justCase4) {
 	EXPECT_EQ(true, f1 < f2);
 	EXPECT_EQ(false, s1 == s2);
 	EXPECT_EQ(false, f1 == f2);
+}
+
+TEST_F(ListComprasionTest, justCase5) {
+	s1.push_back("a"); f1.push_back("a");
+	s1.push_back("a"); f1.push_back("a");
+	s1.push_back("a"); f1.push_back("a");
+
+	s2.push_back("z"); f2.push_back("z");
+	s2.push_back("z"); f2.push_back("z");
+	s2.push_back("z"); f2.push_back("z");
+
+	EXPECT_EQ(true, s1 < s2);
+	EXPECT_EQ(true, f1 < f2);
+	EXPECT_EQ(false, s1 == s2);
+	EXPECT_EQ(false, f1 == f2);
+	EXPECT_EQ(false, s1 > s2);
+	EXPECT_EQ(false, f1 > f2);
+	EXPECT_EQ(false, s1 >= s2);
+	EXPECT_EQ(false, f1 >= f2);
+	EXPECT_EQ(true, s1 < s2);
+	EXPECT_EQ(true, f1 < f2);
+	EXPECT_EQ(true, s1 <= s2);
+	EXPECT_EQ(true, f1 <= f2);
 }

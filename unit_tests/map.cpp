@@ -8,6 +8,14 @@
 #include <string>
 #include <stdexcept>
 
+#ifndef FT_CONTAINERS_DEBUG
+template < class G, class U >
+std::ostream & operator<<(std::ostream & o, std::pair<G, U> p) {
+	o << "_" << p.first;
+	return o;
+}
+#endif
+
 template< class T >
 void printContainer(T & l) {
 	for (typename T::iterator it = l.begin(); it != l.end(); ++it) {

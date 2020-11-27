@@ -17,12 +17,6 @@
 #include <stdexcept>
 #include <iostream>
 
-//TODO
-// make const iterators const
-// implement comparations
-// implement tests on comparation
-// implement tests on swap
-
 namespace ft {
 
 template< class T, class Alloc = std::allocator<T> >
@@ -105,7 +99,7 @@ public:
 		pointer _ptr;
 	};
 
-	class const_iterator : public ft::iterator<std::bidirectional_iterator_tag, value_type>
+	class const_iterator : public ft::iterator<std::bidirectional_iterator_tag, value_type const>
 	{
 
 	public:
@@ -214,7 +208,7 @@ public:
 		pointer _ptr;
 	};
 
-	class const_reverse_iterator : public ft::reverse_iterator<vector::iterator>
+	class const_reverse_iterator : public ft::reverse_iterator<vector::const_iterator>
 	{
 		template<class U, class A> friend class list;
 
@@ -321,7 +315,7 @@ public:
 
 	/*** ASSIGNATION ***/
 
-	vector& operator=(const vector& x) { // if throws container in valid state
+	vector& operator=(const vector& x) {
 		clear();
 		insert(begin(), x.begin(), x.end());
 		return *this;
@@ -357,7 +351,7 @@ public:
 		if (n < _capacity)
 			return ;
 		_reallocate(n);
-	}; // throws length_error, bad_alloc
+	};
 
 	/*** ELEMENT ACCESS ***/
 
