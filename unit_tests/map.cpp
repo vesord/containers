@@ -1143,7 +1143,6 @@ TEST_F(MapEraseByIteratorTest, iteratorValidity2) {
 	checkMapsAreEqualIt(itf, ftmap.end(), its, stmap.end());
 }
 
-
 class MapClearTest : public testing::Test {
 protected:
 	virtual void SetUp() {
@@ -1329,7 +1328,6 @@ TEST_F(MapSwapTest, iteratorValidity) {
 	checkMapsAreEqualIt(itf, f2.end(), its, s2.end());
 }
 
-
 class MapEraseRangeTest : public testing::Test {
 protected:
 	virtual void SetUp() {
@@ -1382,5 +1380,27 @@ TEST_F(MapEraseRangeTest, eraseSimpleTest) {
 			j++;
 		}
 		i++;
+	}
+}
+
+class MapOperatorSqBracketsTest : public testing::Test {
+protected:
+	virtual void SetUp() {
+		for (int i = -200; i < 200; i += 2) {
+			s.insert(std::make_pair(std::to_string(i), i));
+			f.insert(std::make_pair(std::to_string(i), i));
+		}
+	}
+
+	std::map<std::string, int> s;
+	ft::map<std::string, int>  f;
+};
+
+TEST_F(MapOperatorSqBracketsTest, fullTest) {
+	for (int i = -200; i < 200; ++i) {
+		s[std::to_string(i)] = i % 2;
+		f[std::to_string(i)] = i % 2;
+		checkIfMapsAreEqual(f, s);
+//		std::cout << i << std::endl;
 	}
 }

@@ -18,7 +18,6 @@
 #include <iostream>
 
 // DELETE THIS DEBUG
-
 #define RED_NODE_OUTPUT(x)  "\x1b[31;1m" + (x) + "\x1b[0m"
 #include <queue>
 #include <iomanip>
@@ -467,7 +466,9 @@ public:
 
 	/*** ELEMENT ACCEESS ***/
 
-	mapped_type& operator[] (const key_type& k);
+	mapped_type& operator[] (const key_type& k) {
+		return (*((this->insert(make_pair(k,mapped_type()))).first)).second;
+	}
 
 	/*** MODIFIERS ***/
 
