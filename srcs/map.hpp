@@ -504,13 +504,16 @@ public:
 	}
 	void erase (iterator first, iterator last) {
 		iterator next;
+//		_dPrintStrangeTree();
 		while (first != last)
 		{
 			next = first;
 			++next;
 			erase(first);
 			first = next;
+//			_dPrintStrangeTree();
 		}
+
 	}
 
 	void swap (map& x) {
@@ -909,11 +912,13 @@ private:
 //		_dPrintStrangeTree();
 		_t_node *ret;
 		if ((*h)->left == nullptr) {
+			ret = *h;
+			*h = nullptr;
 //			if (_isRightChild(*h))
 //				(*h)->parent->right = nullptr;
 //			else
 //				(*h)->parent->left = nullptr;
-			return (*h);
+			return ret;
 		}
 		ret = _getMinNodeWithErase(&(*h)->left);
 //		_dPrintStrangeTree();
@@ -928,12 +933,13 @@ private:
 
 		minPtr = _getMinNodeWithErase(&(*h)->right);
 
+//		_dPrintStrangeTree();
 		toDel = *h;
 
-		if (_isRightChild(minPtr))
-			minPtr->parent->right = nullptr;
-		else
-			minPtr->parent->left = nullptr;
+//		if (_isRightChild(minPtr))
+//			minPtr->parent->right = nullptr;
+//		else
+//			minPtr->parent->left = nullptr;
 
 //		_dPrintStrangeTree();
 
@@ -950,6 +956,9 @@ private:
 				minPtr->parent->right = minPtr;
 			else
 				minPtr->parent->left = minPtr;
+		}
+		else {
+			_root = minPtr;
 		}
 //		_dPrintStrangeTree();
 		_destroyNode(toDel);

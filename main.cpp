@@ -8,62 +8,40 @@
 #include <map>
 #include <string>
 
-//typedef struct strange_tree {
-//	int					data;
-//	struct strange_tree	*left;
-//	struct strange_tree	*right;
-//	struct strange_tree	*parent;
-//	bool				color;
-//}	t_ref_tree;
-
-//t_ref_tree &rotRight(t_ref_tree & h) {
-//	t_ref_tree *x = h.right;
-//	h.right = x->left;
-//	x->left = &h;
-//	x->color;
-//	return h;
-//}
-//
-//class StrangeIterator {
-//public:
-//	StrangeIterator();
-//	~StrangeIterator();
-//	StrangeIterator( t_ref_tree & ptr) : _ref(ptr) {}
-//
-//private:
-//	strange_tree & _ref;
-//
-//};
 
 int main ()
 {
-//	t_ref_tree *leftPtr = new t_ref_tree;
-//	t_ref_tree *rightPtr = new t_ref_tree;
-//	t_ref_tree *rootPtr = new t_ref_tree;
-//	rootPtr->data = 1;
-//	rootPtr->left = leftPtr;
-//	rootPtr->right = leftPtr;
-//	rootPtr->parent = nullptr;
+//	std::map<std::string, int> sRef, s;
+//	ft::map<std::string, int>  fRef, f;
+
+//	for (int i = 0; i < 10; ++i) {
+//		sRef.insert(std::make_pair(std::to_string(i), i));
+//		fRef.insert(std::make_pair(std::to_string(i), i));
+//	}
+//	f = fRef;
+//	s = sRef;
 //
-//	leftPtr->data = 2;
-//	leftPtr->left = nullptr;
-//	leftPtr->right = nullptr;
-//	leftPtr->parent = rootPtr;
+//	f._dPrintStrangeTree();
 //
-//	rightPtr->data = 3;
-//	rightPtr->left = nullptr;
-//	rightPtr->right = nullptr;
-//	rightPtr->parent = rootPtr;
+//	f.erase(++f.begin(), --f.end());
+//	s.erase(++s.begin(), --s.end());
 //
-//	StrangeIterator itRoot(*rootPtr);
-//	StrangeIterator itLeft(*leftPtr);
-//	StrangeIterator itRight(*rightPtr);
-//
-//	t_ref_tree & root = *rootPtr;
+//	f._dPrintStrangeTree();
 
 
 
+	ft::map<char, int>  fRef, f;
 
+	f.insert(std::make_pair('0', 0));
+//	f.insert(std::make_pair('7', 7));
+	f.insert(std::make_pair('8', 8));
+	f.insert(std::make_pair('9', 9));
+
+	f._dPrintStrangeTree();
+
+	f.erase('8');
+
+	f._dPrintStrangeTree();
 
 
 
@@ -84,29 +62,29 @@ int main ()
 
 
 
-	ft::map<char, int> ftmap;
-	ft::map<std::string, int> ftmapstr;
-	ft::map<char,int>::iterator it;
-
-	ftmap.insert(std::make_pair('a', 123));
-	ftmap.insert(std::make_pair('b', 123));
-	ftmap.insert(std::make_pair('c', 123));
-	ftmap.insert(std::make_pair('d', 123));
-	ftmap.insert(std::make_pair('e', 123));
-	ftmap.insert(std::make_pair('f', 123));
-	ftmap.insert(std::make_pair('g', 123));
-	ftmap.insert(std::make_pair('h', 123));
-	ftmap.insert(std::make_pair('j', 123));
-	ftmap.insert(std::make_pair('k', 123));
-
-	ftmap._dPrintStrangeTree();
-
-	it = ftmap.find('c');
-	std::cout << "before " << it->first << std::endl;
-	ftmap.erase(ftmap.find('b'));
-
-	std::cout << "after " << it->first << std::endl;
-	ftmap._dPrintStrangeTree();
+//	ft::map<char, int> ftmap;
+//	ft::map<std::string, int> ftmapstr;
+//	ft::map<char,int>::iterator it;
+//
+//	ftmap.insert(std::make_pair('a', 123));
+//	ftmap.insert(std::make_pair('b', 123));
+//	ftmap.insert(std::make_pair('c', 123));
+//	ftmap.insert(std::make_pair('d', 123));
+//	ftmap.insert(std::make_pair('e', 123));
+//	ftmap.insert(std::make_pair('f', 123));
+//	ftmap.insert(std::make_pair('g', 123));
+//	ftmap.insert(std::make_pair('h', 123));
+//	ftmap.insert(std::make_pair('j', 123));
+//	ftmap.insert(std::make_pair('k', 123));
+//
+//	ftmap._dPrintStrangeTree();
+//
+//	it = ftmap.find('c');
+//	std::cout << "before " << it->first << std::endl;
+//	ftmap.erase(ftmap.find('b'));
+//
+//	std::cout << "after " << it->first << std::endl;
+//	ftmap._dPrintStrangeTree();
 
 //	std::cout << it->first << std::endl;
 //	ftmap.insert(std::make_pair('h', 123));
