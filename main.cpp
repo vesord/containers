@@ -4,10 +4,36 @@
 #include "list.hpp"
 #include "vector.hpp"
 #include "map.hpp"
+#include "stack.hpp"
 
 #include <map>
 #include <string>
 
+
+//#include <iostream>
+//#include <list>
+//template <typename T, typename D>
+//class A {
+//public:
+//	A(T n, D d) : _n(n), _d(d) {}
+//	template <typename U, typename D2>
+//	friend bool operator == (const A<U,D2> &, const A<U,D2> &);
+//private:
+//	T _n;
+//	D _d;
+//};
+//template <typename U, typename D2>
+//bool operator == ( const A<U,D2> & r1, const A<U,D2> & r2 ) {
+//	return (r1._n == r2._n);
+//}
+//int main() {
+//	A<int, int>	a(10, 20);
+//	A<int, int>	b(10, 20);
+//	A<int, int>	c(12, 20);
+//	std::cout << (a == b) << std::endl;
+//	std::cout << (b == c) << std::endl;
+//	return 0;
+//}
 
 int main ()
 {
@@ -28,40 +54,43 @@ int main ()
 //
 //	f._dPrintStrangeTree();
 
+	ft::stack<std::string, ft::vector<std::string> > f1, f2;
+
+	f1 == f2;
 
 
-	ft::map<char, int> f;
-	ft::map<char, int>::iterator itf, itfe;
-
-	f.insert(std::make_pair('a', 0));
-	f.insert(std::make_pair('b', 1));
-	f.insert(std::make_pair('c', 2));
-	f.insert(std::make_pair('d', 3));
-	f.insert(std::make_pair('e', 4));
-	f.insert(std::make_pair('f', 5));
-	f.insert(std::make_pair('g', 6));
-	f.insert(std::make_pair('h', 7));
-	f.insert(std::make_pair('i', 8));
-	f.insert(std::make_pair('j', 9));
-	f.insert(std::make_pair('k', 9));
-	f.insert(std::make_pair('l', 9));
-	f.insert(std::make_pair('m', 9));
-	f.insert(std::make_pair('n', 9));
-	f.insert(std::make_pair('o', 9));
-
-	f._dPrintStrangeTree();
-
-	f.erase('f');
-	f._dPrintStrangeTree();
-
-	f.erase('g');
-	f._dPrintStrangeTree();
-
-	f.erase('h');
-	f._dPrintStrangeTree();
-
-	f.erase('i');
-	f._dPrintStrangeTree();
+//	ft::map<char, int> f;
+//	ft::map<char, int>::iterator itf, itfe;
+//
+//	f.insert(std::make_pair('a', 0));
+//	f.insert(std::make_pair('b', 1));
+//	f.insert(std::make_pair('c', 2));
+//	f.insert(std::make_pair('d', 3));
+//	f.insert(std::make_pair('e', 4));
+//	f.insert(std::make_pair('f', 5));
+//	f.insert(std::make_pair('g', 6));
+//	f.insert(std::make_pair('h', 7));
+//	f.insert(std::make_pair('i', 8));
+//	f.insert(std::make_pair('j', 9));
+//	f.insert(std::make_pair('k', 9));
+//	f.insert(std::make_pair('l', 9));
+//	f.insert(std::make_pair('m', 9));
+//	f.insert(std::make_pair('n', 9));
+//	f.insert(std::make_pair('o', 9));
+//
+//	f._dPrintStrangeTree();
+//
+//	f.erase('f');
+//	f._dPrintStrangeTree();
+//
+//	f.erase('g');
+//	f._dPrintStrangeTree();
+//
+//	f.erase('h');
+//	f._dPrintStrangeTree();
+//
+//	f.erase('i');
+//	f._dPrintStrangeTree();
 
 
 //	f.erase('i');

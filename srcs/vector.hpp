@@ -345,7 +345,7 @@ public:
 	bool empty() const { return _size == 0; }
 	void reserve (size_type n) {
 		if (n > max_size())
-			throw std::length_error("can not reserve more then max_size() elements");
+			throw std::length_error("vector");
 		if (n < _capacity)
 			return ;
 		_reallocate(n);
@@ -450,7 +450,19 @@ public:
 		return last;
 	}
 
-	void swap (vector& x); // no throw
+	void swap (vector& x) {
+		size_type tmp = _size;
+		_size = x._size;
+		x._size = tmp;
+
+		tmp = _capacity;
+		_capacity = x._capacity;
+		x._capacity = tmp;
+
+		pointer tmpPtr = _end_elem;
+		_end_elem = x._end_elem;
+		x._end_elem = tmpPtr;
+	}
 	void clear() {
 		pointer ptr = _end_elem;
 		for (size_type i = 0; i < _size; ++i) {
@@ -490,6 +502,8 @@ void ft::swap (vector<T,Alloc>& x, vector<T,Alloc>& y) {
 	x.swap(y);
 }
 
+namespace ft {
+
 template <class T, class Alloc>
 bool operator== (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs) {
 	if (lhs.size() != rhs.size())
@@ -509,7 +523,7 @@ bool operator== (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
 }
 
 template <class T, class Alloc>
-bool operator!= (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs);
+bool operator!= (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)  { return !(lhs == rhs); }
 
 template <class T, class Alloc>
 bool operator<  (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs) {
@@ -530,12 +544,14 @@ bool operator<  (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
 }
 
 template <class T, class Alloc>
-bool operator<= (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs);
+bool operator<= (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)  { return !(rhs < lhs); }
 
 template <class T, class Alloc>
-bool operator>  (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs);
+bool operator>  (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)  { return rhs < lhs; }
 
 template <class T, class Alloc>
-bool operator>= (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs);
+bool operator>= (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs) { return !(lhs < rhs); }
+
+}
 
 #endif

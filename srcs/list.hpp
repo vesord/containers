@@ -600,9 +600,6 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 
 private:
 
-//	template <class P, class AllocSwap>
-//	friend void ft::swap (ft::list<P,AllocSwap>& x, ft::list<P,AllocSwap>& y);
-
 	size_type		_size;
 
 	void	_createEndNode() {
@@ -718,13 +715,13 @@ bool operator<  (const ft::list<T,Alloc>& lhs, const ft::list<T,Alloc>& rhs) {
 }
 
 template <class T, class Alloc>
-bool operator<= (const ft::list<T,Alloc>& lhs, const ft::list<T,Alloc>& rhs) { return !(rhs < lhs); };
+bool operator<= (const ft::list<T,Alloc>& lhs, const ft::list<T,Alloc>& rhs) { return !(rhs < lhs); }
 
 template <class T, class Alloc>
-bool operator>  (const ft::list<T,Alloc>& lhs, const ft::list<T,Alloc>& rhs) { return rhs < lhs; };
+bool operator>  (const ft::list<T,Alloc>& lhs, const ft::list<T,Alloc>& rhs) { return rhs < lhs; }
 
 template <class T, class Alloc>
-bool operator>= (const ft::list<T,Alloc>& lhs, const ft::list<T,Alloc>& rhs) { return !(lhs < rhs); };
+bool operator>= (const ft::list<T,Alloc>& lhs, const ft::list<T,Alloc>& rhs) { return !(lhs < rhs); }
 
 
 #endif
