@@ -887,8 +887,9 @@ private:
 				*h = _moveRedRight(*h);
 
 			if (!greater) {
-				_alloc.construct((*h)->data, *_getMinNode((*h)->right)->data);
-				_treeEraseMin(&(*h)->right);
+				_treeEraseCurNodeBySwap(h);
+//				_alloc.construct((*h)->data, *_getMinNode((*h)->right)->data);
+//				_treeEraseMin(&(*h)->right);
 				count = 1;
 			}
 			else
@@ -896,6 +897,62 @@ private:
 		}
 		*h = _fixUp(*h);
 		return count;
+	}
+
+	bool	_isRightChild(_t_node *h) {
+		if (h->parent->right == h)
+			return true;
+		return false;
+	}
+
+	_t_node *_getMinNodeWithErase(_t_node **h) {
+//		_dPrintStrangeTree();
+		_t_node *ret;
+		if ((*h)->left == nullptr) {
+//			if (_isRightChild(*h))
+//				(*h)->parent->right = nullptr;
+//			else
+//				(*h)->parent->left = nullptr;
+			return (*h);
+		}
+		ret = _getMinNodeWithErase(&(*h)->left);
+//		_dPrintStrangeTree();
+		*h = _fixUp(*h);
+//		_dPrintStrangeTree();
+		return ret;
+	}
+
+	void	_treeEraseCurNodeBySwap(_t_node **h) {
+		_t_node *minPtr;
+		_t_node *toDel;
+
+		minPtr = _getMinNodeWithErase(&(*h)->right);
+
+		toDel = *h;
+
+		if (_isRightChild(minPtr))
+			minPtr->parent->right = nullptr;
+		else
+			minPtr->parent->left = nullptr;
+
+//		_dPrintStrangeTree();
+
+		minPtr->color = (*h)->color;
+		minPtr->right = (*h)->right;
+		minPtr->left = (*h)->left;
+		minPtr->parent = (*h)->parent;
+//		_dPrintStrangeTree();
+
+		if (minPtr->right) minPtr->right->parent = minPtr;
+		if (minPtr->left) minPtr->left->parent = minPtr;
+		if (minPtr->parent) {
+			if (_isRightChild(*h))
+				minPtr->parent->right = minPtr;
+			else
+				minPtr->parent->left = minPtr;
+		}
+//		_dPrintStrangeTree();
+		_destroyNode(toDel);
 	}
 
 	iterator _treeBound(_t_node *h, const key_type& k, bool isLower) const {

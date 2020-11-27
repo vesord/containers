@@ -5,85 +5,70 @@
 #include "vector.hpp"
 #include "map.hpp"
 
-#include <iostream>
-#include <sstream>
 #include <map>
 #include <string>
-#include <iomanip>
-#include <queue>
 
-// map::lower_bound/upper_bound
-#include <iostream>
-#include <map>
+//typedef struct strange_tree {
+//	int					data;
+//	struct strange_tree	*left;
+//	struct strange_tree	*right;
+//	struct strange_tree	*parent;
+//	bool				color;
+//}	t_ref_tree;
 
-//template < class T, class U >
-//std::ostream & operator<<(std::ostream & o, std::pair<T, U> p) {
-//	o << p.first << " => " << p.second;
-//	return o;
+//t_ref_tree &rotRight(t_ref_tree & h) {
+//	t_ref_tree *x = h.right;
+//	h.right = x->left;
+//	x->left = &h;
+//	x->color;
+//	return h;
 //}
 //
-//void	printStrangeTreeLine(int width, ft::map<char, int>::_t_node* curNode) {
-//	std::stringstream ss;
-//	std::string str;
+//class StrangeIterator {
+//public:
+//	StrangeIterator();
+//	~StrangeIterator();
+//	StrangeIterator( t_ref_tree & ptr) : _ref(ptr) {}
 //
-//	std::cout.width(width);
-//	if (curNode && curNode->data) {
-//		ss << *(curNode->data);
-//		str = ss.str();
-//		if (curNode->color) {
-//			str = RED_NODE_OUTPUT(ss.str());
-//			width += 11;
-//		}
-//		std::cout << std::setw(width) << str ;
-//	}
-//	else if (curNode)
-//		std::cout << "__edge__";
-//	else
-//		std::cout << "__null__";
-//}
+//private:
+//	strange_tree & _ref;
 //
-//void	printStrangeTree(ft::map<char, int>::_t_node* root)
-//{
-//	std::queue<ft::map<char, int>::_t_node *> q;
-//	ft::map<char, int>::_t_node * curNode;
-//	bool printTime;
-//	int onLine = 1;
-//	int needToPrint = 1;
-//	int widthSt = 128;
-//	int width;
-//
-//	q.push(root);
-//	while (!q.empty()) {
-//		curNode = q.front();
-//		q.pop();
-//		printTime = onLine == needToPrint;
-//		width = printTime ? (widthSt / onLine / 2) : (widthSt / onLine);
-//		printStrangeTreeLine(width, curNode);
-//		--needToPrint;
-//		if (curNode) {
-//			q.push(curNode->left);
-//			q.push(curNode->right);
-//		}
-//		else {
-//			q.push(nullptr);
-//			q.push(nullptr);
-//		}
-//		if (needToPrint == 0) {
-//			onLine *= 2;
-//			needToPrint = onLine;
-//			std::cout << std::endl;
-//		}
-//		if (onLine == 16)
-//			break;
-//	}
-//	std::cout << std::endl;
-//	std::cout << std::setfill('.') << std::setw(120) << " " << std::endl;
-//	std::cout.fill(' ');
-//	std::cout << std::endl;
-//}
+//};
 
 int main ()
 {
+//	t_ref_tree *leftPtr = new t_ref_tree;
+//	t_ref_tree *rightPtr = new t_ref_tree;
+//	t_ref_tree *rootPtr = new t_ref_tree;
+//	rootPtr->data = 1;
+//	rootPtr->left = leftPtr;
+//	rootPtr->right = leftPtr;
+//	rootPtr->parent = nullptr;
+//
+//	leftPtr->data = 2;
+//	leftPtr->left = nullptr;
+//	leftPtr->right = nullptr;
+//	leftPtr->parent = rootPtr;
+//
+//	rightPtr->data = 3;
+//	rightPtr->left = nullptr;
+//	rightPtr->right = nullptr;
+//	rightPtr->parent = rootPtr;
+//
+//	StrangeIterator itRoot(*rootPtr);
+//	StrangeIterator itLeft(*leftPtr);
+//	StrangeIterator itRight(*rightPtr);
+//
+//	t_ref_tree & root = *rootPtr;
+
+
+
+
+
+
+
+
+
 //	std::map<char,int> mymap;
 //	std::map<char,int>::iterator it = mymap.begin();
 //	std::map<char,int>::iterator ite = mymap.end();
@@ -95,6 +80,7 @@ int main ()
 //	mymap.insert(std::make_pair('g', 123));
 //
 //	mymap.erase(mymap.begin(), mymap.end());
+
 
 
 
@@ -115,8 +101,11 @@ int main ()
 
 	ftmap._dPrintStrangeTree();
 
-	ftmap.erase(ftmap.find('b'), ftmap.find('e'));
+	it = ftmap.find('c');
+	std::cout << "before " << it->first << std::endl;
+	ftmap.erase(ftmap.find('b'));
 
+	std::cout << "after " << it->first << std::endl;
 	ftmap._dPrintStrangeTree();
 
 //	std::cout << it->first << std::endl;
