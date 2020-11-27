@@ -17,6 +17,9 @@
 #include <stdexcept>
 #include <iostream>
 
+//TODO
+// mem leak
+
 // DELETE THIS DEBUG
 #define RED_NODE_OUTPUT(x)  "\x1b[31;1m" + (x) + "\x1b[0m"
 #include <queue>
@@ -462,7 +465,7 @@ public:
 
 	bool empty() const { return this->_size == 0; };
 	size_type size() const { return this->_size; }
-	size_type max_size() const { return std::numeric_limits<size_type>::max() / sizeof(ft::map<key_type, mapped_type, Compare, Alloc>); }
+	size_type max_size() const { return std::numeric_limits<size_type>::max() / sizeof(ft::map<Key, T, Compare, Alloc>); }
 
 	/*** ELEMENT ACCEESS ***/
 

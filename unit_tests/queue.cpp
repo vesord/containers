@@ -3,11 +3,12 @@
 //
 
 #include "gtest/gtest.h"
-#include "stack.hpp"
-#include <stack>
+#include "queue.hpp"
+#include <queue>
+#include <list>
 #include <string>
 
-class StackFullTest : public testing::Test {
+class QueueFullTest : public testing::Test {
 protected:
 	virtual void SetUp() {
 		for (int i = 0; i < 100; ++i) {
@@ -16,14 +17,14 @@ protected:
 		}
 	}
 
-	std::vector<std::string> svec;
-	ft::vector<std::string> fvec;
+	std::list<std::string> svec;
+	ft::list<std::string> fvec;
 
 };
 
-TEST_F(StackFullTest, testFunctional) {
-	std::stack<std::string> s;
-	ft::stack<std::string> f;
+TEST_F(QueueFullTest, testFunctional) {
+	std::queue<std::string> s;
+	ft::queue<std::string> f;
 
 	EXPECT_EQ(s.empty(), f.empty());
 	EXPECT_EQ(s.size(), f.size());
@@ -48,8 +49,8 @@ TEST_F(StackFullTest, testFunctional) {
 	EXPECT_EQ(s.empty(), f.empty());
 	EXPECT_EQ(s.size(), f.size());
 
-	std::stack<std::string, std::vector<std::string>> s2(svec);
-	ft::stack<std::string, ft::vector<std::string>>  f2(fvec);
+	std::queue<std::string, std::list<std::string>> s2(svec);
+	ft::queue<std::string, ft::list<std::string>>  f2(fvec);
 	EXPECT_EQ(s2.empty(), f2.empty());
 	EXPECT_EQ(s2.size(), f2.size());
 
@@ -72,9 +73,9 @@ TEST_F(StackFullTest, testFunctional) {
 
 }
 
-TEST_F(StackFullTest, testOperators) {
-	std::stack<std::string, std::vector<std::string> > s1, s2;
-	ft::stack<std::string, ft::vector<std::string> > f1, f2;
+TEST_F(QueueFullTest, testOperators) {
+	std::queue<std::string, std::list<std::string> > s1, s2;
+	ft::queue<std::string, ft::list<std::string> > f1, f2;
 
 	s1.push("123");
 	s1.push("321");

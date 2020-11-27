@@ -17,23 +17,11 @@
 
 namespace ft {
 
-	/*
-	* This is how iterator_tags implemented in std:: but we don't use it
-	* because ft::container would become incompatible with std::container.
-	* std:: will not understand if our iterator has correct type.
-	*/
+	template<bool B, class T = void>
+	struct enable_if {};
 
-//struct input_iterator_tag {};
-//struct output_iterator_tag {};
-//struct forward_iterator_tag : public input_iterator_tag {};
-//struct bidirectional_iterator_tag : public forward_iterator_tag {};
-//struct random_access_iterator_tag : public bidirectional_iterator_tag {};
-
-	/*
-	 * typedefs in class iterator{}; are public for access from
-	 * class reverse_iterator{};
-	 * We do this because we don't use std::iterator_traits class.
-	 */
+	template <class T>
+	struct enable_if <true, T> { typedef T type; };
 
 	template<class Category,			// iterator::iterator_category
 		class T,						// iterator::value_type

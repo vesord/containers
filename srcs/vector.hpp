@@ -17,8 +17,16 @@
 #include <stdexcept>
 #include <iostream>
 
-template< class T, class Alloc >
-class ft::vector {
+//TODO
+// make const iterators const
+// implement comparations
+// implement tests on comparation
+// implement tests on swap
+
+namespace ft {
+
+template< class T, class Alloc = std::allocator<T> >
+class vector {
 
 public:
 	class iterator;
@@ -334,7 +342,7 @@ public:
 	/*** CAPACITY ***/
 
 	size_type size() const { return this->_size; }
-	size_type max_size() const { return std::numeric_limits<size_type>::max() / sizeof(ft::vector<value_type>); }
+	size_type max_size() const { return std::numeric_limits<size_type>::max() / sizeof(ft::vector<T, Alloc>); }
 	void resize (size_type n, value_type val = value_type()) {
 		if (n > _size)
 			insert(end(), n - _size, val);
@@ -498,21 +506,19 @@ private:
 };
 
 template <class T, class Alloc>
-void ft::swap (vector<T,Alloc>& x, vector<T,Alloc>& y) {
+void swap (vector<T,Alloc>& x, vector<T,Alloc>& y) {
 	x.swap(y);
 }
 
-namespace ft {
-
 template <class T, class Alloc>
-bool operator== (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs) {
+bool operator== (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
 	if (lhs.size() != rhs.size())
 		return false;
 
-	typename ft::vector<T, Alloc>::const_iterator itl = lhs.begin();
-	typename ft::vector<T, Alloc>::const_iterator itle = lhs.end();
-	typename ft::vector<T, Alloc>::const_iterator itr = rhs.begin();
-	typename ft::vector<T, Alloc>::const_iterator itre = rhs.end();
+	typename vector<T, Alloc>::const_iterator itl = lhs.begin();
+	typename vector<T, Alloc>::const_iterator itle = lhs.end();
+	typename vector<T, Alloc>::const_iterator itr = rhs.begin();
+	typename vector<T, Alloc>::const_iterator itre = rhs.end();
 
 	for (; itl != itle; ++itl) {
 		if ( itr == itre || *itl != *itr)
@@ -523,14 +529,14 @@ bool operator== (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
 }
 
 template <class T, class Alloc>
-bool operator!= (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)  { return !(lhs == rhs); }
+bool operator!= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)  { return !(lhs == rhs); }
 
 template <class T, class Alloc>
-bool operator<  (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs) {
-	typename ft::vector<T, Alloc>::const_iterator itl = lhs.begin();
-	typename ft::vector<T, Alloc>::const_iterator itle = lhs.end();
-	typename ft::vector<T, Alloc>::const_iterator itr = rhs.begin();
-	typename ft::vector<T, Alloc>::const_iterator itre = rhs.end();
+bool operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
+	typename vector<T, Alloc>::const_iterator itl = lhs.begin();
+	typename vector<T, Alloc>::const_iterator itle = lhs.end();
+	typename vector<T, Alloc>::const_iterator itr = rhs.begin();
+	typename vector<T, Alloc>::const_iterator itre = rhs.end();
 
 	for (; itl != itle; ++itl, ++itr) {
 		if (itr == itre)
@@ -544,14 +550,14 @@ bool operator<  (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
 }
 
 template <class T, class Alloc>
-bool operator<= (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)  { return !(rhs < lhs); }
+bool operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)  { return !(rhs < lhs); }
 
 template <class T, class Alloc>
-bool operator>  (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)  { return rhs < lhs; }
+bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)  { return rhs < lhs; }
 
 template <class T, class Alloc>
-bool operator>= (const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs) { return !(lhs < rhs); }
+bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) { return !(lhs < rhs); }
 
-}
+} // namespace ft
 
 #endif

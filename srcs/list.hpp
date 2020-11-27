@@ -17,8 +17,14 @@
 #include "iterator.hpp"
 #include <iostream>
 
-template< class T, class Alloc >
-class ft::list {
+//TODO
+// list 10k and resize to 5
+// make const iterators const
+
+namespace ft {
+
+template< class T, class Alloc = std::allocator<T> >
+class list {
 
 public:
 
@@ -276,7 +282,7 @@ class const_reverse_iterator : public ft::reverse_iterator<list::iterator>
 	/*** CAPACITY ***/
 	bool empty() const { return this->_begin_node == this->_end_node; };
 	size_type size() const { return this->_size; }
-	size_type max_size() const { return std::numeric_limits<size_type>::max() / sizeof(ft::list<value_type>); }
+	size_type max_size() const { return std::numeric_limits<size_type>::max() / sizeof(list<T, Alloc>); }
 
 	/*** ELEMENT ACCESS ***/
 	reference front() { return *this->_begin_node->_data; };
@@ -669,7 +675,7 @@ private:
 };
 
 template <class P, class AllocSwap>
-void ft::swap (ft::list<P,AllocSwap>& x, ft::list<P,AllocSwap>& y) {
+void swap (ft::list<P,AllocSwap>& x, ft::list<P,AllocSwap>& y) {
 	x.swap(y);
 }
 
@@ -723,5 +729,6 @@ bool operator>  (const ft::list<T,Alloc>& lhs, const ft::list<T,Alloc>& rhs) { r
 template <class T, class Alloc>
 bool operator>= (const ft::list<T,Alloc>& lhs, const ft::list<T,Alloc>& rhs) { return !(lhs < rhs); }
 
+} // namespace ft
 
 #endif

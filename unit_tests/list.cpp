@@ -9,12 +9,6 @@
 #include <sstream>
 #include <cmath>
 
-/*
- * what to check on evaluations
- *
- * erase pop push 1 elem should not destroy _begin_node _end_node ect.
- */
-
 template< class T >
 void print_list(T & l) {
 	for (typename T::iterator it = l.begin(); it != l.end(); ++it) {
