@@ -13,8 +13,6 @@
 #ifndef MAP_HPP
 # define MAP_HPP
 
-//#define DEBUG
-
 #include "iterator.hpp"
 #include <stdexcept>
 #include <iostream>
@@ -506,18 +504,12 @@ public:
 	}
 	void erase (iterator first, iterator last) {
 		iterator next;
-#ifdef DEBUG
-		_dPrintStrangeTree();
-#endif
 		while (first != last)
 		{
 			next = first;
 			++next;
 			erase(first);
 			first = next;
-#ifdef DEBUG
-			_dPrintStrangeTree();
-#endif
 		}
 
 	}
@@ -867,9 +859,6 @@ private:
 	}
 
 	size_type _treeErase(_t_node** h, const key_type& k) {
-#ifdef DEBUG
-		_dPrintStrangeTree();
-#endif
 		if (*h == nullptr)
 			return 0;
 
@@ -905,8 +894,6 @@ private:
 
 			if (!_comp((*h)->data->first, k)) {
 				_treeEraseCurNodeBySwap(h);
-//				_alloc.construct((*h)->data, *_getMinNode((*h)->right)->data);
-//				_treeEraseMin(&(*h)->right);
 				count = 1;
 			}
 			else
@@ -923,9 +910,6 @@ private:
 	}
 
 	_t_node *_getMinNodeWithErase(_t_node **h) {
-#ifdef DEBUG
-		_dPrintStrangeTree();
-#endif
 		_t_node *ret;
 		if ((*h)->left == nullptr) {
 			ret = *h;
@@ -938,43 +922,21 @@ private:
 			return ret;
 		}
 		ret = _getMinNodeWithErase(&(*h)->left);
-#ifdef DEBUG
-		_dPrintStrangeTree();
-#endif
 		*h = _fixUp(*h);
-#ifdef DEBUG
-		_dPrintStrangeTree();
-#endif
 		return ret;
 	}
 
 	void	_treeEraseCurNodeBySwap(_t_node **h) {
 		_t_node *minPtr;
 		_t_node *toDel;
-#ifdef DEBUG
-		_dPrintStrangeTree();
-#endif
-		minPtr = _getMinNodeWithErase(&(*h)->right);
-#ifdef DEBUG
-		_dPrintStrangeTree();
-#endif
-		toDel = *h;
 
-//		if (_isRightChild(minPtr))
-//			minPtr->parent->right = nullptr;
-//		else
-//			minPtr->parent->left = nullptr;
-#ifdef DEBUG
-		_dPrintStrangeTree();
-#endif
+		minPtr = _getMinNodeWithErase(&(*h)->right);
+		toDel = *h;
 
 		minPtr->color = (*h)->color;
 		minPtr->right = (*h)->right;
 		minPtr->left = (*h)->left;
 		minPtr->parent = (*h)->parent;
-#ifdef DEBUG
-		_dPrintStrangeTree();
-#endif
 
 		if (minPtr->right) minPtr->right->parent = minPtr;
 		if (minPtr->left) minPtr->left->parent = minPtr;
@@ -987,9 +949,6 @@ private:
 		else {
 			_root = minPtr;
 		}
-#ifdef DEBUG
-		_dPrintStrangeTree();
-#endif
 		_destroyNode(toDel);
 	}
 
