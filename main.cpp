@@ -30,19 +30,54 @@ int main ()
 
 
 
-	ft::map<char, int>  fRef, f;
+	ft::map<char, int> f;
+	ft::map<char, int>::iterator itf, itfe;
 
-	f.insert(std::make_pair('0', 0));
-//	f.insert(std::make_pair('7', 7));
-	f.insert(std::make_pair('8', 8));
-	f.insert(std::make_pair('9', 9));
+	f.insert(std::make_pair('a', 0));
+	f.insert(std::make_pair('b', 1));
+	f.insert(std::make_pair('c', 2));
+	f.insert(std::make_pair('d', 3));
+	f.insert(std::make_pair('e', 4));
+	f.insert(std::make_pair('f', 5));
+	f.insert(std::make_pair('g', 6));
+	f.insert(std::make_pair('h', 7));
+	f.insert(std::make_pair('i', 8));
+	f.insert(std::make_pair('j', 9));
+	f.insert(std::make_pair('k', 9));
+	f.insert(std::make_pair('l', 9));
+	f.insert(std::make_pair('m', 9));
+	f.insert(std::make_pair('n', 9));
+	f.insert(std::make_pair('o', 9));
 
 	f._dPrintStrangeTree();
 
-	f.erase('8');
-
+	f.erase('f');
 	f._dPrintStrangeTree();
 
+	f.erase('g');
+	f._dPrintStrangeTree();
+
+	f.erase('h');
+	f._dPrintStrangeTree();
+
+	f.erase('i');
+	f._dPrintStrangeTree();
+
+
+//	f.erase('i');
+
+//	f._dPrintStrangeTree();
+
+//	f.erase('4');
+
+//	f._dPrintStrangeTree();
+
+
+//	itfe = f.end();
+//	itf = f.begin();
+//	for (; itf != itfe;) {
+//		std::cout << *itf++ << std::endl;
+//	}
 
 
 

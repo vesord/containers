@@ -13,6 +13,8 @@
 #ifndef MAP_HPP
 # define MAP_HPP
 
+//#define DEBUG
+
 #include "iterator.hpp"
 #include <stdexcept>
 #include <iostream>
@@ -26,7 +28,7 @@
 
 template < class G, class U >
 std::ostream & operator<<(std::ostream & o, std::pair<G, U> p) {
-	o << p.first << " => " << p.second;
+	o << "_" << p.first;
 	return o;
 }
 
@@ -504,14 +506,18 @@ public:
 	}
 	void erase (iterator first, iterator last) {
 		iterator next;
-//		_dPrintStrangeTree();
+#ifdef DEBUG
+		_dPrintStrangeTree();
+#endif
 		while (first != last)
 		{
 			next = first;
 			++next;
 			erase(first);
 			first = next;
-//			_dPrintStrangeTree();
+#ifdef DEBUG
+			_dPrintStrangeTree();
+#endif
 		}
 
 	}
@@ -603,9 +609,9 @@ public:
 			std::cout << std::setw(width) << str ;
 		}
 		else if (curNode)
-			std::cout << "__edge__";
+			std::cout << "ed";
 		else
-			std::cout << "__null__";
+			std::cout << "nl";
 	}
 
 	void	_dPrintStrangeTree()
@@ -616,7 +622,7 @@ public:
 		bool printTime;
 		int onLine = 1;
 		int needToPrint = 1;
-		int widthSt = 128;
+		int widthSt = 64;
 		int width;
 
 		q.push(root);
@@ -640,11 +646,11 @@ public:
 				needToPrint = onLine;
 				std::cout << std::endl;
 			}
-			if (onLine == 16)
+			if (onLine == widthSt / 2)
 				break;
 		}
 		std::cout << std::endl;
-		std::cout << std::setfill('.') << std::setw(120) << " " << std::endl;
+		std::cout << std::setfill('.') << std::setw(widthSt) << " " << std::endl;
 		std::cout.fill(' ');
 		std::cout << std::endl;
 	}
@@ -824,18 +830,24 @@ private:
 	}
 
 	void	_treeEraseNodeBot(_t_node **h) {
-		bool ifEndNode = (*h)->right == _end_node;
-		bool ifBeginNode = (*h)->left == _begin_node;
+		_t_node *right;
+		_t_node *left;
+		bool ifRightNode = (*h)->right != nullptr;
+		bool ifLeftNode = (*h)->left != nullptr;
 
-		if (ifEndNode)
-			_end_node->parent = (*h)->parent;
-		if (ifBeginNode)
-			_begin_node->parent = (*h)->parent;
+		if (ifRightNode) {
+			right = (*h)->right;
+			right->parent = (*h)->parent;
+		}
+		if (ifLeftNode) {
+			left = (*h)->left;
+			left->parent = (*h)->parent;
+		}
 		_destroyNode(*h);
-		if (ifEndNode)
-			*h = _end_node;
-		else if (ifBeginNode)
-			*h = _begin_node;
+		if (ifRightNode)
+			*h = right;
+		else if (ifLeftNode)
+			*h = left;
 		else
 			*h = nullptr;
 	}
@@ -855,7 +867,9 @@ private:
 	}
 
 	size_type _treeErase(_t_node** h, const key_type& k) {
-//		_dPrintStrangeTree();
+#ifdef DEBUG
+		_dPrintStrangeTree();
+#endif
 		if (*h == nullptr)
 			return 0;
 
@@ -889,7 +903,7 @@ private:
 			if (!_isRed((*h)->right) && !_isRed((*h)->right->left))
 				*h = _moveRedRight(*h);
 
-			if (!greater) {
+			if (!_comp((*h)->data->first, k)) {
 				_treeEraseCurNodeBySwap(h);
 //				_alloc.construct((*h)->data, *_getMinNode((*h)->right)->data);
 //				_treeEraseMin(&(*h)->right);
@@ -909,45 +923,58 @@ private:
 	}
 
 	_t_node *_getMinNodeWithErase(_t_node **h) {
-//		_dPrintStrangeTree();
+#ifdef DEBUG
+		_dPrintStrangeTree();
+#endif
 		_t_node *ret;
 		if ((*h)->left == nullptr) {
 			ret = *h;
-			*h = nullptr;
-//			if (_isRightChild(*h))
-//				(*h)->parent->right = nullptr;
-//			else
-//				(*h)->parent->left = nullptr;
+			if ((*h)->right != nullptr) {
+				(*h)->right->parent = (*h)->parent;
+				*h = (*h)->right;
+			}
+			else
+				*h = nullptr;
 			return ret;
 		}
 		ret = _getMinNodeWithErase(&(*h)->left);
-//		_dPrintStrangeTree();
+#ifdef DEBUG
+		_dPrintStrangeTree();
+#endif
 		*h = _fixUp(*h);
-//		_dPrintStrangeTree();
+#ifdef DEBUG
+		_dPrintStrangeTree();
+#endif
 		return ret;
 	}
 
 	void	_treeEraseCurNodeBySwap(_t_node **h) {
 		_t_node *minPtr;
 		_t_node *toDel;
-
+#ifdef DEBUG
+		_dPrintStrangeTree();
+#endif
 		minPtr = _getMinNodeWithErase(&(*h)->right);
-
-//		_dPrintStrangeTree();
+#ifdef DEBUG
+		_dPrintStrangeTree();
+#endif
 		toDel = *h;
 
 //		if (_isRightChild(minPtr))
 //			minPtr->parent->right = nullptr;
 //		else
 //			minPtr->parent->left = nullptr;
-
-//		_dPrintStrangeTree();
+#ifdef DEBUG
+		_dPrintStrangeTree();
+#endif
 
 		minPtr->color = (*h)->color;
 		minPtr->right = (*h)->right;
 		minPtr->left = (*h)->left;
 		minPtr->parent = (*h)->parent;
-//		_dPrintStrangeTree();
+#ifdef DEBUG
+		_dPrintStrangeTree();
+#endif
 
 		if (minPtr->right) minPtr->right->parent = minPtr;
 		if (minPtr->left) minPtr->left->parent = minPtr;
@@ -960,7 +987,9 @@ private:
 		else {
 			_root = minPtr;
 		}
-//		_dPrintStrangeTree();
+#ifdef DEBUG
+		_dPrintStrangeTree();
+#endif
 		_destroyNode(toDel);
 	}
 

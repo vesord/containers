@@ -1333,7 +1333,7 @@ TEST_F(MapSwapTest, iteratorValidity) {
 class MapEraseRangeTest : public testing::Test {
 protected:
 	virtual void SetUp() {
-		for (int i = 0; i < 10; ++i) {
+		for (int i = -50; i < 50; ++i) {
 			sRef.insert(std::make_pair(std::to_string(i), i));
 			fRef.insert(std::make_pair(std::to_string(i), i));
 		}
@@ -1351,14 +1351,12 @@ protected:
 
 TEST_F(MapEraseRangeTest, eraseSimpleTest) {
 	itse = sRef.end();
-//	itfe = fRef.end();
 	int i = 0;
 	int j = 0;
 
-	printContainer(sRef);
 	for (its = sRef.begin(); its != itse; ++its) {
 		j = i;
-		for (jts = its; jts != itse; ++jts) {
+		for (jts = its; true; ++jts) {
 			f = fRef;
 			s = sRef;
 			checkIfMapsAreEqual(f, s);
@@ -1378,13 +1376,11 @@ TEST_F(MapEraseRangeTest, eraseSimpleTest) {
 				EXPECT_EQ(*itscheck++, *itfcheck++) << "from = " << i << " to = " << j;
 			}
 			EXPECT_EQ(itfcheck, itfchecke) << "from = " << i << " to = " << j;
-			std::cout << "i " << i << " j " << j << std::endl;
-//			if (jts == itse)
-//				break;
+//			std::cout << "i " << i << " j " << j << std::endl;
+			if (jts == itse)
+				break;
 			j++;
 		}
 		i++;
 	}
 }
-
-// Test Each order of erasing
