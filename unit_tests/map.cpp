@@ -162,9 +162,9 @@ TEST_F(MapIteratorTest, IteratorInputInputTest) {
 	std::map<std::string,int>::iterator tmps;
 
 	mapIteratorTest(itf, itfe, tmpf, its, itse, tmps);
-	printContainer(f);
-	std::cout << std::endl;
-	printContainer(s);
+//	printContainer(f);
+//	std::cout << std::endl;
+//	printContainer(s);
 //	f._dPrintStrangeTree();
 }
 

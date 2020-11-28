@@ -410,17 +410,14 @@ public:
 		return iterator(curPosPtr);
 	}
 	void insert (iterator position, size_type n, const value_type& val) {
-		std::cout << "1" << std::endl;
 		pointer curPosPtr = position.getPtr();
 		if (_size + n > _capacity) {
 			difference_type offset = _end_elem - curPosPtr;
 			_reallocate((_size + n) * 2);
 			curPosPtr = _end_elem - offset;
 		}
-		std::cout << "1" << std::endl;
 		std::memmove(curPosPtr + n, curPosPtr,
 			   static_cast<size_t>(abs(_end_elem - curPosPtr)) * sizeof(value_type));
-		std::cout << "1" << std::endl;
 		for (size_type i = 0; i < n; ++i) {
 			_alloc.construct(&curPosPtr[i], val);
 		}
