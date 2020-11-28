@@ -19,5 +19,6 @@ set(SRCS
 
 add_executable(ft_containers main.cpp ${SRCS})
 
-add_library(testlib ${SRCS} main.cpp)
+add_library(testlib INTERFACE)
+target_include_directories(testlib INTERFACE ./srcs)
 add_subdirectory(unit_tests)

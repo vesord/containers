@@ -1,4 +1,3 @@
-#include <string>
 #include <iostream>
 #include "list.hpp"
 #include "vector.hpp"
@@ -6,20 +5,9 @@
 #include "stack.hpp"
 #include "queue.hpp"
 
-int main()
-{
-//	ft::list<int> ftList;
-//	for (int i = 0; i < 10; ++i)
-//		ftList.push_front(i);
-//
-//	typedef ft::list<int>::const_iterator (ft::list<int>::* foo1)() const;
-//	foo1 objFoo = &ft::list<int>::begin;
-//
-//	ft::list<int>::const_iterator fIt = (ftList.*objFoo)();
-
-
 /*	LIST COMPILES	*/
 
+void ftList() {
 	ft::list<std::string> f;
 
 	f.push_back("LIST ");
@@ -36,10 +24,11 @@ int main()
 		std::cout << *itf;
 	}
 	std::cout << std::endl << std::endl;
-
+}
 
 /*	VECTOR COMPILES	*/
 
+void ftVector() {
 	ft::vector<std::string> v;
 
 	v.push_back("VECTOR ");
@@ -52,14 +41,16 @@ int main()
 
 	ft::vector<std::string>::iterator itv;
 	ft::vector<std::string>::iterator itve = v.end();
-	for (itv = v.begin(); itv != itve; ++itv) {
+	for (itv = v.begin(); itv != itve; ++itv)
+	{
 		std::cout << *itv;
 	}
 	std::cout << std::endl << std::endl;
-
+}
 
 /*	MAP COMPILES	*/
 
+void ftMap() {
 	ft::map<int, std::string> m;
 
 	m.insert(std::make_pair(1, "MAP "));
@@ -76,10 +67,11 @@ int main()
 		std::cout << itm->second;
 	}
 	std::cout << std::endl << std::endl;
-
+}
 
 /*	STACK COMPILES	*/
 
+void ftStack() {
 	ft::stack<std::string> s;
 
 	s.push("STACK ");
@@ -95,9 +87,11 @@ int main()
 		s.pop();
 	}
 	std::cout << std::endl << std::endl;
+}
 
 /*	QUEUE COMPILES	*/
 
+void ftQueue() {
 	ft::queue<std::string> q;
 
 	q.push("QUEUE ");
@@ -113,6 +107,15 @@ int main()
 		q.pop();
 	}
 	std::cout << std::endl;
+}
 
-return 0;
+int main()
+{
+	ftList();
+	ftVector();
+	ftMap();
+	ftStack();
+	ftQueue();
+
+	return 0;
 }

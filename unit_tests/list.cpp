@@ -1,11 +1,18 @@
-//
-// Created by Mushroom Atrus on 11/11/20.
-//
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   list.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: matrus <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/11/28 10:38:04 by matrus            #+#    #+#             */
+/*   Updated: 2020/11/28 10:38:12 by matrus           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "gtest/gtest.h"
 #include "list.hpp"
 #include <list>
-#include <string>
 #include <sstream>
 #include <cmath>
 
