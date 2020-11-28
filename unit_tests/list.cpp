@@ -1589,8 +1589,7 @@ TEST_F(ListReverseTest, reverseEmpty) {
 	f.reverse();
 	s.reverse();
 	EXPECT_EQ(f.size(), s.size());
-	EXPECT_EQ(f.front(), s.front());
-	EXPECT_EQ(f.back(), s.back());
+	EXPECT_EQ(f.empty(), s.empty());
 	checkListEqual(f.begin(), f.end(), s.begin(), s.end());
 }
 

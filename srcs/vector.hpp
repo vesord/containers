@@ -437,7 +437,7 @@ public:
 		pointer erasePosPtr = position.getPtr();
 		_alloc.destroy(erasePosPtr);
 		std::memmove(erasePosPtr, erasePosPtr + 1,
-			   static_cast<size_t>(abs(_end_elem - erasePosPtr)) * sizeof(value_type));
+			   static_cast<size_t>(abs(_end_elem - erasePosPtr - 1)) * sizeof(value_type));
 		_size -= 1;
 		_end_elem -= 1;
 		return (erasePosPtr);

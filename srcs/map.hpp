@@ -17,10 +17,6 @@
 #include <stdexcept>
 #include "iterator.hpp"
 
-//TODO
-// mem leak
-
-
 # ifdef FT_CONTAINERS_DEBUG
 #  define RED_NODE_OUTPUT(x)  "\x1b[31;1m" + (x) + "\x1b[0m"
 #  include <queue>
