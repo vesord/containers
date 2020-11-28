@@ -6,7 +6,7 @@
 /*   By: matrus <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 15:04:26 by matrus            #+#    #+#             */
-/*   Updated: 2020/11/27 15:04:28 by matrus           ###   ########.fr       */
+/*   Updated: 2020/11/28 12:38:14 by matrus           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 # define STACK_HPP
 
 # include "vector.hpp"
-
-// TODO: read for explicit
 
 namespace ft {
 
