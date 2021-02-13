@@ -1,5 +1,5 @@
 # containers
-It's a reimplementation of the various container types of the C++ standard template library.
+It's a reimplementation of the `list`, `vector`, `map`, `stack`, `queue` containers of the C++ standard template library.
 
 ### list
 `std::list<>` container reimplementation. Reference standard C++98. 
