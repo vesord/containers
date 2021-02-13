@@ -1,17 +1,17 @@
 # containers
 It's a reimplementation of the various container types of the C++ standard template library.
 
-## list
+### list
 `std::list<>` container reimplementation. Reference standard C++98. 
 
-## vector
+### vector
 `std::vector<>` container reimplementation. Reference standard C++98.
 
-## map
+### map
 `std::map<>` container reimplementation. Reference standard C++98. Uses left-leaning red-black trees.
 
-## stack
+### stack
 `std::stack<>` container-adaptor reimplementation. Reference standard C++98. Inherits from `list` implementation.
 
-## queue
+### queue
 `std::queue<>` container-adaptor reimplementation. Reference standard C++98. Inherits from `list` implementation.
